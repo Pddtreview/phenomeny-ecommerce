@@ -31,6 +31,10 @@ export async function POST(request: NextRequest) {
     const otp = generateOtp();
     const expiresAt = new Date(Date.now() + 10 * 60 * 1000).toISOString();
 
+    if (process.env.NODE_ENV === "development") {
+      console.log("DEV OTP:", otp);
+    }
+
     const { error: insertError } = await supabase.from("otp_verifications").insert({
       phone,
       otp,
@@ -75,6 +79,10 @@ export async function POST(request: NextRequest) {
         { success: false, error: "Failed to send OTP" },
         { status: 502 }
       );
+    }
+
+    if (process.env.NODE_ENV === "development") {
+      return NextResponse.json({ success: true, devOtp: otp });
     }
 
     return NextResponse.json({ success: true });

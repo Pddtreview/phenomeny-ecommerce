@@ -64,9 +64,14 @@ export default function CheckoutPage() {
   const [summaryOpen, setSummaryOpen] = useState(false);
   const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>("prepaid");
   const [otpSent, setOtpSent] = useState(false);
-  const [otpValue, setOtpValue] = useState("");
+  const [otp, setOtp] = useState("");
+  const [otpVerified, setOtpVerified] = useState(false);
+  const [resendTimer, setResendTimer] = useState(0);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [devOtpAutoFilled, setDevOtpAutoFilled] = useState(false);
+
+  const isDev = process.env.NODE_ENV === "development";
 
   const subtotal = totalPrice();
   const shippingCharge =
@@ -79,6 +84,8 @@ export default function CheckoutPage() {
     register,
     handleSubmit,
     setValue,
+    trigger,
+    getValues,
     watch,
     formState: { errors },
   } = useForm<AddressForm>({
@@ -101,6 +108,24 @@ export default function CheckoutPage() {
       router.replace("/products");
     }
   }, [items.length, router]);
+
+  useEffect(() => {
+    // Reset COD OTP flow when switching payment method.
+    setOtpSent(false);
+    setOtp("");
+    setOtpVerified(false);
+    setResendTimer(0);
+    setError(null);
+    setDevOtpAutoFilled(false);
+  }, [paymentMethod]);
+
+  useEffect(() => {
+    if (!otpSent || resendTimer <= 0) return;
+    const id = window.setInterval(() => {
+      setResendTimer((t) => (t > 0 ? t - 1 : 0));
+    }, 1000);
+    return () => window.clearInterval(id);
+  }, [otpSent, resendTimer]);
 
   const onPincodeBlur = async () => {
     const pin = (pincode || "").replace(/\D/g, "");
@@ -142,7 +167,7 @@ export default function CheckoutPage() {
         quantity: i.quantity,
         unitPrice: i.price,
         totalPrice: i.price * i.quantity,
-        itemType: "product" as const,
+        itemType: "variant" as const,
       })),
       paymentMethod,
       subtotal,
@@ -224,70 +249,103 @@ export default function CheckoutPage() {
     setLoading(false);
   };
 
-  const onSendOtp = async () => {
-    const phone = watch("phone").replace(/\D/g, "").slice(-10);
-    if (phone.length !== 10) {
-      setError("Enter a valid 10 digit phone number");
-      return;
+  const sendOtp = async (phone: string): Promise<string | null> => {
+    const res = await fetch("/api/otp/send", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ phone }),
+    });
+    const json = await res.json();
+    if (!res.ok || !json.success) {
+      throw new Error(json?.error || "Failed to send OTP");
     }
-    setLoading(true);
-    setError(null);
-    try {
-      const res = await fetch("/api/otp/send", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ phone }),
-      });
-      const json = await res.json();
-      if (!res.ok || !json.success) {
-        throw new Error(json?.error || "Failed to send OTP");
-      }
-      setOtpSent(true);
-      setOtpValue("");
-    } catch (e) {
-      setError(e instanceof Error ? e.message : "Failed to send OTP");
-    }
-    setLoading(false);
+    return typeof json?.devOtp === "string" ? json.devOtp : null;
   };
 
-  const onVerifyOtpAndPlaceOrder = async (data: AddressForm) => {
-    const phone = data.phone.replace(/\D/g, "").slice(-10);
-    if (otpValue.length !== 6) {
-      setError("Enter 6 digit OTP");
-      return;
+  const verifyOtp = async (phone: string, otpToVerify: string) => {
+    const verifyRes = await fetch("/api/otp/verify", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ phone, otp: otpToVerify }),
+    });
+    const verifyJson = await verifyRes.json();
+    if (!verifyRes.ok || !verifyJson.success) {
+      throw new Error("Invalid OTP. Please try again.");
     }
-    setLoading(true);
+  };
+
+  const onCodPlaceOrderClick = async () => {
     setError(null);
+    setLoading(true);
     try {
-      const verifyRes = await fetch("/api/otp/verify", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ phone, otp: otpValue }),
-      });
-      const verifyJson = await verifyRes.json();
-      if (!verifyRes.ok || !verifyJson.success) {
-        throw new Error(verifyJson?.error || "Invalid OTP");
+      const isValid = await trigger();
+      if (!isValid) return;
+
+      const phone = getValues("phone").replace(/\D/g, "").slice(-10);
+      if (phone.length !== 10) {
+        setError("Enter a valid 10 digit phone number");
+        return;
       }
+
+      const devOtp = await sendOtp(phone);
+      setOtpSent(true);
+      setOtp(devOtp ?? "");
+      setOtpVerified(false);
+      setResendTimer(30);
+      setDevOtpAutoFilled(Boolean(devOtp));
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "Failed to send OTP");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const onCodVerifyAndPlaceOrder = handleSubmit(async (data) => {
+    setError(null);
+    setLoading(true);
+    try {
+      const phone = data.phone.replace(/\D/g, "").slice(-10);
+      if (otp.length !== 6) {
+        setError("Enter 6 digit OTP");
+        return;
+      }
+
+      await verifyOtp(phone, otp);
+      setOtpVerified(true);
 
       const payload = buildOrderPayload(data);
       const result = await createOrder(payload);
       clearCart();
       router.replace(`/order-success/${result.orderId}`);
     } catch (e) {
-      setError(e instanceof Error ? e.message : "Verification failed");
+      setError(e instanceof Error ? e.message : "Invalid OTP. Please try again.");
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
-  };
+  });
 
-  const onSubmit = (data: AddressForm) => {
-    if (paymentMethod === "prepaid") {
-      onPlaceOrderPrepaid(data);
-    } else {
-      if (!otpSent) {
-        onSendOtp();
-      } else {
-        onVerifyOtpAndPlaceOrder(data);
+  const onResendOtp = async () => {
+    if (resendTimer > 0) return;
+    setError(null);
+    setLoading(true);
+    try {
+      const isValid = await trigger(["phone"]);
+      if (!isValid) return;
+      const phone = getValues("phone").replace(/\D/g, "").slice(-10);
+      if (phone.length !== 10) {
+        setError("Enter a valid 10 digit phone number");
+        return;
       }
+      const devOtp = await sendOtp(phone);
+      if (devOtp) {
+        setOtp(devOtp);
+        setDevOtpAutoFilled(true);
+      }
+      setResendTimer(30);
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "Failed to resend OTP");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -377,7 +435,6 @@ export default function CheckoutPage() {
           <h2 className="mb-4 font-semibold text-zinc-900">Delivery details</h2>
           <form
             id="checkout-form"
-            onSubmit={handleSubmit(onSubmit)}
             className="space-y-4"
           >
             <div>
@@ -528,12 +585,44 @@ export default function CheckoutPage() {
               Enter 6 digit OTP sent to your phone
             </label>
             <input
-              value={otpValue}
-              onChange={(e) => setOtpValue(e.target.value.replace(/\D/g, "").slice(0, 6))}
+              value={otp}
+              onChange={(e) =>
+                setOtp(e.target.value.replace(/\D/g, "").slice(0, 6))
+              }
               maxLength={6}
               className="w-full rounded-lg border border-zinc-200 px-3 py-2 text-sm"
               placeholder="000000"
             />
+            {isDev && devOtpAutoFilled && (
+              <p className="mt-2 text-xs text-zinc-500">
+                Dev mode: OTP auto-filled
+              </p>
+            )}
+            <div className="mt-3 flex items-center justify-between">
+              <button
+                type="button"
+                onClick={onCodVerifyAndPlaceOrder}
+                disabled={loading || otpVerified}
+                className="rounded-lg px-4 py-2 text-sm font-semibold text-white disabled:opacity-70"
+                style={{ backgroundColor: PRIMARY }}
+              >
+                {loading ? "Verifying..." : "Verify & Place Order"}
+              </button>
+
+              {resendTimer > 0 ? (
+                <span className="text-xs text-zinc-500">
+                  Resend in {resendTimer}s
+                </span>
+              ) : (
+                <button
+                  type="button"
+                  onClick={onResendOtp}
+                  className="text-xs font-medium text-zinc-600 hover:text-zinc-900"
+                >
+                  Resend OTP
+                </button>
+              )}
+            </div>
           </section>
         )}
 
@@ -543,19 +632,27 @@ export default function CheckoutPage() {
 
         {/* Section 4: Place Order */}
         <div className="mt-6">
-          <button
-            type="submit"
-            form="checkout-form"
-            disabled={loading}
-            className="w-full rounded-lg py-3 text-sm font-semibold text-white disabled:opacity-70"
-            style={{ backgroundColor: PRIMARY }}
-          >
-            {loading
-              ? "Processing..."
-              : paymentMethod === "cod" && !otpSent
-                ? "Send OTP & Continue"
-                : "Place Order"}
-          </button>
+          {paymentMethod === "prepaid" ? (
+            <button
+              type="button"
+              onClick={handleSubmit(onPlaceOrderPrepaid)}
+              disabled={loading}
+              className="w-full rounded-lg py-3 text-sm font-semibold text-white disabled:opacity-70"
+              style={{ backgroundColor: PRIMARY }}
+            >
+              {loading ? "Processing..." : "Place Order"}
+            </button>
+          ) : !otpSent ? (
+            <button
+              type="button"
+              onClick={onCodPlaceOrderClick}
+              disabled={loading}
+              className="w-full rounded-lg py-3 text-sm font-semibold text-white disabled:opacity-70"
+              style={{ backgroundColor: PRIMARY }}
+            >
+              {loading ? "Sending OTP..." : "Place Order"}
+            </button>
+          ) : null}
         </div>
       </div>
     </div>

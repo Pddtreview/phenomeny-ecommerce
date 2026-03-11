@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useCart } from "@/hooks/useCart";
 import { CartDrawer } from "@/components/store/CartDrawer";
@@ -15,9 +15,14 @@ const navLinks = [
 ];
 
 export function Header() {
+  const [mounted, setMounted] = useState(false);
   const [cartOpen, setCartOpen] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const totalItems = useCart((s) => s.totalItems());
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   return (
     <>
@@ -50,8 +55,9 @@ export function Header() {
             <button
               type="button"
               onClick={() => setCartOpen(true)}
+              suppressHydrationWarning
               className="relative flex h-10 w-10 items-center justify-center rounded-lg text-zinc-600 hover:bg-zinc-100 hover:text-zinc-900"
-              aria-label={`Open cart${totalItems > 0 ? `, ${totalItems} items` : ""}`}
+              aria-label="Open cart"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -68,7 +74,7 @@ export function Header() {
                 <path d="M3 6h18" />
                 <path d="M16 10a4 4 0 0 1-8 0" />
               </svg>
-              {totalItems > 0 && (
+              {mounted && totalItems > 0 && (
                 <span
                   className="absolute -right-1 -top-1 flex h-4 min-w-4 items-center justify-center rounded-full px-1 text-[10px] font-bold text-white"
                   style={{ backgroundColor: GOLD }}

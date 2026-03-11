@@ -101,7 +101,6 @@ export async function POST(request: NextRequest) {
         .update({
           name: customer.name,
           email: customer.email || null,
-          updated_at: new Date().toISOString(),
         })
         .eq("id", existingCustomer.id);
       customerId = existingCustomer.id;
@@ -129,8 +128,10 @@ export async function POST(request: NextRequest) {
       .from("addresses")
       .insert({
         customer_id: customerId,
-        address_line1: address.line1,
-        address_line2: address.line2 || null,
+        name: customer.name,
+        phone: customer.phone,
+        line1: address.line1,
+        line2: address.line2 || null,
         city: address.city,
         state: address.state,
         pincode: address.pincode,
@@ -147,6 +148,8 @@ export async function POST(request: NextRequest) {
     }
 
     const orderNumber = generateOrderNumber();
+    const payment_status = paymentMethod === "prepaid" ? "paid" : "pending";
+    const cod_otp_verified = paymentMethod === "cod";
 
     const { data: orderRow, error: orderErr } = await supabase
       .from("orders")
@@ -155,15 +158,16 @@ export async function POST(request: NextRequest) {
         customer_id: customerId,
         address_id: addressRow.id,
         payment_method: paymentMethod,
+        payment_status,
+        order_status: "confirmed",
         razorpay_order_id: razorpayOrderId || null,
         razorpay_payment_id: razorpayPaymentId || null,
-        coupon_id: body.couponId || null,
+        cod_otp_verified,
         subtotal,
         discount,
         shipping_charge: shippingCharge,
         cod_charge: codCharge,
         total,
-        status: "confirmed",
       })
       .select("id")
       .single();
@@ -188,7 +192,7 @@ export async function POST(request: NextRequest) {
         quantity: it.quantity,
         unit_price: it.unitPrice,
         total_price: it.totalPrice,
-        item_type: it.itemType || "product",
+        item_type: it.bundleId ? "bundle" : "variant",
       });
       if (itemErr) {
         console.error("order_items insert error:", itemErr);
