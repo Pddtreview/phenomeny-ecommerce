@@ -230,6 +230,19 @@ export async function POST(request: NextRequest) {
       }
     }
 
+    // Fire-and-forget: trigger Shiprocket order creation (do not await)
+    const baseUrl =
+      process.env.NEXT_PUBLIC_SITE_URL ||
+      (typeof request.url === "string" ? new URL(request.url).origin : null) ||
+      "http://localhost:3000";
+    if (baseUrl) {
+      fetch(`${baseUrl}/api/shiprocket/create-order`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ orderId }),
+      }).catch((err) => console.error("Shiprocket create-order trigger:", err));
+    }
+
     return NextResponse.json({
       success: true,
       orderId,

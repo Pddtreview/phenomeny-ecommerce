@@ -2,6 +2,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { createServerSupabaseClient } from "@/lib/supabase-server";
 import { OrderStatusUpdate } from "@/components/admin/OrderStatusUpdate";
+import { CreateShipmentButton } from "@/components/admin/CreateShipmentButton";
 
 const PRIMARY = "#1B3A6B";
 const GOLD = "#C8860A";
@@ -11,7 +12,7 @@ async function getOrder(id: string) {
   const { data: order, error } = await supabase
     .from("orders")
     .select(
-      "id, order_number, created_at, order_status, payment_status, payment_method, subtotal, discount, shipping_charge, cod_charge, total, customer_id, address_id"
+      "id, order_number, created_at, order_status, payment_status, payment_method, subtotal, discount, shipping_charge, cod_charge, total, customer_id, address_id, shiprocket_order_id, shiprocket_shipment_id, awb_number, courier_name, label_url, tracking_url"
     )
     .eq("id", id)
     .single();
@@ -152,6 +153,64 @@ export default async function AdminOrderDetailPage({
           <p className="mt-4 text-sm text-zinc-500">—</p>
         )}
       </section>
+
+      {order.shiprocket_order_id ? (
+        <section className="rounded-xl border border-zinc-200 bg-white p-5">
+          <h2 className="text-sm font-semibold text-zinc-900">
+            Shiprocket details
+          </h2>
+          <div className="mt-4 space-y-2 text-sm">
+            <div className="flex justify-between">
+              <span className="text-zinc-600">AWB number</span>
+              <span className="font-medium text-zinc-900">
+                {order.awb_number || "—"}
+              </span>
+            </div>
+            <div className="flex justify-between">
+              <span className="text-zinc-600">Courier</span>
+              <span className="font-medium text-zinc-900">
+                {order.courier_name || "—"}
+              </span>
+            </div>
+            {order.label_url && (
+              <div className="pt-2">
+                <a
+                  href={order.label_url}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="font-medium hover:underline"
+                  style={{ color: PRIMARY }}
+                >
+                  Download label
+                </a>
+              </div>
+            )}
+            {order.tracking_url && (
+              <div className="pt-1">
+                <a
+                  href={order.tracking_url}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="font-medium hover:underline"
+                  style={{ color: PRIMARY }}
+                >
+                  Tracking URL
+                </a>
+              </div>
+            )}
+          </div>
+        </section>
+      ) : (
+        <section className="rounded-xl border border-zinc-200 bg-white p-5">
+          <h2 className="text-sm font-semibold text-zinc-900">Shiprocket</h2>
+          <p className="mt-2 text-sm text-zinc-600">
+            No shipment created yet. Create one to assign AWB and generate label.
+          </p>
+          <div className="mt-4">
+            <CreateShipmentButton orderId={id} />
+          </div>
+        </section>
+      )}
 
       <section className="rounded-xl border border-zinc-200 bg-white p-5">
         <h2 className="text-sm font-semibold text-zinc-900">Order items</h2>
