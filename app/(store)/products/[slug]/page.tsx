@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import { createServerSupabaseClient } from "@/lib/supabase-server";
 import ProductDetailClient from "@/components/store/ProductDetailClient";
+import SaveRecentlyViewed from "@/components/store/SaveRecentlyViewed";
 
 const PRIMARY = "#1B3A6B";
 const GOLD = "#C8860A";
@@ -36,14 +37,17 @@ async function getProductBySlug(slug: string) {
 
   if (error || !product) return null;
 
-  const { data: primaryImage } = await supabase
+  const { data: productImages } = await supabase
     .from("product_images")
     .select("cloudinary_url, is_primary")
     .eq("product_id", product.id)
-    .eq("is_primary", true)
-    .order("created_at", { ascending: true })
-    .limit(1)
-    .maybeSingle();
+    .order("is_primary", { ascending: false })
+    .order("created_at", { ascending: true });
+
+  const primaryImageUrl =
+    (productImages ?? []).find((img) => img.is_primary)?.cloudinary_url ??
+    productImages?.[0]?.cloudinary_url ??
+    null;
 
   const { data: variants } = await supabase
     .from("product_variants")
@@ -59,9 +63,15 @@ async function getProductBySlug(slug: string) {
     .eq("is_approved", true)
     .order("created_at", { ascending: false });
 
+  const imagesForClient = (productImages ?? []).map((img) => ({
+    cloudinary_url: img.cloudinary_url,
+    is_primary: !!img.is_primary,
+  }));
+
   return {
     product,
-    primaryImageUrl: primaryImage?.cloudinary_url ?? null,
+    primaryImageUrl,
+    productImages: imagesForClient,
     variants: (variants ?? []) as ProductVariantRow[],
     reviews: (reviews ?? []) as ReviewRow[],
   };
@@ -105,7 +115,7 @@ export default async function ProductPage({
 
   if (!data) notFound();
 
-  const { product, primaryImageUrl, variants, reviews } = data;
+  const { product, primaryImageUrl, productImages, variants, reviews } = data;
 
   const variantPayload = variants.map((v) => ({
     id: v.id,
@@ -149,6 +159,13 @@ export default async function ProductPage({
 
   return (
     <div className="min-h-screen bg-zinc-50">
+      <SaveRecentlyViewed
+        id={product.id}
+        slug={product.slug}
+        name={product.name}
+        price={variantPrice}
+        image_url={primaryImageUrl}
+      />
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: productSchemaJson }}
@@ -174,50 +191,13 @@ export default async function ProductPage({
         </Link>
 
         <div className="mt-6 grid gap-8 sm:grid-cols-2">
-          {/* Image area */}
-          <div className="flex h-64 items-center justify-center rounded-xl bg-zinc-100">
-            {primaryImageUrl ? (
-              <img
-                src={primaryImageUrl}
-                alt={product.name}
-                className="h-full w-full rounded-xl object-cover"
-              />
-            ) : (
-              <div
-                className="flex h-full w-full items-center justify-center rounded-xl px-4 text-center"
-                style={{ backgroundColor: PRIMARY }}
-              >
-                <p
-                  className="text-sm font-medium"
-                  style={{ color: GOLD }}
-                >
-                  {product.name}
-                </p>
-              </div>
-            )}
-          </div>
-
-          <div className="flex flex-col">
-            {/* Category badge */}
-            {product.category && (
-              <span
-                className="mb-2 inline-block w-fit rounded-full px-3 py-1 text-xs font-medium text-white"
-                style={{ backgroundColor: GOLD }}
-              >
-                {product.category}
-              </span>
-            )}
-
-            <h1 className="text-2xl font-bold text-zinc-900 sm:text-3xl">
-              {product.name}
-            </h1>
-
-            <ProductDetailClient
-              productId={product.id}
-              productName={product.name}
-              variants={variantPayload}
-            />
-          </div>
+          <ProductDetailClient
+            productId={product.id}
+            productName={product.name}
+            productCategory={product.category ?? null}
+            variants={variantPayload}
+            images={productImages}
+          />
         </div>
 
         {/* Description */}

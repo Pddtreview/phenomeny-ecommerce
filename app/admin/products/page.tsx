@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { createServerSupabaseClient } from "@/lib/supabase-server";
+import ImportProductsModal from "@/components/admin/ImportProductsModal";
 
 const PRIMARY = "#1B3A6B";
 
@@ -41,13 +42,23 @@ export default async function AdminProductsPage() {
     <div className="space-y-6">
       <div className="flex flex-wrap items-center justify-between gap-4">
         <h1 className="text-2xl font-bold text-zinc-900">Products</h1>
-        <Link
-          href="/admin/products/new"
-          className="rounded-lg px-4 py-2 text-sm font-medium text-white"
-          style={{ backgroundColor: PRIMARY }}
-        >
-          Add Product
-        </Link>
+        <div className="flex flex-wrap items-center gap-2">
+          <a
+            href="/api/admin/products/import-template"
+            download="nauvarah-products-template.xlsx"
+            className="rounded-lg border border-zinc-200 bg-white px-4 py-2 text-sm font-medium text-zinc-700 hover:bg-zinc-50"
+          >
+            Download Template
+          </a>
+          <ImportProductsModal />
+          <Link
+            href="/admin/products/new"
+            className="rounded-lg px-4 py-2 text-sm font-medium text-white"
+            style={{ backgroundColor: PRIMARY }}
+          >
+            Add Product
+          </Link>
+        </div>
       </div>
 
       <div className="overflow-x-auto rounded-xl border border-zinc-200 bg-white shadow-sm">
@@ -107,7 +118,7 @@ export default async function AdminProductsPage() {
                 </td>
                 <td className="px-4 py-3">
                   <Link
-                    href={`/admin/products/${p.id}/edit`}
+                    href={'/admin/products/' + p.id + '/edit'}
                     className="font-medium hover:underline"
                     style={{ color: PRIMARY }}
                   >
