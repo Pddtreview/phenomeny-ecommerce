@@ -1,13 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
-import { createClient } from "@supabase/supabase-js";
 
 const MSG91_OTP_URL = "https://control.msg91.com/api/v5/otp";
 
-function generateOtp(): string {
-  return String(Math.floor(100000 + Math.random() * 900000));
-}
-
 export async function POST(request: NextRequest) {
+  console.log("OTP SEND ROUTE HIT")
   try {
     const body = await request.json();
     const phone = typeof body?.phone === "string" ? body.phone.replace(/\D/g, "") : "";
@@ -15,38 +11,6 @@ export async function POST(request: NextRequest) {
       return NextResponse.json(
         { success: false, error: "Invalid phone number" },
         { status: 400 }
-      );
-    }
-
-    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
-    const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY ?? process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
-    if (!supabaseUrl || !supabaseKey) {
-      return NextResponse.json(
-        { success: false, error: "Server configuration error" },
-        { status: 500 }
-      );
-    }
-
-    const supabase = createClient(supabaseUrl, supabaseKey);
-    const otp = generateOtp();
-    const expiresAt = new Date(Date.now() + 10 * 60 * 1000).toISOString();
-
-    if (process.env.NODE_ENV === "development") {
-      console.log("DEV OTP:", otp);
-    }
-
-    const { error: insertError } = await supabase.from("otp_verifications").insert({
-      phone,
-      otp,
-      expires_at: expiresAt,
-      verified: false,
-    });
-
-    if (insertError) {
-      console.error("otp/send insert error:", insertError);
-      return NextResponse.json(
-        { success: false, error: "Failed to store OTP" },
-        { status: 500 }
       );
     }
 
@@ -59,6 +23,9 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    console.log("Sending OTP to MSG91 for mobile: 91" + phone);
+    console.log("Template ID:", templateId);
+
     const msg91Res = await fetch(MSG91_OTP_URL, {
       method: "POST",
       headers: {
@@ -67,22 +34,19 @@ export async function POST(request: NextRequest) {
       },
       body: JSON.stringify({
         template_id: templateId,
-        mobile: `91${phone}`,
-        otp,
+        mobile: "91" + phone,
       }),
     });
 
+    const responseText = await msg91Res.text();
+    console.log("MSG91 response status:", msg91Res.status);
+    console.log("MSG91 response body:", responseText);
+
     if (!msg91Res.ok) {
-      const errText = await msg91Res.text();
-      console.error("MSG91 OTP send error:", msg91Res.status, errText);
       return NextResponse.json(
-        { success: false, error: "Failed to send OTP" },
+        { success: false, error: "MSG91 error: " + responseText },
         { status: 502 }
       );
-    }
-
-    if (process.env.NODE_ENV === "development") {
-      return NextResponse.json({ success: true, devOtp: otp });
     }
 
     return NextResponse.json({ success: true });

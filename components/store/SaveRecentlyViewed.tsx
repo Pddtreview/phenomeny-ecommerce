@@ -1,11 +1,11 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect } from "react";
 
-const RECENTLY_VIEWED_KEY = 'recently_viewed';
-const RECENTLY_VIEWED_MAX = 6;
+const KEY = "recently_viewed";
+const MAX_ITEMS = 6;
 
-type Props = {
+type SaveRecentlyViewedProps = {
   id: string;
   slug: string;
   name: string;
@@ -13,24 +13,20 @@ type Props = {
   image_url: string | null;
 };
 
-export default function SaveRecentlyViewed({
-  id,
-  slug,
-  name,
-  price,
-  image_url,
-}: Props) {
+export default function SaveRecentlyViewed(props: SaveRecentlyViewedProps) {
   useEffect(() => {
-    if (typeof window === 'undefined') return;
+    if (typeof window === "undefined") return;
     try {
-      const raw = window.localStorage.getItem(RECENTLY_VIEWED_KEY);
-      let list: Props[] = raw ? JSON.parse(raw) : [];
-      list = list.filter((x) => x.id !== id);
-      list.unshift({ id, slug, name, price, image_url });
-      list = list.slice(0, RECENTLY_VIEWED_MAX);
-      window.localStorage.setItem(RECENTLY_VIEWED_KEY, JSON.stringify(list));
-    } catch (_) {}
-  }, [id, slug, name, price, image_url]);
+      const raw = window.localStorage.getItem(KEY);
+      const list: SaveRecentlyViewedProps[] = raw ? JSON.parse(raw) : [];
+      const filtered = list.filter((item) => item.id !== props.id);
+      const next = [props].concat(filtered).slice(0, MAX_ITEMS);
+      window.localStorage.setItem(KEY, JSON.stringify(next));
+    } catch {
+      // ignore storage errors
+    }
+  }, [props.id, props.slug, props.name, props.price, props.image_url]);
 
   return null;
 }
+
