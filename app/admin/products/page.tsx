@@ -2,34 +2,26 @@ import Link from "next/link";
 import { createServerSupabaseClient } from "@/lib/supabase-server";
 
 const PRIMARY = "#1B3A6B";
-const GOLD = "#C8860A";
 
 async function getProducts() {
   const supabase = await createServerSupabaseClient();
   const { data: products, error } = await supabase
     .from("products")
-    .select("id, name, slug, category, is_active")
+    .select("id, name, slug, category, is_active, created_at")
     .order("created_at", { ascending: false });
 
   if (error || !products?.length) return [];
 
   const productIds = products.map((p) => p.id);
-  const { data: variants } = await supabase
-    .from("product_variants")
-    .select("product_id, stock_quantity")
+  const { data: images } = await supabase
+    .from("product_images")
+    .select("product_id, cloudinary_url, is_primary")
+    .eq("is_primary", true)
     .in("product_id", productIds);
 
-  const variantCountByProduct = new Map<string, number>();
-  const totalStockByProduct = new Map<string, number>();
-
-  for (const v of variants ?? []) {
-    const pid = v.product_id;
-    variantCountByProduct.set(pid, (variantCountByProduct.get(pid) ?? 0) + 1);
-    totalStockByProduct.set(
-      pid,
-      (totalStockByProduct.get(pid) ?? 0) + Number(v.stock_quantity ?? 0)
-    );
-  }
+  const imageMap = new Map(
+    (images ?? []).map((img) => [img.product_id, img.cloudinary_url])
+  );
 
   return products.map((p) => ({
     id: p.id,
@@ -37,8 +29,8 @@ async function getProducts() {
     slug: p.slug,
     category: p.category,
     is_active: p.is_active,
-    variants_count: variantCountByProduct.get(p.id) ?? 0,
-    total_stock: totalStockByProduct.get(p.id) ?? 0,
+    created_at: p.created_at,
+    thumbnail: imageMap.get(p.id) ?? null,
   }));
 }
 
@@ -62,23 +54,37 @@ export default async function AdminProductsPage() {
         <table className="w-full text-left text-sm">
           <thead>
             <tr className="border-b border-zinc-200 bg-zinc-50">
-              <th className="px-4 py-3 font-medium text-zinc-600">Name</th>
+              <th className="px-4 py-3 font-medium text-zinc-600">Product</th>
               <th className="px-4 py-3 font-medium text-zinc-600">Category</th>
-              <th className="px-4 py-3 font-medium text-zinc-600">Variants</th>
-              <th className="px-4 py-3 font-medium text-zinc-600">Total stock</th>
+              <th className="px-4 py-3 font-medium text-zinc-600">Slug</th>
               <th className="px-4 py-3 font-medium text-zinc-600">Status</th>
+              <th className="px-4 py-3 font-medium text-zinc-600">Created</th>
               <th className="px-4 py-3 font-medium text-zinc-600">Actions</th>
             </tr>
           </thead>
           <tbody>
             {products.map((p) => (
               <tr key={p.id} className="border-b border-zinc-100 last:border-0">
-                <td className="px-4 py-3 font-medium text-zinc-900">{p.name}</td>
+                <td className="px-4 py-3">
+                  <div className="flex items-center gap-3">
+                    {p.thumbnail ? (
+                      <img
+                        src={p.thumbnail}
+                        alt={p.name}
+                        className="h-10 w-10 rounded-md object-cover ring-1 ring-zinc-200"
+                      />
+                    ) : (
+                      <div className="flex h-10 w-10 items-center justify-center rounded-md bg-zinc-100 text-xs text-zinc-400">
+                        No image
+                      </div>
+                    )}
+                    <span className="font-medium text-zinc-900">{p.name}</span>
+                  </div>
+                </td>
                 <td className="px-4 py-3 text-zinc-600">
                   {p.category ?? "—"}
                 </td>
-                <td className="px-4 py-3 text-zinc-900">{p.variants_count}</td>
-                <td className="px-4 py-3 text-zinc-900">{p.total_stock}</td>
+                <td className="px-4 py-3 text-zinc-600">{p.slug}</td>
                 <td className="px-4 py-3">
                   <span
                     className={`rounded-full px-2 py-0.5 text-xs font-medium ${
@@ -89,6 +95,15 @@ export default async function AdminProductsPage() {
                   >
                     {p.is_active ? "Active" : "Inactive"}
                   </span>
+                </td>
+                <td className="px-4 py-3 text-zinc-600">
+                  {p.created_at
+                    ? new Date(p.created_at).toLocaleDateString("en-IN", {
+                        year: "numeric",
+                        month: "short",
+                        day: "numeric",
+                      })
+                    : "—"}
                 </td>
                 <td className="px-4 py-3">
                   <Link
@@ -112,3 +127,4 @@ export default async function AdminProductsPage() {
     </div>
   );
 }
+

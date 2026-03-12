@@ -10,6 +10,7 @@ type VariantRow = {
   id: string;
   product_id: string;
   product_name: string;
+  product_category?: string | null;
   variant_name: string;
   sku: string;
   stock_quantity: number;
@@ -19,48 +20,45 @@ type VariantRow = {
 
 export function InventoryTable({ rows }: { rows: VariantRow[] }) {
   const router = useRouter();
-  const [adjustingId, setAdjustingId] = useState<string | null>(null);
-  const [change, setChange] = useState("");
-  const [reason, setReason] = useState("");
+  const [editingId, setEditingId] = useState<string | null>(null);
+  const [newQty, setNewQty] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const startAdjust = (id: string) => {
-    setAdjustingId(id);
-    setChange("");
-    setReason("");
+  const startEdit = (id: string, currentQty: number) => {
+    setEditingId(id);
+    setNewQty(String(currentQty));
     setError(null);
   };
 
-  const cancelAdjust = () => {
-    setAdjustingId(null);
-    setChange("");
-    setReason("");
+  const cancelEdit = () => {
+    setEditingId(null);
+    setNewQty("");
     setError(null);
   };
 
-  const submitAdjust = async () => {
-    if (!adjustingId) return;
-    const delta = parseInt(change, 10);
-    if (Number.isNaN(delta) || delta === 0) {
-      setError("Enter a non-zero integer");
+  const submitUpdate = async (row: VariantRow) => {
+    if (!editingId) return;
+    const parsed = parseInt(newQty, 10);
+    if (!Number.isFinite(parsed) || parsed < 0) {
+      setError("Enter a non-negative quantity");
       return;
     }
     setLoading(true);
     setError(null);
     try {
-      const res = await fetch("/api/admin/inventory/adjust", {
-        method: "POST",
+      const res = await fetch("/api/admin/inventory/update", {
+        method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          variantId: adjustingId,
-          change: delta,
-          reason: reason || "admin adjust",
+          variantId: row.id,
+          newQuantity: parsed,
+          oldQuantity: row.stock_quantity,
         }),
       });
       const json = await res.json();
       if (!res.ok) throw new Error(json?.error ?? "Failed");
-      cancelAdjust();
+      cancelEdit();
       router.refresh();
     } catch (e) {
       setError(e instanceof Error ? e.message : "Failed");
@@ -80,14 +78,14 @@ export function InventoryTable({ rows }: { rows: VariantRow[] }) {
             <th className="px-4 py-3 font-medium text-zinc-600">Stock</th>
             <th className="px-4 py-3 font-medium text-zinc-600">Price</th>
             <th className="px-4 py-3 font-medium text-zinc-600">Status</th>
-            <th className="px-4 py-3 font-medium text-zinc-600">Adjust</th>
+            <th className="px-4 py-3 font-medium text-zinc-600">Update</th>
           </tr>
         </thead>
         <tbody>
           {rows.map((row) => {
             const isZero = row.stock_quantity === 0;
-            const isLow = row.stock_quantity > 0 && row.stock_quantity < 20;
-            const isAdjusting = adjustingId === row.id;
+            const isLow = row.stock_quantity > 0 && row.stock_quantity <= 20;
+            const isEditing = editingId === row.id;
 
             return (
               <tr
@@ -100,11 +98,28 @@ export function InventoryTable({ rows }: { rows: VariantRow[] }) {
               >
                 <td className="px-4 py-3 font-medium text-zinc-900">
                   {row.product_name}
+                  {row.product_category && (
+                    <span className="ml-2 text-xs text-zinc-500">
+                      ({row.product_category})
+                    </span>
+                  )}
                 </td>
                 <td className="px-4 py-3 text-zinc-700">{row.variant_name}</td>
                 <td className="px-4 py-3 text-zinc-600">{row.sku}</td>
                 <td className="px-4 py-3 font-semibold text-zinc-900">
-                  {row.stock_quantity}
+                  <div className="flex items-center gap-2">
+                    <span>{row.stock_quantity}</span>
+                    {isZero && (
+                      <span className="rounded-full bg-red-100 px-2 py-0.5 text-xs font-medium text-red-800">
+                        Out of Stock
+                      </span>
+                    )}
+                    {!isZero && isLow && (
+                      <span className="rounded-full bg-amber-100 px-2 py-0.5 text-xs font-medium text-amber-800">
+                        Low Stock
+                      </span>
+                    )}
+                  </div>
                 </td>
                 <td className="px-4 py-3 text-zinc-700">
                   ₹{Number(row.price).toLocaleString("en-IN")}
@@ -121,40 +136,33 @@ export function InventoryTable({ rows }: { rows: VariantRow[] }) {
                   </span>
                 </td>
                 <td className="px-4 py-3">
-                  {isAdjusting ? (
+                  {isEditing ? (
                     <div className="flex flex-col gap-2">
                       <div className="flex gap-2">
                         <input
                           type="number"
-                          value={change}
-                          onChange={(e) => setChange(e.target.value)}
-                          placeholder="+/- qty"
+                          min={0}
+                          value={newQty}
+                          onChange={(e) => setNewQty(e.target.value)}
                           className="w-24 rounded border border-zinc-200 px-2 py-1 text-xs"
                         />
                         <button
                           type="button"
-                          onClick={submitAdjust}
+                          onClick={() => submitUpdate(row)}
                           disabled={loading}
                           className="rounded bg-zinc-900 px-2 py-1 text-xs font-medium text-white disabled:opacity-70"
                           style={{ backgroundColor: PRIMARY }}
                         >
-                          Save
+                          Update
                         </button>
                         <button
                           type="button"
-                          onClick={cancelAdjust}
+                          onClick={cancelEdit}
                           className="rounded border border-zinc-200 px-2 py-1 text-xs"
                         >
                           Cancel
                         </button>
                       </div>
-                      <input
-                        type="text"
-                        value={reason}
-                        onChange={(e) => setReason(e.target.value)}
-                        placeholder="Reason (optional)"
-                        className="w-full max-w-xs rounded border border-zinc-200 px-2 py-1 text-xs"
-                      />
                       {error && (
                         <p className="text-xs text-red-600">{error}</p>
                       )}
@@ -162,11 +170,11 @@ export function InventoryTable({ rows }: { rows: VariantRow[] }) {
                   ) : (
                     <button
                       type="button"
-                      onClick={() => startAdjust(row.id)}
+                      onClick={() => startEdit(row.id, row.stock_quantity)}
                       className="text-xs font-medium hover:underline"
                       style={{ color: PRIMARY }}
                     >
-                      Adjust
+                      Update
                     </button>
                   )}
                 </td>

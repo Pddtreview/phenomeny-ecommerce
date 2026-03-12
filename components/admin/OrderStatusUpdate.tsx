@@ -1,4 +1,4 @@
-"use client";
+'use client'
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
@@ -7,10 +7,9 @@ import { cn } from "@/lib/utils";
 const PRIMARY = "#1B3A6B";
 
 const STATUS_OPTIONS = [
+  "pending",
   "confirmed",
-  "processing",
   "shipped",
-  "out_for_delivery",
   "delivered",
   "cancelled",
   "rto",
@@ -36,7 +35,7 @@ export function OrderStatusUpdate({
       const res = await fetch(`/api/admin/orders/${orderId}/status`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ order_status: newStatus }),
+          body: JSON.stringify({ status: newStatus }),
       });
       const json = await res.json();
       if (!res.ok) throw new Error(json?.error ?? "Update failed");

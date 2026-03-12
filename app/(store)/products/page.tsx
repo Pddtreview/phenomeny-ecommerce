@@ -9,6 +9,7 @@ type Product = {
   category: string | null;
   price: number | null;
   compare_price: number | null;
+  image_url: string | null;
 };
 
 async function getAllProducts(): Promise<Product[]> {
@@ -24,11 +25,22 @@ async function getAllProducts(): Promise<Product[]> {
     return [];
   }
 
+  const productIds = products.map((p) => p.id);
+  const { data: images } = await supabase
+    .from("product_images")
+    .select("product_id, cloudinary_url, is_primary")
+    .eq("is_primary", true)
+    .in("product_id", productIds);
+
+  const imageMap = new Map(
+    (images ?? []).map((img) => [img.product_id, img.cloudinary_url])
+  );
+
   const productsWithVariants = await Promise.all(
     products.map(async (product) => {
       const { data: variant } = await supabase
         .from("product_variants")
-        .select("price, compare_price, image_urls")
+        .select("price, compare_price")
         .eq("product_id", product.id)
         .eq("is_active", true)
         .limit(1)
@@ -42,6 +54,7 @@ async function getAllProducts(): Promise<Product[]> {
         category: (product as any).category ?? null,
         price: variant?.price ?? null,
         compare_price: variant?.compare_price ?? null,
+        image_url: imageMap.get(product.id) ?? null,
       } as Product;
     })
   );
@@ -93,11 +106,21 @@ export default async function ProductsPage() {
                   key={product.id}
                   className="flex h-full flex-col overflow-hidden rounded-xl bg-white shadow-sm"
                 >
-                  {/* Image area (name-based placeholder) */}
-                  <div className="flex h-48 items-center justify-center bg-[#1B3A6B] px-2 text-center">
-                    <p className="text-sm font-medium text-[#C8860A] line-clamp-3">
-                      {product.name}
-                    </p>
+                  {/* Image area */}
+                  <div className="flex h-48 items-center justify-center bg-zinc-100">
+                    {product.image_url ? (
+                      <img
+                        src={product.image_url}
+                        alt={product.name}
+                        className="h-full w-full object-cover"
+                      />
+                    ) : (
+                      <div className="flex h-full w-full items-center justify-center bg-[#1B3A6B] px-2 text-center">
+                        <p className="text-sm font-medium text-[#C8860A] line-clamp-3">
+                          {product.name}
+                        </p>
+                      </div>
+                    )}
                   </div>
 
                   {/* Card body */}

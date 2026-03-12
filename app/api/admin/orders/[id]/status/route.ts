@@ -8,12 +8,12 @@ export async function PATCH(
   try {
     const { id } = await params;
     const body = await request.json();
-    const order_status =
-      typeof body?.order_status === "string" ? body.order_status.trim() : "";
+    const status =
+      typeof body?.status === "string" ? body.status.trim() : "";
 
-    if (!id || !order_status) {
+    if (!id || !status) {
       return NextResponse.json(
-        { error: "order_status required" },
+        { error: "status required" },
         { status: 400 }
       );
     }
@@ -30,17 +30,43 @@ export async function PATCH(
     }
 
     const supabase = createClient(supabaseUrl, supabaseKey);
-    const { error } = await supabase
+
+    const { error: updateErr } = await supabase
       .from("orders")
-      .update({ order_status })
+      .update({ order_status: status })
       .eq("id", id);
 
-    if (error) {
-      console.error("admin orders status update error:", error);
+    if (updateErr) {
+      console.error("admin orders status update error:", updateErr);
       return NextResponse.json(
         { error: "Update failed" },
         { status: 500 }
       );
+    }
+
+    if (status === "cancelled") {
+      const { data: items, error: itemsErr } = await supabase
+        .from("order_items")
+        .select("variant_id, quantity")
+        .eq("order_id", id);
+
+      if (!itemsErr && items) {
+        for (const it of items) {
+          if (!it.variant_id || !it.quantity) continue;
+          const { data: variant, error: vErr } = await supabase
+            .from("product_variants")
+            .select("stock_quantity")
+            .eq("id", it.variant_id)
+            .single();
+          if (vErr || !variant) continue;
+          const current = Number(variant.stock_quantity ?? 0);
+          const newStock = current + Number(it.quantity ?? 0);
+          await supabase
+            .from("product_variants")
+            .update({ stock_quantity: newStock })
+            .eq("id", it.variant_id);
+        }
+      }
     }
 
     return NextResponse.json({ success: true });
@@ -52,3 +78,4 @@ export async function PATCH(
     );
   }
 }
+

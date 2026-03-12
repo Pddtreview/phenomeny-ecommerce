@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { createServerSupabaseClient } from "@/lib/supabase-server";
 import { OrderStatusUpdate } from "@/components/admin/OrderStatusUpdate";
 import { CreateShipmentButton } from "@/components/admin/CreateShipmentButton";
+import { AdminOrderNotes } from "@/components/admin/AdminOrderNotes";
 
 const PRIMARY = "#1B3A6B";
 const GOLD = "#C8860A";
@@ -12,7 +13,7 @@ async function getOrder(id: string) {
   const { data: order, error } = await supabase
     .from("orders")
     .select(
-      "id, order_number, created_at, order_status, payment_status, payment_method, subtotal, discount, shipping_charge, cod_charge, total, customer_id, address_id, shiprocket_order_id, shiprocket_shipment_id, awb_number, courier_name, label_url, tracking_url"
+      "id, order_number, created_at, order_status, payment_status, payment_method, subtotal, discount, shipping_charge, cod_charge, total, coupon_code, discount_amount, razorpay_order_id, customer_id, address_id, shiprocket_order_id, shiprocket_shipment_id, awb_number, courier_name, label_url, tracking_url, admin_notes"
     )
     .eq("id", id)
     .single();
@@ -75,12 +76,16 @@ export default async function AdminOrderDetailPage({
         </div>
         <div className="flex items-center gap-3">
           <OrderStatusUpdate orderId={id} currentStatus={order.order_status} />
-          <button
-            type="button"
-            className="rounded-lg border border-zinc-200 bg-white px-4 py-2 text-sm font-medium text-zinc-700 hover:bg-zinc-50"
-          >
-            Print label
-          </button>
+          {order.label_url && (
+            <a
+              href={order.label_url}
+              target="_blank"
+              rel="noreferrer"
+              className="rounded-lg border border-zinc-200 bg-white px-4 py-2 text-sm font-medium text-zinc-700 hover:bg-zinc-50"
+            >
+              Print label
+            </a>
+          )}
         </div>
       </div>
 
@@ -89,15 +94,33 @@ export default async function AdminOrderDetailPage({
           <h2 className="text-sm font-semibold text-zinc-900">
             Order summary
           </h2>
+          <div className="mt-3 flex items-center justify-between text-sm">
+            <span className="text-zinc-600">Status</span>
+            <span className="rounded-full bg-zinc-100 px-2 py-0.5 text-xs font-medium text-zinc-800">
+              {String(order.order_status ?? "").replace(/_/g, " ")}
+            </span>
+          </div>
           <div className="mt-4 space-y-2 text-sm">
             <div className="flex justify-between">
               <span className="text-zinc-600">Subtotal</span>
               <span>₹{Number(order.subtotal).toLocaleString("en-IN")}</span>
             </div>
             <div className="flex justify-between">
-              <span className="text-zinc-600">Discount</span>
-              <span>−₹{Number(order.discount ?? 0).toLocaleString("en-IN")}</span>
+              <span className="text-zinc-600">Discount (prepaid)</span>
+              <span>
+                −₹{Number(order.discount ?? 0).toLocaleString("en-IN")}
+              </span>
             </div>
+            {order.coupon_code && (
+              <div className="flex justify-between text-emerald-700">
+                <span className="text-zinc-600">
+                  Coupon ({order.coupon_code})
+                </span>
+                <span>
+                  −₹{Number(order.discount_amount ?? 0).toLocaleString("en-IN")}
+                </span>
+              </div>
+            )}
             <div className="flex justify-between">
               <span className="text-zinc-600">Shipping</span>
               <span>₹{Number(order.shipping_charge ?? 0).toLocaleString("en-IN")}</span>
@@ -113,10 +136,6 @@ export default async function AdminOrderDetailPage({
               </span>
             </div>
           </div>
-          <p className="mt-3 text-xs text-zinc-500">
-            Payment: {String(order.payment_status).replace(/_/g, " ")} •{" "}
-            {String(order.payment_method).replace(/_/g, " ")}
-          </p>
         </section>
 
         <section className="rounded-xl border border-zinc-200 bg-white p-5">
@@ -245,12 +264,36 @@ export default async function AdminOrderDetailPage({
       </section>
 
       <section className="rounded-xl border border-zinc-200 bg-white p-5">
+        <h2 className="text-sm font-semibold text-zinc-900">Payment info</h2>
+        <div className="mt-4 space-y-2 text-sm text-zinc-700">
+          <div className="flex justify-between">
+            <span className="text-zinc-600">Method</span>
+            <span>
+              {String(order.payment_method ?? "").replace(/_/g, " ")}
+            </span>
+          </div>
+          <div className="flex justify-between">
+            <span className="text-zinc-600">Status</span>
+            <span>
+              {String(order.payment_status ?? "").replace(/_/g, " ")}
+            </span>
+          </div>
+          {order.razorpay_order_id && (
+            <div className="flex justify-between">
+              <span className="text-zinc-600">Razorpay order ID</span>
+              <span className="font-mono text-xs">
+                {order.razorpay_order_id}
+              </span>
+            </div>
+          )}
+        </div>
+      </section>
+
+      <section className="rounded-xl border border-zinc-200 bg-white p-5">
         <h2 className="text-sm font-semibold text-zinc-900">Admin notes</h2>
-        <textarea
-          placeholder="Add internal notes..."
-          rows={3}
-          className="mt-2 w-full rounded-lg border border-zinc-200 px-3 py-2 text-sm focus:outline-none focus:ring-2"
-          style={{ outlineColor: PRIMARY }}
+        <AdminOrderNotes
+          orderId={id}
+          initialNote={order.admin_notes ?? ""}
         />
       </section>
     </div>

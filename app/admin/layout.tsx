@@ -1,9 +1,10 @@
-"use client";
+'use client'
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
+import { AdminLogout } from "@/components/admin/AdminLogout";
 
 // Admin layout is completely separate from the store. Do NOT import or use
 // components/store/Header or any store layout — /admin must not show the store header.
@@ -15,6 +16,7 @@ const navItems = [
   { href: "/admin", label: "Dashboard" },
   { href: "/admin/orders", label: "Orders" },
   { href: "/admin/products", label: "Products" },
+  { href: "/admin/coupons", label: "Coupons" },
   { href: "/admin/inventory", label: "Inventory" },
   { href: "/admin/customers", label: "Customers" },
   { href: "/admin/reports", label: "Reports" },
@@ -75,6 +77,9 @@ export default function AdminLayout({
           >
             Nauvarah Admin
           </Link>
+        </div>
+        <div className="hidden items-center gap-3 md:flex">
+          <AdminLogout />
         </div>
       </header>
 

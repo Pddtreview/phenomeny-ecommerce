@@ -6,7 +6,9 @@ async function getCustomers() {
 
   const { data: customers, error } = await supabase
     .from("customers")
-    .select("id, name, phone, order_count, total_spent, is_rto_risk, last_order_at")
+    .select(
+      "id, name, phone, email, order_count, total_spent, is_rto_risk, last_order_at, rto_count, created_at"
+    )
     .order("total_spent", { ascending: false });
 
   if (error || !customers) return [];
@@ -15,10 +17,13 @@ async function getCustomers() {
     id: c.id,
     name: c.name ?? "—",
     phone: c.phone ?? "—",
+    email: c.email ?? null,
     order_count: Number(c.order_count ?? 0),
     total_spent: Number(c.total_spent ?? 0),
     is_rto_risk: Boolean(c.is_rto_risk),
     last_order_at: c.last_order_at ?? null,
+    rto_count: Number(c.rto_count ?? 0),
+    created_at: c.created_at ?? null,
   }));
 }
 
@@ -35,3 +40,4 @@ export default async function AdminCustomersPage() {
     </div>
   );
 }
+

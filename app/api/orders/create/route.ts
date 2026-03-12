@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { createClient } from "@supabase/supabase-js";
+import { createSupabaseServiceRoleClient } from "@/lib/supabase-server";
 
 type OrderItemInput = {
   variantId?: string;
@@ -25,7 +25,8 @@ type CreateOrderBody = {
   paymentMethod: "prepaid" | "cod";
   razorpayOrderId?: string;
   razorpayPaymentId?: string;
-  couponId?: string;
+  coupon_code?: string;
+  discount_amount?: number;
   subtotal: number;
   discount: number;
   shippingCharge: number;
@@ -41,18 +42,16 @@ function generateOrderNumber(): string {
 
 export async function POST(request: NextRequest) {
   try {
-    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
-    const supabaseKey =
-      process.env.SUPABASE_SERVICE_ROLE_KEY ??
-      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
-    if (!supabaseUrl || !supabaseKey) {
+    let supabase;
+    try {
+      supabase = createSupabaseServiceRoleClient();
+    } catch {
       return NextResponse.json(
         { error: "Server configuration error" },
         { status: 500 }
       );
     }
 
-    const supabase = createClient(supabaseUrl, supabaseKey);
     const body: CreateOrderBody = await request.json();
 
     const {
@@ -62,6 +61,8 @@ export async function POST(request: NextRequest) {
       paymentMethod,
       razorpayOrderId,
       razorpayPaymentId,
+      coupon_code,
+      discount_amount,
       subtotal,
       discount,
       shippingCharge,
@@ -124,27 +125,52 @@ export async function POST(request: NextRequest) {
       customerId = newCustomer.id;
     }
 
-    const { data: addressRow, error: addrErr } = await supabase
+    let addressId: string;
+    const { data: existingAddresses, error: existingAddrErr } = await supabase
       .from("addresses")
-      .insert({
-        customer_id: customerId,
-        name: customer.name,
-        phone: customer.phone,
-        line1: address.line1,
-        line2: address.line2 || null,
-        city: address.city,
-        state: address.state,
-        pincode: address.pincode,
-      })
       .select("id")
-      .single();
+      .eq("customer_id", customerId)
+      .eq("line1", address.line1)
+      .eq("pincode", address.pincode)
+      .eq("phone", phone)
+      .limit(1);
 
-    if (addrErr || !addressRow) {
-      console.error("addresses insert error:", addrErr);
+    if (existingAddrErr) {
+      console.error("addresses select error:", existingAddrErr?.message ?? existingAddrErr?.code ?? existingAddrErr);
       return NextResponse.json(
         { error: "Failed to save address" },
         { status: 500 }
       );
+    }
+
+    if (existingAddresses && existingAddresses.length > 0) {
+      addressId = existingAddresses[0].id;
+    } else {
+      const { data: addressRow, error: addrErr } = await supabase
+        .from("addresses")
+        .insert({
+          customer_id: customerId,
+          name: customer.name,
+          phone,
+          line1: address.line1,
+          line2: address.line2 || null,
+          city: address.city,
+          state: address.state,
+          pincode: address.pincode,
+          label: "Order address",
+          is_default: false,
+        })
+        .select("id")
+        .single();
+
+      if (addrErr || !addressRow) {
+        console.error("addresses insert error:", addrErr?.message ?? addrErr?.code ?? addrErr);
+        return NextResponse.json(
+          { error: "Failed to save address" },
+          { status: 500 }
+        );
+      }
+      addressId = addressRow.id;
     }
 
     const orderNumber = generateOrderNumber();
@@ -156,13 +182,15 @@ export async function POST(request: NextRequest) {
       .insert({
         order_number: orderNumber,
         customer_id: customerId,
-        address_id: addressRow.id,
+        address_id: addressId,
         payment_method: paymentMethod,
         payment_status,
         order_status: "confirmed",
         razorpay_order_id: razorpayOrderId || null,
         razorpay_payment_id: razorpayPaymentId || null,
         cod_otp_verified,
+        coupon_code: coupon_code || null,
+        discount_amount: discount_amount != null ? Number(discount_amount) : null,
         subtotal,
         discount,
         shipping_charge: shippingCharge,
@@ -227,6 +255,21 @@ export async function POST(request: NextRequest) {
             reason: "order",
           });
         }
+      }
+    }
+
+    if (coupon_code && coupon_code.trim()) {
+      const { data: coupon } = await supabase
+        .from("coupons")
+        .select("id, usage_count")
+        .eq("code", coupon_code.trim().toUpperCase())
+        .maybeSingle();
+      if (coupon) {
+        const newCount = Number(coupon.usage_count ?? 0) + 1;
+        await supabase
+          .from("coupons")
+          .update({ usage_count: newCount })
+          .eq("id", coupon.id);
       }
     }
 
