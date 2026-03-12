@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { createServerSupabaseClient } from "@/lib/supabase-server";
@@ -66,6 +67,34 @@ async function getProductBySlug(slug: string) {
   };
 }
 
+type Props = { params: Promise<{ slug: string }> };
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { slug } = await params;
+  const data = await getProductBySlug(slug);
+  if (!data) return {};
+  const { product, primaryImageUrl } = data;
+  const metaDescription =
+    product.description && product.description.length > 160
+      ? product.description.slice(0, 157) + "..."
+      : product.description ?? "";
+  const canonicalUrl = "https://nauvarah.com/products/" + product.slug;
+  const openGraphImages = primaryImageUrl
+    ? [{ url: primaryImageUrl, width: 800, height: 800, alt: product.name }]
+    : undefined;
+  return {
+    title: product.name,
+    description: metaDescription,
+    alternates: { canonical: canonicalUrl },
+    openGraph: {
+      title: product.name,
+      description: product.description ?? "",
+      url: canonicalUrl,
+      images: openGraphImages,
+    },
+  };
+}
+
 export default async function ProductPage({
   params,
 }: {
@@ -88,8 +117,42 @@ export default async function ProductPage({
     image_urls: Array.isArray(v.image_urls) ? v.image_urls : null,
   }));
 
+  const firstVariant = variants[0];
+  const variantPrice = firstVariant ? Number(firstVariant.price) : 0;
+  const inStock = firstVariant ? Number(firstVariant.stock_quantity ?? 0) > 0 : false;
+  const availability = inStock
+    ? "https://schema.org/InStock"
+    : "https://schema.org/OutOfStock";
+
+  const productSchema = {
+    "@context": "https://schema.org",
+    "@type": "Product",
+    name: product.name,
+    description: product.description ?? "",
+    image: primaryImageUrl ?? undefined,
+    brand: {
+      "@type": "Brand",
+      name: "Nauvarah",
+    },
+    offers: {
+      "@type": "Offer",
+      priceCurrency: "INR",
+      price: variantPrice,
+      availability,
+      seller: {
+        "@type": "Organization",
+        name: "Nauvarah",
+      },
+    },
+  };
+  const productSchemaJson = JSON.stringify(productSchema);
+
   return (
     <div className="min-h-screen bg-zinc-50">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: productSchemaJson }}
+      />
       <div className="mx-auto max-w-4xl px-4 py-6">
         {/* Back link */}
         <Link

@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { createServerSupabaseClient } from "@/lib/supabase-server";
 import Link from "next/link";
 
@@ -61,6 +62,13 @@ async function getAllProducts(): Promise<Product[]> {
 
   return productsWithVariants;
 }
+
+export const metadata: Metadata = {
+  title: "All Products",
+  description:
+    "Shop all Nauvarah products — pyrite frames, crystals, vastu items, and abundance bundles.",
+  alternates: { canonical: "https://nauvarah.com/products" },
+};
 
 export default async function ProductsPage() {
   const products = await getAllProducts();

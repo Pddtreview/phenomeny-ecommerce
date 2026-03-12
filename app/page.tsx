@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { createServerSupabaseClient } from "@/lib/supabase-server";
 
@@ -53,11 +54,36 @@ async function getFeaturedProducts(): Promise<Product[]> {
   return productsWithVariants;
 }
 
+const orgSchema = {
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  name: "Nauvarah",
+  url: "https://nauvarah.com",
+  logo: "https://nauvarah.com/logo.png",
+  contactPoint: {
+    "@type": "ContactPoint",
+    contactType: "customer service",
+    availableLanguage: ["English", "Hindi"],
+  },
+};
+const orgSchemaJson = JSON.stringify(orgSchema);
+
+export const metadata: Metadata = {
+  title: "Nauvarah — Align Your Energy. Attract Your Abundance.",
+  description:
+    "Authentic pyrite frames, crystals, and vastu items curated for prosperity and positive energy. Shop Nauvarah.",
+  alternates: { canonical: "https://nauvarah.com" },
+};
+
 export default async function Home() {
   const products = await getFeaturedProducts();
 
   return (
     <div className="min-h-screen bg-zinc-50 text-zinc-900">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: orgSchemaJson }}
+      />
       {/* Hero */}
       <section
         className="relative flex min-h-screen items-center justify-center px-6 py-16"
