@@ -36,6 +36,10 @@ export async function POST(request: NextRequest) {
       "&otp=" +
       encodeURIComponent(otp);
 
+    console.log("MSG91 verify URL:", url);
+    console.log("Verifying OTP with MSG91 for mobile: 91" + phone);
+    console.log("OTP entered:", otp);
+
     const verifyRes = await fetch(url, {
       method: "GET",
       headers: {
@@ -49,6 +53,9 @@ export async function POST(request: NextRequest) {
     } catch {
       verifyJson = null;
     }
+
+    console.log("MSG91 verify status:", verifyRes.status);
+    console.log("MSG91 verify body:", JSON.stringify(verifyJson));
 
     if (!verifyRes.ok || !verifyJson || verifyJson.type !== "success") {
       return NextResponse.json(

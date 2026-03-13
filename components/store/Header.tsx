@@ -12,6 +12,7 @@ const navLinks = [
   { href: "/", label: "Home" },
   { href: "/products", label: "Products" },
   { href: "/bundles", label: "Bundles" },
+  { href: "/track", label: "Track Order" },
 ];
 
 export function Header() {

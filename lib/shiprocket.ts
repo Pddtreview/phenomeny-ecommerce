@@ -1,5 +1,5 @@
-const SHIPROCKET_EMAIL = process.env.SHIPROCKET_EMAIL;
-const SHIPROCKET_PASSWORD = process.env.SHIPROCKET_PASSWORD;
+const SHIPROCKET_EMAIL = process.env.SHIPROCKET_EMAIL?.trim();
+const SHIPROCKET_PASSWORD = process.env.SHIPROCKET_PASSWORD?.trim();
 const BASE_URL = "https://apiv2.shiprocket.in/v1/external";
 
 let cachedToken: string | null = null;
@@ -46,6 +46,9 @@ async function getToken(): Promise<string> {
   if (!SHIPROCKET_EMAIL || !SHIPROCKET_PASSWORD) {
     throw new Error("SHIPROCKET_EMAIL and SHIPROCKET_PASSWORD must be set");
   }
+  console.log("Shiprocket auth attempt - email:", SHIPROCKET_EMAIL);
+  console.log("Shiprocket auth attempt - password length:", SHIPROCKET_PASSWORD?.length);
+  console.log("Shiprocket auth attempt - password:", SHIPROCKET_PASSWORD);
   const res = await fetch(`${BASE_URL}/auth/login`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
