@@ -34,12 +34,6 @@ type CreateOrderBody = {
   total: number;
 };
 
-function generateOrderNumber(): string {
-  const ts = Date.now().toString(36).toUpperCase();
-  const r = Math.floor(1000 + Math.random() * 9000);
-  return `NV${ts}${r}`;
-}
-
 export async function POST(request: NextRequest) {
   try {
     let supabase;
@@ -173,7 +167,7 @@ export async function POST(request: NextRequest) {
       addressId = addressRow.id;
     }
 
-    const orderNumber = generateOrderNumber();
+    const orderNumber = "NV" + Math.floor(100000 + Math.random() * 900000).toString();
     const payment_status = paymentMethod === "prepaid" ? "paid" : "pending";
     const cod_otp_verified = paymentMethod === "cod";
 
