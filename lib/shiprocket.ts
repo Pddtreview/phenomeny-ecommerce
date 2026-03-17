@@ -20,8 +20,8 @@ export type ShiprocketOrderPayload = {
   order_id: string;
   order_date: string;
   pickup_location: string;
-  channel_id: string;
   billing_customer_name: string;
+  billing_last_name: string;
   billing_address: string;
   billing_city: string;
   billing_state: string;

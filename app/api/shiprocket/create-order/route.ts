@@ -73,13 +73,16 @@ export async function POST(request: NextRequest) {
     const billingAddress = [address.line1, address.line2].filter(Boolean).join(", ");
     const phone = (address.phone || customer.phone || "").replace(/\D/g, "").slice(-10);
     const email = customer.email || `noreply+${order.id}@nauvarah.com`;
+    const nameParts = (address.name || customer.name || "Customer").trim().split(" ");
+    const firstName = nameParts[0] || "Customer";
+    const lastName = nameParts.slice(1).join(" ") || ".";
 
     const payload: ShiprocketOrderPayload = {
       order_id: order.order_number,
       order_date: orderDate,
       pickup_location: PICKUP_LOCATION,
-      channel_id: "1",
-      billing_customer_name: address.name || customer.name,
+      billing_customer_name: firstName,
+      billing_last_name: lastName,
       billing_address: billingAddress,
       billing_city: address.city,
       billing_state: address.state,
