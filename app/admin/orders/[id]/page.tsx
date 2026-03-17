@@ -86,6 +86,14 @@ export default async function AdminOrderDetailPage({
               Print label
             </a>
           )}
+          <a
+            href={`/api/admin/orders/${id}/invoice`}
+            target="_blank"
+            rel="noreferrer"
+            className="rounded-lg border border-zinc-200 bg-white px-4 py-2 text-sm font-medium text-zinc-700 hover:bg-zinc-50"
+          >
+            Download invoice
+          </a>
         </div>
       </div>
 
