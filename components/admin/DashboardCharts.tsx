@@ -15,6 +15,7 @@ import {
   BarChart,
   Bar,
 } from 'recharts';
+import type { PieLabelRenderProps, TooltipValueType } from 'recharts';
 
 const PRIMARY = '#1B3A6B';
 const GOLD = '#C8860A';
@@ -58,16 +59,27 @@ export function DashboardCharts({
     color: STATUS_COLORS[s.name] ?? '#6b7280',
   }));
 
-  function renderPieLabel(props: { name: string; value: number }) {
-    return props.name + ': ' + props.value;
+  function renderPieLabel(props: PieLabelRenderProps) {
+    const name = props.name ?? '';
+    const value = Number(props.value ?? 0);
+    return name + ': ' + value;
   }
 
   function formatYAxisTick(v: number) {
     return '₹' + v;
   }
 
-  function formatRevenueTooltip(value: number) {
-    return ['₹' + Number(value).toLocaleString('en-IN'), 'Revenue'];
+  function tooltipToNumber(value: TooltipValueType | undefined): number {
+    if (value === undefined) return 0;
+    if (typeof value === 'number') return value;
+    if (typeof value === 'string') return Number(value);
+    const first = value[0];
+    return typeof first === 'number' ? first : Number(first ?? 0);
+  }
+
+  function formatRevenueTooltip(value: TooltipValueType | undefined) {
+    const v = tooltipToNumber(value);
+    return ['₹' + v.toLocaleString('en-IN'), 'Revenue'];
   }
 
   return (
@@ -122,7 +134,12 @@ export function DashboardCharts({
                   ))}
                 </Pie>
                 <Legend />
-                <Tooltip formatter={(value: number) => [value, 'Orders']} />
+                <Tooltip
+                  formatter={(value: TooltipValueType | undefined) => [
+                    tooltipToNumber(value),
+                    'Orders',
+                  ]}
+                />
               </PieChart>
             </ResponsiveContainer>
           </div>

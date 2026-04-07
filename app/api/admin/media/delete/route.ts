@@ -27,7 +27,7 @@ export async function DELETE(request: NextRequest) {
     configureCloudinary();
 
     await new Promise<void>((resolve, reject) => {
-      cloudinary.uploader.destroy(public_id, (err) => {
+      cloudinary.uploader.destroy(public_id, (err: Error | undefined) => {
         if (err) reject(err);
         else resolve();
       });

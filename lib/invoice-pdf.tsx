@@ -1,6 +1,7 @@
 import { Document, Page, Text, View, StyleSheet } from "@react-pdf/renderer";
 
 type InvoiceOrderItem = {
+  id?: string | null;
   name: string;
   sku: string | null;
   quantity: number;
