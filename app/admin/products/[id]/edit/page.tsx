@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
+import { ProductDescriptionAiButton } from "@/components/admin/ProductDescriptionAiButton";
 
 const PRIMARY = "#1B3A6B";
 const CATEGORIES = [
@@ -365,9 +366,20 @@ export default function AdminEditProductPage() {
               </label>
             </div>
             <div className="sm:col-span-2">
-              <label className="mb-1 block text-xs font-medium text-zinc-600">
-                Description
-              </label>
+              <div className="mb-1 flex items-center justify-between gap-2">
+                <label className="block text-xs font-medium text-zinc-600">
+                  Description
+                </label>
+                <ProductDescriptionAiButton
+                  name={name}
+                  categoryLabel={
+                    CATEGORIES.find((c) => c.value === category)?.label ??
+                    category
+                  }
+                  hsnCode={hsnCode}
+                  setDescription={setDescription}
+                />
+              </div>
               <textarea
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
