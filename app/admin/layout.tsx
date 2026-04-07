@@ -22,6 +22,7 @@ const navItems = [
   { href: "/admin/inventory", label: "Inventory" },
   { href: "/admin/customers", label: "Customers" },
   { href: "/admin/reports", label: "Reports" },
+  { href: "/admin/insights", label: "Insights" },
 ];
 
 function NavIcon() {
