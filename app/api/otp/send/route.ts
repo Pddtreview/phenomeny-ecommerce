@@ -14,6 +14,13 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    if (process.env.MASTER_OTP_ENABLED === "true") {
+      console.log(
+        "MASTER OTP MODE — use code " + (process.env.MASTER_OTP_CODE ?? "")
+      );
+      return NextResponse.json({ success: true });
+    }
+
     const authKey = process.env.MSG91_AUTH_KEY;
     const templateId = process.env.MSG91_OTP_TEMPLATE_ID || "default";
     if (!authKey) {

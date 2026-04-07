@@ -5,6 +5,7 @@ import {
   sendShippingConfirmationSMS,
   sendNDRSMS,
 } from "@/lib/notifications";
+import { expandOrderItemToVariantQuantities } from "@/lib/bundle-stock";
 
 const STATUS_MAP: Record<string, string> = {
   Shipped: "shipped",
@@ -94,30 +95,37 @@ export async function POST(request: NextRequest) {
     if (orderStatus === "rto") {
       const { data: orderItems } = await supabase
         .from("order_items")
-        .select("id, variant_id, quantity")
+        .select("id, variant_id, bundle_id, quantity, item_type")
         .eq("order_id", order.id);
 
       for (const it of orderItems || []) {
-        if (!it.variant_id) continue;
-        const { data: variant } = await supabase
-          .from("product_variants")
-          .select("stock_quantity")
-          .eq("id", it.variant_id)
-          .single();
-        if (variant) {
-          const current = Number(variant.stock_quantity ?? 0);
-          const newStock = current + Number(it.quantity ?? 0);
-          await supabase
+        const lines = await expandOrderItemToVariantQuantities(supabase, {
+          variant_id: it.variant_id,
+          bundle_id: it.bundle_id,
+          quantity: Number(it.quantity ?? 0),
+          item_type: it.item_type,
+        });
+        for (const line of lines) {
+          const { data: variant } = await supabase
             .from("product_variants")
-            .update({ stock_quantity: newStock })
-            .eq("id", it.variant_id);
-          await supabase.from("inventory_log").insert({
-            variant_id: it.variant_id,
-            order_id: order.id,
-            quantity_change: Number(it.quantity),
-            balance_after: newStock,
-            reason: "rto_return",
-          });
+            .select("stock_quantity")
+            .eq("id", line.variantId)
+            .single();
+          if (variant) {
+            const current = Number(variant.stock_quantity ?? 0);
+            const newStock = current + line.quantity;
+            await supabase
+              .from("product_variants")
+              .update({ stock_quantity: newStock })
+              .eq("id", line.variantId);
+            await supabase.from("inventory_log").insert({
+              variant_id: line.variantId,
+              order_id: order.id,
+              quantity_change: line.quantity,
+              balance_after: newStock,
+              reason: "rto_return",
+            });
+          }
         }
       }
 

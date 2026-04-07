@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createSupabaseServiceRoleClient } from "@/lib/supabase-server";
+import { expandOrderItemToVariantQuantities } from "@/lib/bundle-stock";
 
 type OrderItemInput = {
   variantId?: string;
@@ -9,7 +10,7 @@ type OrderItemInput = {
   quantity: number;
   unitPrice: number;
   totalPrice: number;
-  itemType: string;
+  itemType?: string;
 };
 
 type CreateOrderBody = {
@@ -79,6 +80,27 @@ export async function POST(request: NextRequest) {
         { error: "Invalid request body" },
         { status: 400 }
       );
+    }
+
+    for (const it of items) {
+      if (it.itemType === "bundle") {
+        if (!it.bundleId) {
+          return NextResponse.json(
+            { error: "Invalid bundle line" },
+            { status: 400 }
+          );
+        }
+        continue;
+      }
+      if (
+        !it.variantId ||
+        String(it.variantId).startsWith("__bundle__")
+      ) {
+        return NextResponse.json(
+          { error: "Invalid order line: missing variant" },
+          { status: 400 }
+        );
+      }
     }
 
     const phone = customer.phone.replace(/\D/g, "").slice(-10);
@@ -205,16 +227,17 @@ export async function POST(request: NextRequest) {
     const orderId = orderRow.id;
 
     for (const it of items) {
+      const isBundle = it.itemType === "bundle" && !!it.bundleId;
       const { error: itemErr } = await supabase.from("order_items").insert({
         order_id: orderId,
-        variant_id: it.variantId || null,
-        bundle_id: it.bundleId || null,
+        variant_id: isBundle ? null : it.variantId || null,
+        bundle_id: isBundle ? it.bundleId : null,
         name: it.name,
         sku: it.sku,
         quantity: it.quantity,
         unit_price: it.unitPrice,
         total_price: it.totalPrice,
-        item_type: it.bundleId ? "bundle" : "variant",
+        item_type: isBundle ? "bundle" : "variant",
       });
       if (itemErr) {
         console.error("order_items insert error:", itemErr);
@@ -224,27 +247,35 @@ export async function POST(request: NextRequest) {
         );
       }
 
-      if (it.variantId && it.quantity > 0) {
+      const stockLines = await expandOrderItemToVariantQuantities(supabase, {
+        variant_id: isBundle ? null : it.variantId ?? null,
+        bundle_id: isBundle ? it.bundleId! : null,
+        quantity: it.quantity,
+        item_type: isBundle ? "bundle" : "variant",
+      });
+
+      for (const line of stockLines) {
+        if (!line.variantId || line.quantity <= 0) continue;
         const { data: variant } = await supabase
           .from("product_variants")
           .select("stock_quantity")
-          .eq("id", it.variantId)
+          .eq("id", line.variantId)
           .single();
 
         if (variant) {
           const newStock = Math.max(
             0,
-            Number(variant.stock_quantity ?? 0) - it.quantity
+            Number(variant.stock_quantity ?? 0) - line.quantity
           );
           await supabase
             .from("product_variants")
             .update({ stock_quantity: newStock })
-            .eq("id", it.variantId);
+            .eq("id", line.variantId);
 
           await supabase.from("inventory_log").insert({
-            variant_id: it.variantId,
+            variant_id: line.variantId,
             order_id: orderId,
-            quantity_change: -it.quantity,
+            quantity_change: -line.quantity,
             balance_after: newStock,
             reason: "order",
           });

@@ -3,6 +3,13 @@ import Razorpay from "razorpay";
 
 export async function POST(request: NextRequest) {
   try {
+    if (process.env.COD_ONLY_MODE === "true") {
+      return NextResponse.json(
+        { message: "Prepaid payments not available" },
+        { status: 503 }
+      );
+    }
+
     const keyId = process.env.RAZORPAY_KEY_ID;
     const keySecret = process.env.RAZORPAY_KEY_SECRET;
     if (!keyId || !keySecret) {

@@ -1,5 +1,8 @@
 import type { NextConfig } from "next";
 const nextConfig: NextConfig = {
+  env: {
+    COD_ONLY_MODE: process.env.COD_ONLY_MODE ?? "",
+  },
   images: {
     remotePatterns: [
       { protocol: "https", hostname: "placehold.co" },

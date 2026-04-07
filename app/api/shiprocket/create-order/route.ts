@@ -62,6 +62,8 @@ export async function POST(request: NextRequest) {
           .eq("order_id", order.id),
       ]);
 
+    console.log("Items fetched from DB:", items?.length, JSON.stringify(items));
+
     if (!customer || !address) {
       return NextResponse.json(
         { error: "Customer or address not found" },
@@ -107,6 +109,8 @@ export async function POST(request: NextRequest) {
       height: 10,
       weight: 0.5,
     };
+
+    console.log("Shiprocket order_items:", JSON.stringify(payload.order_items));
 
     const { order_id: srOrderId, shipment_id } = await createShiprocketOrder(payload);
 

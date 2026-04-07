@@ -81,6 +81,7 @@ export default function ProductDetailClient({
       sku: selectedVariant.sku,
       price: selectedVariant.price,
       image,
+      itemType: "variant",
     });
   };
 

@@ -98,8 +98,8 @@ export default function AccountPage() {
   const handleVerifyOtp = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
-    if (normalizedPhone.length !== 10 || otp.trim().length !== 4) {
-      setError("Please enter a valid phone and 4 digit OTP.");
+    if (normalizedPhone.length !== 10 || otp.trim().length < 4 || otp.trim().length > 8) {
+      setError("Please enter a valid phone and OTP.");
       return;
     }
     setVerifying(true);
@@ -223,8 +223,8 @@ export default function AccountPage() {
                   value={otp}
                   onChange={(e) => setOtp(e.target.value)}
                   inputMode="numeric"
-                  maxLength={4}
-                  placeholder="4 digit OTP"
+                  maxLength={8}
+                  placeholder="OTP"
                   className="w-full rounded-lg border border-zinc-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-offset-2"
                   style={{ outlineColor: PRIMARY }}
                 />

@@ -9,6 +9,10 @@ import { useCart } from "@/hooks/useCart";
 import nauvarahConfig from "@/configs/nauvarah.config";
 import { cn } from "@/lib/utils";
 
+const SKIP_COD_OTP = false;
+
+const COD_ONLY_MODE = process.env.COD_ONLY_MODE === "true";
+
 const PRIMARY = "#1B3A6B";
 const GOLD = "#C8860A";
 const FREE_SHIPPING_ABOVE = nauvarahConfig.shipping.freeShippingAbove;
@@ -62,7 +66,9 @@ export default function CheckoutPage() {
   const router = useRouter();
   const { items, totalPrice, clearCart } = useCart();
   const [summaryOpen, setSummaryOpen] = useState(false);
-  const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>("prepaid");
+  const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>(
+    COD_ONLY_MODE ? "cod" : "prepaid"
+  );
   const [otpSent, setOtpSent] = useState(false);
   const [otp, setOtp] = useState("");
   const [otpVerified, setOtpVerified] = useState(false);
@@ -218,15 +224,29 @@ export default function CheckoutPage() {
         state: data.state,
         pincode: data.pincode,
       },
-      items: items.map((i) => ({
-        variantId: i.variantId,
-        name: i.name,
-        sku: i.sku,
-        quantity: i.quantity,
-        unitPrice: i.price,
-        totalPrice: i.price * i.quantity,
-        itemType: "variant" as const,
-      })),
+      items: items.map((i) => {
+        const isBundle = i.itemType === "bundle" && i.bundleId;
+        if (isBundle) {
+          return {
+            bundleId: i.bundleId,
+            name: i.name,
+            sku: i.sku,
+            quantity: i.quantity,
+            unitPrice: i.price,
+            totalPrice: i.price * i.quantity,
+            itemType: "bundle" as const,
+          };
+        }
+        return {
+          variantId: i.variantId,
+          name: i.name,
+          sku: i.sku,
+          quantity: i.quantity,
+          unitPrice: i.price,
+          totalPrice: i.price * i.quantity,
+          itemType: "variant" as const,
+        };
+      }),
       paymentMethod,
       coupon_code: appliedCoupon?.code ?? undefined,
       discount_amount: appliedCoupon?.discountAmount ?? undefined,
@@ -272,7 +292,11 @@ export default function CheckoutPage() {
       });
       const razorpayOrder = await createOrderRes.json();
       if (!createOrderRes.ok || !razorpayOrder.orderId) {
-        throw new Error(razorpayOrder?.error || "Could not create payment order");
+        throw new Error(
+          razorpayOrder?.message ||
+            razorpayOrder?.error ||
+            "Could not create payment order"
+        );
       }
 
       const key = process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID;
@@ -347,6 +371,14 @@ export default function CheckoutPage() {
         return;
       }
 
+      if (SKIP_COD_OTP) {
+        const payload = buildOrderPayload(getValues());
+        const result = await createOrder(payload);
+        clearCart();
+        router.replace(`/order-success/${result.orderId}`);
+        return;
+      }
+
       const devOtp = await sendOtp(phone);
       setOtpSent(true);
       setOtp(devOtp ?? "");
@@ -365,13 +397,15 @@ export default function CheckoutPage() {
     setLoading(true);
     try {
       const phone = data.phone.replace(/\D/g, "").slice(-10);
-      if (otp.length !== 6) {
-        setError("Enter 6 digit OTP");
+      if (!SKIP_COD_OTP && (otp.length < 4 || otp.length > 6)) {
+        setError("Enter a valid OTP");
         return;
       }
 
-      await verifyOtp(phone, otp);
-      setOtpVerified(true);
+      if (!SKIP_COD_OTP) {
+        await verifyOtp(phone, otp);
+        setOtpVerified(true);
+      }
 
       const payload = buildOrderPayload(data);
       const result = await createOrder(payload);
@@ -646,29 +680,36 @@ export default function CheckoutPage() {
         {/* Section 3: Payment method */}
         <section className="mt-6">
           <h2 className="mb-3 font-semibold text-zinc-900">Payment method</h2>
-          <div className="grid grid-cols-2 gap-4">
-            <button
-              type="button"
-              onClick={() => setPaymentMethod("prepaid")}
-              className={cn(
-                "rounded-xl border-2 p-4 text-left transition",
-                paymentMethod === "prepaid"
-                  ? "border-[#1B3A6B] bg-[#1B3A6B]/5"
-                  : "border-zinc-200 bg-white"
-              )}
-            >
-              <span className="font-semibold text-zinc-900">Pay Online</span>
-              <span
-                className="ml-2 rounded px-2 py-0.5 text-xs font-medium text-white"
-                style={{ backgroundColor: GOLD }}
+          <div
+            className={cn(
+              "grid gap-4",
+              COD_ONLY_MODE ? "grid-cols-1" : "grid-cols-2"
+            )}
+          >
+            {!COD_ONLY_MODE && (
+              <button
+                type="button"
+                onClick={() => setPaymentMethod("prepaid")}
+                className={cn(
+                  "rounded-xl border-2 p-4 text-left transition",
+                  paymentMethod === "prepaid"
+                    ? "border-[#1B3A6B] bg-[#1B3A6B]/5"
+                    : "border-zinc-200 bg-white"
+                )}
               >
-                ₹75 off
-              </span>
-              <p className="mt-1 text-xs text-zinc-500">Razorpay</p>
-              <span className="mt-1 inline-block text-xs font-medium text-[#1B3A6B]">
-                Recommended
-              </span>
-            </button>
+                <span className="font-semibold text-zinc-900">Pay Online</span>
+                <span
+                  className="ml-2 rounded px-2 py-0.5 text-xs font-medium text-white"
+                  style={{ backgroundColor: GOLD }}
+                >
+                  ₹75 off
+                </span>
+                <p className="mt-1 text-xs text-zinc-500">Razorpay</p>
+                <span className="mt-1 inline-block text-xs font-medium text-[#1B3A6B]">
+                  Recommended
+                </span>
+              </button>
+            )}
             <button
               type="button"
               onClick={() => setPaymentMethod("cod")}
@@ -691,7 +732,7 @@ export default function CheckoutPage() {
         {paymentMethod === "cod" && otpSent && (
           <section className="mt-6 rounded-xl border border-zinc-200 bg-white p-4">
             <label className="mb-2 block text-sm font-medium text-zinc-700">
-              Enter 6 digit OTP sent to your phone
+              Enter OTP sent to your phone
             </label>
             <input
               value={otp}

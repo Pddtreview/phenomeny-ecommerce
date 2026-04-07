@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
+import { expandOrderItemToVariantQuantities } from "@/lib/bundle-stock";
 
 export async function PATCH(
   request: NextRequest,
@@ -47,24 +48,32 @@ export async function PATCH(
     if (status === "cancelled") {
       const { data: items, error: itemsErr } = await supabase
         .from("order_items")
-        .select("variant_id, quantity")
+        .select("variant_id, bundle_id, quantity, item_type")
         .eq("order_id", id);
 
       if (!itemsErr && items) {
         for (const it of items) {
-          if (!it.variant_id || !it.quantity) continue;
-          const { data: variant, error: vErr } = await supabase
-            .from("product_variants")
-            .select("stock_quantity")
-            .eq("id", it.variant_id)
-            .single();
-          if (vErr || !variant) continue;
-          const current = Number(variant.stock_quantity ?? 0);
-          const newStock = current + Number(it.quantity ?? 0);
-          await supabase
-            .from("product_variants")
-            .update({ stock_quantity: newStock })
-            .eq("id", it.variant_id);
+          const lines = await expandOrderItemToVariantQuantities(supabase, {
+            variant_id: it.variant_id,
+            bundle_id: it.bundle_id,
+            quantity: Number(it.quantity ?? 0),
+            item_type: it.item_type,
+          });
+          for (const line of lines) {
+            if (!line.variantId || line.quantity <= 0) continue;
+            const { data: variant, error: vErr } = await supabase
+              .from("product_variants")
+              .select("stock_quantity")
+              .eq("id", line.variantId)
+              .single();
+            if (vErr || !variant) continue;
+            const current = Number(variant.stock_quantity ?? 0);
+            const newStock = current + line.quantity;
+            await supabase
+              .from("product_variants")
+              .update({ stock_quantity: newStock })
+              .eq("id", line.variantId);
+          }
         }
       }
     }

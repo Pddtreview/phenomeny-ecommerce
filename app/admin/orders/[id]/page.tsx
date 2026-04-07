@@ -57,6 +57,11 @@ export default async function AdminOrderDetailPage({
 
   const { order, customer, address, items } = data;
 
+  const orderStatus = String(order.order_status ?? "");
+  const showCreateShipmentButton =
+    !order.shiprocket_order_id &&
+    (orderStatus === "confirmed" || orderStatus === "processing");
+
   return (
     <div className="space-y-8">
       <div className="flex flex-wrap items-center justify-between gap-4">
@@ -233,9 +238,11 @@ export default async function AdminOrderDetailPage({
           <p className="mt-2 text-sm text-zinc-600">
             No shipment created yet. Create one to assign AWB and generate label.
           </p>
-          <div className="mt-4">
-            <CreateShipmentButton orderId={id} />
-          </div>
+          {showCreateShipmentButton && (
+            <div className="mt-4">
+              <CreateShipmentButton orderId={id} />
+            </div>
+          )}
         </section>
       )}
 

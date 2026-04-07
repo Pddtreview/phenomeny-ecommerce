@@ -11,13 +11,14 @@ type BundleRow = {
   description: string | null;
   price: number;
   compare_price: number | null;
+  images: string[] | null;
 };
 
 async function getBundles(): Promise<BundleRow[]> {
   const supabase = await createServerSupabaseClient();
   const { data, error } = await supabase
     .from("bundles")
-    .select("id, name, slug, description, price, compare_price")
+    .select("id, name, slug, description, price, compare_price, images")
     .eq("is_active", true)
     .order("created_at", { ascending: false });
 
@@ -33,7 +34,10 @@ export default async function BundlesPage() {
 
   return (
     <div className="min-h-screen bg-zinc-50">
-      <header className="w-full px-4 py-12 text-center text-white" style={{ backgroundColor: PRIMARY }}>
+      <header
+        className="w-full px-4 py-12 text-center text-white"
+        style={{ backgroundColor: PRIMARY }}
+      >
         <h1 className="text-3xl font-semibold">Our Bundles</h1>
         <p className="mt-2 text-sm text-white/70">
           Complete sets curated for maximum abundance
@@ -46,23 +50,37 @@ export default async function BundlesPage() {
             <p className="text-sm text-zinc-500">Bundles launching soon</p>
           </div>
         ) : (
-          <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {bundles.map((b) => {
               const hasCompare =
                 b.compare_price != null && b.compare_price > b.price;
               const savings = hasCompare ? b.compare_price! - b.price : 0;
+              const img =
+                Array.isArray(b.images) && b.images[0] ? b.images[0] : null;
 
               return (
                 <article
                   key={b.id}
                   className="overflow-hidden rounded-2xl border border-zinc-100 bg-white shadow-sm"
                 >
-                  <div
-                    className="flex h-56 items-center justify-center px-6 text-center"
-                    style={{ backgroundColor: PRIMARY, color: GOLD }}
-                  >
-                    <p className="text-sm font-medium">{b.name}</p>
-                  </div>
+                  <Link href={`/bundles/${b.slug}`} className="block">
+                    <div className="relative h-56 w-full overflow-hidden bg-zinc-100">
+                      {img ? (
+                        <img
+                          src={img}
+                          alt={b.name}
+                          className="h-full w-full object-cover"
+                        />
+                      ) : (
+                        <div
+                          className="flex h-full items-center justify-center px-6 text-center"
+                          style={{ backgroundColor: PRIMARY, color: GOLD }}
+                        >
+                          <p className="text-sm font-medium">{b.name}</p>
+                        </div>
+                      )}
+                    </div>
+                  </Link>
 
                   <div className="p-5">
                     <h2 className="text-lg font-semibold text-zinc-900">
@@ -84,7 +102,8 @@ export default async function BundlesPage() {
                       {hasCompare && (
                         <>
                           <span className="text-sm text-zinc-400 line-through">
-                            ₹{Number(b.compare_price).toLocaleString("en-IN")}
+                            ₹
+                            {Number(b.compare_price).toLocaleString("en-IN")}
                           </span>
                           <span className="rounded-full bg-emerald-50 px-3 py-1 text-xs font-semibold text-emerald-700">
                             Save ₹{savings.toLocaleString("en-IN")}
@@ -110,4 +129,3 @@ export default async function BundlesPage() {
     </div>
   );
 }
-

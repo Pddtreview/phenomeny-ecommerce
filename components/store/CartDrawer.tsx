@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useCart } from "@/hooks/useCart";
+import { useCart, getCartLineKey } from "@/hooks/useCart";
 import { cn } from "@/lib/utils";
 
 const PRIMARY = "#1B3A6B";
@@ -83,21 +83,30 @@ export function CartDrawer({ open, onClose }: CartDrawerProps) {
             <ul className="space-y-4">
               {items.map((item) => (
                 <li
-                  key={item.variantId}
+                  key={getCartLineKey(item)}
                   className="flex gap-3 border-b border-zinc-100 pb-4 last:border-0"
                 >
-                  {/* Image placeholder */}
                   <div
                     className="h-16 w-16 shrink-0 overflow-hidden rounded-lg flex items-center justify-center text-[10px] font-medium text-center text-[#C8860A] bg-[#1B3A6B]"
                     style={{ backgroundColor: PRIMARY, color: GOLD }}
                   >
-                    {item.name.slice(0, 12)}
+                    {item.image ? (
+                      <img
+                        src={item.image}
+                        alt=""
+                        className="h-full w-full object-cover"
+                      />
+                    ) : (
+                      item.name.slice(0, 12)
+                    )}
                   </div>
                   <div className="min-w-0 flex-1">
                     <p className="text-sm font-semibold text-zinc-900 line-clamp-2">
                       {item.name}
                     </p>
-                    <p className="text-xs text-zinc-500">{item.sku}</p>
+                    <p className="text-xs text-zinc-500">
+                      {item.itemType === "bundle" ? "Bundle" : item.sku}
+                    </p>
                     <p
                       className="mt-0.5 text-sm font-semibold"
                       style={{ color: PRIMARY }}
@@ -109,7 +118,10 @@ export function CartDrawer({ open, onClose }: CartDrawerProps) {
                         <button
                           type="button"
                           onClick={() =>
-                            updateQuantity(item.variantId, item.quantity - 1)
+                            updateQuantity(
+                              getCartLineKey(item),
+                              item.quantity - 1
+                            )
                           }
                           className="flex h-7 w-7 items-center justify-center text-zinc-600 hover:bg-zinc-100"
                           aria-label="Decrease quantity"
@@ -122,7 +134,10 @@ export function CartDrawer({ open, onClose }: CartDrawerProps) {
                         <button
                           type="button"
                           onClick={() =>
-                            updateQuantity(item.variantId, item.quantity + 1)
+                            updateQuantity(
+                              getCartLineKey(item),
+                              item.quantity + 1
+                            )
                           }
                           className="flex h-7 w-7 items-center justify-center text-zinc-600 hover:bg-zinc-100"
                           aria-label="Increase quantity"
@@ -132,7 +147,7 @@ export function CartDrawer({ open, onClose }: CartDrawerProps) {
                       </div>
                       <button
                         type="button"
-                        onClick={() => removeItem(item.variantId)}
+                        onClick={() => removeItem(getCartLineKey(item))}
                         className="text-xs text-red-600 hover:underline"
                       >
                         Remove

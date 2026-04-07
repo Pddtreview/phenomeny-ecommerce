@@ -14,54 +14,73 @@ export async function POST(request: NextRequest) {
     const phone = typeof body?.phone === "string" ? body.phone.replace(/\D/g, "") : "";
     const otp = typeof body?.otp === "string" ? body.otp.trim() : "";
 
-    if (phone.length !== 10 || otp.length !== 4) {
+    if (phone.length !== 10) {
       return NextResponse.json(
         { success: false, error: "Invalid phone or OTP" },
         { status: 400 }
       );
     }
 
-    const authKey = process.env.MSG91_AUTH_KEY;
-    if (!authKey) {
-      return NextResponse.json(
-        { success: false, error: "MSG91 not configured" },
-        { status: 500 }
-      );
-    }
+    const masterEnabled = process.env.MASTER_OTP_ENABLED === "true";
+    const masterCode = process.env.MASTER_OTP_CODE ?? "";
 
-    const url =
-      MSG91_VERIFY_URL +
-      "?mobile=91" +
-      encodeURIComponent(phone) +
-      "&otp=" +
-      encodeURIComponent(otp);
+    if (masterEnabled) {
+      if (!masterCode || otp !== masterCode) {
+        return NextResponse.json(
+          { success: false, error: "Invalid OTP" },
+          { status: 400 }
+        );
+      }
+    } else {
+      if (otp.length < 4 || otp.length > 6) {
+        return NextResponse.json(
+          { success: false, error: "Invalid phone or OTP" },
+          { status: 400 }
+        );
+      }
 
-    console.log("MSG91 verify URL:", url);
-    console.log("Verifying OTP with MSG91 for mobile: 91" + phone);
-    console.log("OTP entered:", otp);
+      const authKey = process.env.MSG91_AUTH_KEY;
+      if (!authKey) {
+        return NextResponse.json(
+          { success: false, error: "MSG91 not configured" },
+          { status: 500 }
+        );
+      }
 
-    const verifyRes = await fetch(url, {
-      method: "GET",
-      headers: {
-        authkey: authKey,
-      },
-    });
+      const url =
+        MSG91_VERIFY_URL +
+        "?mobile=91" +
+        encodeURIComponent(phone) +
+        "&otp=" +
+        encodeURIComponent(otp);
 
-    let verifyJson: Msg91VerifyResponse | null = null;
-    try {
-      verifyJson = (await verifyRes.json()) as Msg91VerifyResponse;
-    } catch {
-      verifyJson = null;
-    }
+      console.log("MSG91 verify URL:", url);
+      console.log("Verifying OTP with MSG91 for mobile: 91" + phone);
+      console.log("OTP entered:", otp);
 
-    console.log("MSG91 verify status:", verifyRes.status);
-    console.log("MSG91 verify body:", JSON.stringify(verifyJson));
+      const verifyRes = await fetch(url, {
+        method: "GET",
+        headers: {
+          authkey: authKey,
+        },
+      });
 
-    if (!verifyRes.ok || !verifyJson || verifyJson.type !== "success") {
-      return NextResponse.json(
-        { success: false, error: "Invalid OTP" },
-        { status: 400 }
-      );
+      let verifyJson: Msg91VerifyResponse | null = null;
+      try {
+        verifyJson = (await verifyRes.json()) as Msg91VerifyResponse;
+      } catch {
+        verifyJson = null;
+      }
+
+      console.log("MSG91 verify status:", verifyRes.status);
+      console.log("MSG91 verify body:", JSON.stringify(verifyJson));
+
+      if (!verifyRes.ok || !verifyJson || verifyJson.type !== "success") {
+        return NextResponse.json(
+          { success: false, error: "Invalid OTP" },
+          { status: 400 }
+        );
+      }
     }
 
     const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
