@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { ProductDescriptionAiButton } from "@/components/admin/ProductDescriptionAiButton";
@@ -23,10 +23,17 @@ function slugify(text: string): string {
     .replace(/^-|-$/g, "") || "product";
 }
 
+function makeAutoSku(slugForId: string): string {
+  const base = slugForId.replace(/-/g, "").slice(0, 20) || "SKU";
+  return `NAU-${base}-${Date.now().toString(36)}`.toUpperCase();
+}
+
 export default function AdminNewProductPage() {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  const slugManual = useRef(false);
 
   const [name, setName] = useState("");
   const [slug, setSlug] = useState("");
@@ -43,9 +50,29 @@ export default function AdminNewProductPage() {
   const [variantCostPrice, setVariantCostPrice] = useState("");
   const [variantStock, setVariantStock] = useState("0");
 
+  const [imageFile, setImageFile] = useState<File | null>(null);
+  const [imagePreviewUrl, setImagePreviewUrl] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (!imageFile) {
+      setImagePreviewUrl(null);
+      return;
+    }
+    const url = URL.createObjectURL(imageFile);
+    setImagePreviewUrl(url);
+    return () => URL.revokeObjectURL(url);
+  }, [imageFile]);
+
   const handleNameChange = (value: string) => {
     setName(value);
-    if (!slug || slug === slugify(name)) setSlug(slugify(value));
+    if (!slugManual.current) {
+      setSlug(slugify(value));
+    }
+  };
+
+  const handleSlugChange = (value: string) => {
+    slugManual.current = true;
+    setSlug(value);
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -53,12 +80,16 @@ export default function AdminNewProductPage() {
     setError(null);
     setLoading(true);
     try {
+      const effectiveSlug = slug.trim() || slugify(name);
+      const sku =
+        variantSku.trim() || makeAutoSku(effectiveSlug);
+
       const res = await fetch("/api/admin/products/create", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           name: name.trim(),
-          slug: slug.trim() || slugify(name),
+          slug: effectiveSlug,
           category,
           description: description.trim() || undefined,
           hsn_code: hsnCode.trim() || undefined,
@@ -66,7 +97,7 @@ export default function AdminNewProductPage() {
           is_active: isActive,
           variant: {
             name: variantName.trim(),
-            sku: variantSku.trim(),
+            sku,
             price: Number(variantPrice),
             compare_price:
               variantComparePrice.trim() === ""
@@ -83,7 +114,32 @@ export default function AdminNewProductPage() {
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data?.error || "Failed to create product");
-      router.push("/admin/products");
+
+      const productId = data?.productId as string | undefined;
+      if (!productId) {
+        throw new Error("Create succeeded but no product id returned");
+      }
+
+      if (imageFile) {
+        const formData = new FormData();
+        formData.append("file", imageFile);
+        const up = await fetch(
+          `/api/admin/products/${productId}/upload-image`,
+          {
+            method: "POST",
+            body: formData,
+          }
+        );
+        const upData = await up.json();
+        if (!up.ok) {
+          throw new Error(
+            upData?.error ||
+              "Product was created but image upload failed. You can add an image from the product edit page."
+          );
+        }
+      }
+
+      router.push(`/admin/products/${productId}/edit`);
     } catch (e) {
       setError(e instanceof Error ? e.message : "Failed to create product");
     } finally {
@@ -125,7 +181,7 @@ export default function AdminNewProductPage() {
               </label>
               <input
                 value={slug}
-                onChange={(e) => setSlug(e.target.value)}
+                onChange={(e) => handleSlugChange(e.target.value)}
                 className="w-full rounded-lg border border-zinc-200 px-3 py-2 text-sm"
                 placeholder="product-name"
               />
@@ -228,9 +284,12 @@ export default function AdminNewProductPage() {
               <input
                 value={variantSku}
                 onChange={(e) => setVariantSku(e.target.value)}
+                placeholder="Auto-generated if empty"
                 className="w-full rounded-lg border border-zinc-200 px-3 py-2 text-sm"
-                required
               />
+              <p className="mt-1 text-[11px] text-zinc-500">
+                Unique code for inventory; leave blank to generate one.
+              </p>
             </div>
             <div>
               <label className="mb-1 block text-xs font-medium text-zinc-600">
@@ -284,6 +343,46 @@ export default function AdminNewProductPage() {
                 className="w-full rounded-lg border border-zinc-200 px-3 py-2 text-sm"
               />
             </div>
+          </div>
+        </section>
+
+        <section className="rounded-xl border border-zinc-200 bg-white p-5">
+          <h2 className="mb-4 text-sm font-semibold text-zinc-900">Image</h2>
+          <p className="mb-3 text-xs text-zinc-500">
+            Uploads to Cloudinary after the product is created (saved as the
+            primary image if it&apos;s the first).
+          </p>
+          <div className="flex flex-wrap items-start gap-4">
+            {imagePreviewUrl && (
+              <div className="flex w-40 flex-col gap-2">
+                <img
+                  src={imagePreviewUrl}
+                  alt="Selected product preview"
+                  className="h-24 w-full rounded-md border border-zinc-200 object-cover"
+                />
+                <button
+                  type="button"
+                  onClick={() => setImageFile(null)}
+                  className="rounded border border-zinc-200 px-2 py-1 text-xs text-zinc-700 hover:bg-zinc-50"
+                >
+                  Remove
+                </button>
+              </div>
+            )}
+            <label className="flex h-24 min-w-[10rem] cursor-pointer flex-col items-center justify-center rounded-lg border border-dashed border-zinc-300 px-4 text-center text-xs text-zinc-500 hover:border-zinc-400">
+              <span>{imageFile ? "Choose a different image" : "Choose image"}</span>
+              <input
+                type="file"
+                accept="image/*"
+                className="hidden"
+                onChange={(e) => {
+                  const file = e.target.files?.[0];
+                  if (file) setImageFile(file);
+                  e.target.value = "";
+                }}
+                disabled={loading}
+              />
+            </label>
           </div>
         </section>
 

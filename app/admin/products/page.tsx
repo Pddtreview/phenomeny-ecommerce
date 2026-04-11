@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { createServerSupabaseClient } from "@/lib/supabase-server";
+import DeleteProductButton from "@/components/admin/DeleteProductButton";
 import ImportProductsModal from "@/components/admin/ImportProductsModal";
 
 const PRIMARY = "#1B3A6B";
@@ -117,13 +118,16 @@ export default async function AdminProductsPage() {
                     : "—"}
                 </td>
                 <td className="px-4 py-3">
-                  <Link
-                    href={'/admin/products/' + p.id + '/edit'}
-                    className="font-medium hover:underline"
-                    style={{ color: PRIMARY }}
-                  >
-                    Edit
-                  </Link>
+                  <div className="flex flex-wrap items-center gap-2">
+                    <Link
+                      href={'/admin/products/' + p.id + '/edit'}
+                      className="font-medium hover:underline"
+                      style={{ color: PRIMARY }}
+                    >
+                      Edit
+                    </Link>
+                    <DeleteProductButton productId={p.id} />
+                  </div>
                 </td>
               </tr>
             ))}

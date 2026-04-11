@@ -1,0 +1,12 @@
+# *
+User-agent: *
+Allow: /
+Disallow: /admin
+Disallow: /account
+Disallow: /api
+
+# Host
+Host: https://nauvarah.com
+
+# Sitemaps
+Sitemap: https://nauvarah.com/sitemap.xml
