@@ -25,6 +25,9 @@ export function StoreFooter() {
           >
             Privacy Policy
           </Link>
+          <Link href="/terms" className="transition hover:text-white">
+            Terms
+          </Link>
         </nav>
       </div>
     </footer>
