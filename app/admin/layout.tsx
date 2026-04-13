@@ -14,6 +14,7 @@ const GOLD = "#C8860A";
 
 const navItems = [
   { href: "/admin", label: "Dashboard" },
+  { href: "/admin/enquiries", label: "Enquiries" },
   { href: "/admin/orders", label: "Orders" },
   { href: "/admin/products", label: "Products" },
   { href: "/admin/bundles", label: "Bundles" },

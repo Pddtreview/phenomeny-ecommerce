@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { Inter, Playfair_Display } from "next/font/google";
+import { ContactForm } from "@/components/store/ContactForm";
 
 const playfair = Playfair_Display({
   subsets: ["latin"],
@@ -150,6 +151,15 @@ export default function ContactPage() {
               </li>
             </ul>
           </section>
+        </div>
+
+        <h2
+          className={`${playfair.className} mt-12 text-2xl text-[#1B3A6B] sm:text-3xl`}
+        >
+          Send Us a Message
+        </h2>
+        <div className="mt-6">
+          <ContactForm />
         </div>
 
         <p className="mt-10 text-sm italic leading-relaxed text-gray-500 sm:text-base">
