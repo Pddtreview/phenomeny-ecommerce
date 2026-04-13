@@ -1,18 +1,20 @@
-"use client";
+﻿"use client";
 
 import { useEffect, useState } from "react";
+import Image from "next/image";
 import Link from "next/link";
 import { useCart } from "@/hooks/useCart";
 import { CartDrawer } from "@/components/store/CartDrawer";
 import { cn } from "@/lib/utils";
 
 const GOLD = "#C8860A";
+const GOLDEN_LOGO =
+  "https://res.cloudinary.com/dwhpxdp18/image/upload/v1776068357/Nauvaraha_golden_logo_kmgjir.png";
 
 const navLinks = [
   { href: "/", label: "Home" },
   { href: "/products", label: "Products" },
   { href: "/bundles", label: "Bundles" },
-  { href: "/track", label: "Track Order" },
 ];
 
 export function Header() {
@@ -27,43 +29,64 @@ export function Header() {
 
   return (
     <>
-      <header className="sticky top-0 z-50 border-b border-zinc-200 bg-white">
-        <div className="mx-auto flex h-14 max-w-6xl items-center justify-between px-4">
-          {/* Logo */}
-          <Link
-            href="/"
-            className="text-xl font-semibold tracking-tight"
-            style={{ color: GOLD }}
-          >
-            Nauvarah
+      <header className="sticky top-0 z-50 border-b border-[#C8860A]/20 bg-white shadow-sm">
+        <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4 sm:h-[4.5rem]">
+          <Link href="/" className="block" aria-label="Nauvaraha home">
+            <Image
+              src={GOLDEN_LOGO}
+              alt="Nauvaraha"
+              width={280}
+              height={88}
+              quality={90}
+              className="h-9 w-auto sm:h-11"
+              priority
+            />
           </Link>
 
-          {/* Desktop nav */}
           <nav className="hidden items-center gap-8 md:flex" aria-label="Main">
             {navLinks.map((link) => (
               <Link
                 key={link.href}
                 href={link.href}
-                className="text-sm font-medium text-zinc-700 hover:text-zinc-900"
+                className="font-cormorant text-sm tracking-[0.18em] text-[#6B5E4E] transition-colors hover:text-[#C8860A]"
               >
                 {link.label}
               </Link>
             ))}
           </nav>
 
-          {/* Right: cart + mobile menu */}
           <div className="flex items-center gap-2">
+            <Link
+              href="/products"
+              className="flex h-10 w-10 items-center justify-center rounded-lg text-[#C8860A] transition hover:bg-[#FFF8EE]"
+              aria-label="Search products"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="18"
+                height="18"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <circle cx="11" cy="11" r="8" />
+                <path d="m21 21-4.3-4.3" />
+              </svg>
+            </Link>
             <button
               type="button"
               onClick={() => setCartOpen(true)}
               suppressHydrationWarning
-              className="relative flex h-10 w-10 items-center justify-center rounded-lg text-zinc-600 hover:bg-zinc-100 hover:text-zinc-900"
+              className="relative flex h-10 w-10 items-center justify-center rounded-lg text-[#C8860A] transition hover:bg-[#FFF8EE]"
               aria-label="Open cart"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                width="22"
-                height="22"
+                width="20"
+                height="20"
                 viewBox="0 0 24 24"
                 fill="none"
                 stroke="currentColor"
@@ -77,7 +100,7 @@ export function Header() {
               </svg>
               {mounted && totalItems > 0 && (
                 <span
-                  className="absolute -right-1 -top-1 flex h-4 min-w-4 items-center justify-center rounded-full px-1 text-[10px] font-bold text-white"
+                  className="absolute -right-1 -top-1 flex h-4 min-w-4 items-center justify-center rounded-full px-1 text-[10px] font-medium text-white"
                   style={{ backgroundColor: GOLD }}
                 >
                   {totalItems > 99 ? "99+" : totalItems}
@@ -85,11 +108,10 @@ export function Header() {
               )}
             </button>
 
-            {/* Mobile hamburger */}
             <button
               type="button"
               onClick={() => setMobileMenuOpen((o) => !o)}
-              className="flex h-10 w-10 items-center justify-center rounded-lg text-zinc-600 hover:bg-zinc-100 md:hidden"
+              className="flex h-10 w-10 items-center justify-center rounded-lg text-[#C8860A] transition hover:bg-[#FFF8EE] md:hidden"
               aria-label={mobileMenuOpen ? "Close menu" : "Open menu"}
               aria-expanded={mobileMenuOpen}
             >
@@ -125,10 +147,9 @@ export function Header() {
           </div>
         </div>
 
-        {/* Mobile nav dropdown */}
         <div
           className={cn(
-            "border-t border-zinc-100 bg-white md:hidden",
+            "border-t border-[#C8860A]/20 bg-white md:hidden",
             mobileMenuOpen ? "block" : "hidden"
           )}
         >
@@ -138,7 +159,7 @@ export function Header() {
                 key={link.href}
                 href={link.href}
                 onClick={() => setMobileMenuOpen(false)}
-                className="py-2.5 text-sm font-medium text-zinc-700 hover:text-zinc-900"
+                className="font-cormorant py-2.5 text-sm tracking-[0.18em] text-[#6B5E4E] transition-colors hover:text-[#C8860A]"
               >
                 {link.label}
               </Link>
@@ -151,3 +172,4 @@ export function Header() {
     </>
   );
 }
+

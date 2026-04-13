@@ -1,10 +1,5 @@
-import type { Metadata } from "next";
-import { Inter, Playfair_Display } from "next/font/google";
-
-const playfair = Playfair_Display({
-  subsets: ["latin"],
-  display: "swap",
-});
+﻿import type { Metadata } from "next";
+import { Inter } from "next/font/google";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -22,29 +17,29 @@ export const metadata: Metadata = {
   },
 };
 
-const heading = "font-semibold text-[#1B3A6B] mt-8";
+const heading = "mt-8 font-semibold text-[#C8860A]";
 
 const helloMail = "hello@nauvaraha.com";
 
 export default function RefundPolicyPage() {
   return (
-    <div className={`bg-white pb-16 pt-16 ${inter.className}`}>
-      <article className="mx-auto max-w-3xl px-4 leading-relaxed text-gray-700">
+    <div className={`bg-[#FDFAF5] pb-16 pt-16 ${inter.className}`}>
+      <article className="mx-auto max-w-3xl px-4 leading-relaxed text-[#1A1A1A]">
         <h1
-          className={`${playfair.className} text-4xl text-[#1B3A6B] sm:text-[2.5rem]`}
+          className="font-cormorant text-4xl text-[#1A1A1A] sm:text-[2.5rem]"
         >
           Refund &amp; Return Policy
         </h1>
-        <p className="mt-4 text-sm text-gray-600">
+        <p className="mt-4 text-sm text-[#6B5E4E]">
           Last updated: April 2026
         </p>
 
         <p className="mt-6">
           This Refund &amp; Return Policy applies to purchases made through{" "}
-          <strong className="font-medium text-gray-800">Nauvaraha</strong> at{" "}
+          <strong className="font-medium text-[#1A1A1A]">Nauvaraha</strong> at{" "}
           <a
             href="https://www.nauvaraha.com"
-            className="text-[#1B3A6B] underline underline-offset-2 hover:no-underline"
+            className="text-[#C8860A] underline underline-offset-2 hover:no-underline"
           >
             www.nauvaraha.com
           </a>
@@ -85,7 +80,7 @@ export default function RefundPolicyPage() {
         <ul className="mt-3 list-disc space-y-2 pl-6">
           <li>Change of mind after delivery.</li>
           <li>
-            Slight natural variations in crystals, stone, or wood—these are
+            Slight natural variations in crystals, stone, or woodÃ¢â‚¬â€these are
             inherent to natural products and are not considered defects.
           </li>
           <li>Products returned without original packaging.</li>
@@ -98,7 +93,7 @@ export default function RefundPolicyPage() {
             Email{" "}
             <a
               href={`mailto:${helloMail}`}
-              className="text-[#1B3A6B] underline underline-offset-2 hover:no-underline"
+              className="text-[#C8860A] underline underline-offset-2 hover:no-underline"
             >
               {helloMail}
             </a>{" "}
@@ -106,7 +101,7 @@ export default function RefundPolicyPage() {
           </li>
           <li>
             Use the subject line:{" "}
-            <strong className="font-medium text-gray-800">
+            <strong className="font-medium text-[#1A1A1A]">
               Return Request - [Your Order Number]
             </strong>
             .
@@ -121,12 +116,12 @@ export default function RefundPolicyPage() {
         <h2 className={heading}>5. Refund Process</h2>
         <ul className="mt-3 list-disc space-y-2 pl-6">
           <li>
-            <strong className="font-medium text-gray-800">Prepaid orders:</strong>{" "}
+            <strong className="font-medium text-[#1A1A1A]">Prepaid orders:</strong>{" "}
             refund to the original payment method within 7 business days of return
             pickup.
           </li>
           <li>
-            <strong className="font-medium text-gray-800">COD orders:</strong>{" "}
+            <strong className="font-medium text-[#1A1A1A]">COD orders:</strong>{" "}
             refund via bank transfer within 7 business days; you must share bank
             details as requested.
           </li>
@@ -148,7 +143,7 @@ export default function RefundPolicyPage() {
             To cancel before dispatch, email{" "}
             <a
               href={`mailto:${helloMail}`}
-              className="text-[#1B3A6B] underline underline-offset-2 hover:no-underline"
+              className="text-[#C8860A] underline underline-offset-2 hover:no-underline"
             >
               {helloMail}
             </a>{" "}
@@ -170,7 +165,7 @@ export default function RefundPolicyPage() {
             Email the photos to{" "}
             <a
               href={`mailto:${helloMail}`}
-              className="text-[#1B3A6B] underline underline-offset-2 hover:no-underline"
+              className="text-[#C8860A] underline underline-offset-2 hover:no-underline"
             >
               {helloMail}
             </a>{" "}
@@ -185,33 +180,33 @@ export default function RefundPolicyPage() {
         <h2 className={heading}>8. Contact Us</h2>
         <div className="mt-3 space-y-2">
           <p>
-            <strong className="font-medium text-gray-800">Nauvaraha</strong>
+            <strong className="font-medium text-[#1A1A1A]">Nauvaraha</strong>
           </p>
           <p>
-            <span className="font-medium text-gray-800">GSTIN:</span>{" "}
+            <span className="font-medium text-[#1A1A1A]">GSTIN:</span>{" "}
             03BGNPK9576K2ZO
           </p>
           <p>
-            <span className="font-medium text-gray-800">Address:</span>
+            <span className="font-medium text-[#1A1A1A]">Address:</span>
             <br />
             House No 10, Street No 01, Krishna Nagar,
             <br />
             Jalandhar, Punjab - 144008, India
           </p>
           <p>
-            <span className="font-medium text-gray-800">Phone:</span>{" "}
+            <span className="font-medium text-[#1A1A1A]">Phone:</span>{" "}
             <a
               href="tel:+919115490001"
-              className="text-[#1B3A6B] underline underline-offset-2 hover:no-underline"
+              className="text-[#C8860A] underline underline-offset-2 hover:no-underline"
             >
               +91 9115490001
             </a>
           </p>
           <p>
-            <span className="font-medium text-gray-800">Email:</span>{" "}
+            <span className="font-medium text-[#1A1A1A]">Email:</span>{" "}
             <a
               href={`mailto:${helloMail}`}
-              className="text-[#1B3A6B] underline underline-offset-2 hover:no-underline"
+              className="text-[#C8860A] underline underline-offset-2 hover:no-underline"
             >
               {helloMail}
             </a>
@@ -221,3 +216,7 @@ export default function RefundPolicyPage() {
     </div>
   );
 }
+
+
+
+

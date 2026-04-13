@@ -1,10 +1,5 @@
-import type { Metadata } from "next";
-import { Inter, Playfair_Display } from "next/font/google";
-
-const playfair = Playfair_Display({
-  subsets: ["latin"],
-  display: "swap",
-});
+﻿import type { Metadata } from "next";
+import { Inter } from "next/font/google";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -22,31 +17,31 @@ export const metadata: Metadata = {
   },
 };
 
-const heading = "font-semibold text-[#1B3A6B] mt-8";
+const heading = "mt-8 font-semibold text-[#C8860A]";
 
 export default function PrivacyPolicyPage() {
   return (
-    <div className={`bg-white pb-16 pt-16 ${inter.className}`}>
-      <article className="mx-auto max-w-3xl px-4 leading-relaxed text-gray-700">
+    <div className={`bg-[#FDFAF5] pb-16 pt-16 ${inter.className}`}>
+      <article className="mx-auto max-w-3xl px-4 leading-relaxed text-[#1A1A1A]">
         <h1
-          className={`${playfair.className} text-4xl text-[#1B3A6B] sm:text-[2.5rem]`}
+          className="font-cormorant text-4xl text-[#1A1A1A] sm:text-[2.5rem]"
         >
           Privacy Policy
         </h1>
-        <p className="mt-4 text-sm text-gray-600">
+        <p className="mt-4 text-sm text-[#6B5E4E]">
           Last updated: April 2026
         </p>
 
         <p className="mt-6">
           This Privacy Policy describes how{" "}
-          <strong className="font-medium text-gray-800">Nauvaraha</strong> (
+          <strong className="font-medium text-[#1A1A1A]">Nauvaraha</strong> (
           <a
             href="https://www.nauvaraha.com"
-            className="text-[#1B3A6B] underline underline-offset-2 hover:no-underline"
+            className="text-[#C8860A] underline underline-offset-2 hover:no-underline"
           >
             www.nauvaraha.com
           </a>
-          ), operated by <strong className="font-medium text-gray-800">Nauvaraha</strong>,
+          ), operated by <strong className="font-medium text-[#1A1A1A]">Nauvaraha</strong>,
           collects, uses, and safeguards your information when you use our
           website and services.
         </p>
@@ -55,17 +50,17 @@ export default function PrivacyPolicyPage() {
         <p className="mt-3">We may collect:</p>
         <ul className="mt-3 list-disc space-y-2 pl-6">
           <li>
-            <strong className="font-medium text-gray-800">Account and order details:</strong>{" "}
+            <strong className="font-medium text-[#1A1A1A]">Account and order details:</strong>{" "}
             name, phone number, email address, and delivery address when you
             place an order or check out.
           </li>
           <li>
-            <strong className="font-medium text-gray-800">Technical data:</strong>{" "}
+            <strong className="font-medium text-[#1A1A1A]">Technical data:</strong>{" "}
             device information, IP address, and browser type when you visit our
             site.
           </li>
           <li>
-            <strong className="font-medium text-gray-800">Usage data:</strong>{" "}
+            <strong className="font-medium text-[#1A1A1A]">Usage data:</strong>{" "}
             order history and browsing behaviour on our website.
           </li>
         </ul>
@@ -88,17 +83,17 @@ export default function PrivacyPolicyPage() {
         <ul className="mt-3 list-disc space-y-2 pl-6">
           <li>
             We share necessary order and delivery details with{" "}
-            <strong className="font-medium text-gray-800">Shiprocket</strong>{" "}
+            <strong className="font-medium text-[#1A1A1A]">Shiprocket</strong>{" "}
             to fulfil shipments.
           </li>
           <li>
             Payment processing is handled by{" "}
-            <strong className="font-medium text-gray-800">Razorpay</strong>; we
+            <strong className="font-medium text-[#1A1A1A]">Razorpay</strong>; we
             do not receive or store your full card or UPI credentials on our
             servers.
           </li>
           <li>
-            We do <strong className="font-medium text-gray-800">not</strong>{" "}
+            We do <strong className="font-medium text-[#1A1A1A]">not</strong>{" "}
             sell your personal data to third parties.
           </li>
         </ul>
@@ -131,7 +126,7 @@ export default function PrivacyPolicyPage() {
             To exercise these rights, contact us at{" "}
             <a
               href="mailto:hello@nauvaraha.com"
-              className="text-[#1B3A6B] underline underline-offset-2 hover:no-underline"
+              className="text-[#C8860A] underline underline-offset-2 hover:no-underline"
             >
               hello@nauvaraha.com
             </a>
@@ -149,44 +144,44 @@ export default function PrivacyPolicyPage() {
         <h2 className={heading}>8. Contact Us</h2>
         <div className="mt-3 space-y-2">
           <p>
-            <strong className="font-medium text-gray-800">
+            <strong className="font-medium text-[#1A1A1A]">
               Nauvaraha
             </strong>
           </p>
           <p>
-            <span className="font-medium text-gray-800">Website:</span>{" "}
+            <span className="font-medium text-[#1A1A1A]">Website:</span>{" "}
             <a
               href="https://www.nauvaraha.com"
-              className="text-[#1B3A6B] underline underline-offset-2 hover:no-underline"
+              className="text-[#C8860A] underline underline-offset-2 hover:no-underline"
             >
               https://www.nauvaraha.com
             </a>
           </p>
           <p>
-            <span className="font-medium text-gray-800">GSTIN:</span>{" "}
+            <span className="font-medium text-[#1A1A1A]">GSTIN:</span>{" "}
             03BGNPK9576K2ZO
           </p>
           <p>
-            <span className="font-medium text-gray-800">Address:</span>
+            <span className="font-medium text-[#1A1A1A]">Address:</span>
             <br />
             House No 10, Street No 01, Krishna Nagar,
             <br />
             Jalandhar, Punjab - 144008, India
           </p>
           <p>
-            <span className="font-medium text-gray-800">Phone:</span>{" "}
+            <span className="font-medium text-[#1A1A1A]">Phone:</span>{" "}
             <a
               href="tel:+919115490001"
-              className="text-[#1B3A6B] underline underline-offset-2 hover:no-underline"
+              className="text-[#C8860A] underline underline-offset-2 hover:no-underline"
             >
               +91 9115490001
             </a>
           </p>
           <p>
-            <span className="font-medium text-gray-800">Email:</span>{" "}
+            <span className="font-medium text-[#1A1A1A]">Email:</span>{" "}
             <a
               href="mailto:hello@nauvaraha.com"
-              className="text-[#1B3A6B] underline underline-offset-2 hover:no-underline"
+              className="text-[#C8860A] underline underline-offset-2 hover:no-underline"
             >
               hello@nauvaraha.com
             </a>
@@ -196,3 +191,7 @@ export default function PrivacyPolicyPage() {
     </div>
   );
 }
+
+
+
+

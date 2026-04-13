@@ -1,10 +1,5 @@
-import type { Metadata } from "next";
-import { Inter, Playfair_Display } from "next/font/google";
-
-const playfair = Playfair_Display({
-  subsets: ["latin"],
-  display: "swap",
-});
+﻿import type { Metadata } from "next";
+import { Inter } from "next/font/google";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -22,32 +17,32 @@ export const metadata: Metadata = {
   },
 };
 
-const heading = "font-semibold text-[#1B3A6B] mt-8";
+const heading = "mt-8 font-semibold text-[#C8860A]";
 
 export default function TermsPage() {
   return (
-    <div className={`bg-white pb-16 pt-16 ${inter.className}`}>
-      <article className="mx-auto max-w-3xl px-4 leading-relaxed text-gray-700">
+    <div className={`bg-[#FDFAF5] pb-16 pt-16 ${inter.className}`}>
+      <article className="mx-auto max-w-3xl px-4 leading-relaxed text-[#1A1A1A]">
         <h1
-          className={`${playfair.className} text-4xl text-[#1B3A6B] sm:text-[2.5rem]`}
+          className="font-cormorant text-4xl text-[#1A1A1A] sm:text-[2.5rem]"
         >
           Terms &amp; Conditions
         </h1>
-        <p className="mt-4 text-sm text-gray-600">
+        <p className="mt-4 text-sm text-[#6B5E4E]">
           Last updated: April 2026
         </p>
 
         <p className="mt-6">
           These Terms &amp; Conditions (&quot;Terms&quot;) govern your use of{" "}
-          <strong className="font-medium text-gray-800">Nauvaraha</strong> at{" "}
+          <strong className="font-medium text-[#1A1A1A]">Nauvaraha</strong> at{" "}
           <a
             href="https://www.nauvaraha.com"
-            className="text-[#1B3A6B] underline underline-offset-2 hover:no-underline"
+            className="text-[#C8860A] underline underline-offset-2 hover:no-underline"
           >
             www.nauvaraha.com
           </a>
           , operated by{" "}
-          <strong className="font-medium text-gray-800">Nauvaraha</strong>.
+          <strong className="font-medium text-[#1A1A1A]">Nauvaraha</strong>.
           Please read them carefully before placing an order.
         </p>
 
@@ -87,7 +82,7 @@ export default function TermsPage() {
           </li>
           <li>
             We accept UPI, cards, and net banking through{" "}
-            <strong className="font-medium text-gray-800">Razorpay</strong>.
+            <strong className="font-medium text-[#1A1A1A]">Razorpay</strong>.
           </li>
           <li>
             Cash on delivery (COD) may be available where offered, subject to
@@ -105,10 +100,10 @@ export default function TermsPage() {
         <ul className="mt-3 list-disc space-y-2 pl-6">
           <li>
             We ship across India through delivery partners integrated via{" "}
-            <strong className="font-medium text-gray-800">Shiprocket</strong>.
+            <strong className="font-medium text-[#1A1A1A]">Shiprocket</strong>.
           </li>
           <li>
-            Estimated delivery is typically within 4–7 business days after
+            Estimated delivery is typically within 4Ã¢â‚¬â€œ7 business days after
             dispatch, unless stated otherwise at checkout.
           </li>
           <li>
@@ -116,7 +111,7 @@ export default function TermsPage() {
             capacity, weather, or force majeure events.
           </li>
           <li>
-            Free shipping applies to orders above ₹999, where this offer is
+            Free shipping applies to orders above Ã¢â€šÂ¹999, where this offer is
             active and displayed on the site.
           </li>
         </ul>
@@ -148,9 +143,9 @@ export default function TermsPage() {
         <h2 className={heading}>6. Intellectual Property</h2>
         <ul className="mt-3 list-disc space-y-2 pl-6">
           <li>
-            All content on nauvaraha.com—including text, graphics, logos,
-            images, product descriptions, and layout—is owned by or licensed
-            to <strong className="font-medium text-gray-800">Nauvaraha</strong>.
+            All content on nauvaraha.comÃ¢â‚¬â€including text, graphics, logos,
+            images, product descriptions, and layoutÃ¢â‚¬â€is owned by or licensed
+            to <strong className="font-medium text-[#1A1A1A]">Nauvaraha</strong>.
           </li>
           <li>
             You may not copy, reproduce, distribute, modify, or create
@@ -179,7 +174,7 @@ export default function TermsPage() {
           <li>These Terms are governed by the laws of India.</li>
           <li>
             Subject to applicable law, courts at{" "}
-            <strong className="font-medium text-gray-800">
+            <strong className="font-medium text-[#1A1A1A]">
               Jalandhar, Punjab, India
             </strong>{" "}
             shall have exclusive jurisdiction over disputes arising from these
@@ -190,44 +185,44 @@ export default function TermsPage() {
         <h2 className={heading}>9. Contact Us</h2>
         <div className="mt-3 space-y-2">
           <p>
-            <strong className="font-medium text-gray-800">
+            <strong className="font-medium text-[#1A1A1A]">
               Nauvaraha
             </strong>
           </p>
           <p>
-            <span className="font-medium text-gray-800">Website:</span>{" "}
+            <span className="font-medium text-[#1A1A1A]">Website:</span>{" "}
             <a
               href="https://www.nauvaraha.com"
-              className="text-[#1B3A6B] underline underline-offset-2 hover:no-underline"
+              className="text-[#C8860A] underline underline-offset-2 hover:no-underline"
             >
               https://www.nauvaraha.com
             </a>
           </p>
           <p>
-            <span className="font-medium text-gray-800">GSTIN:</span>{" "}
+            <span className="font-medium text-[#1A1A1A]">GSTIN:</span>{" "}
             03BGNPK9576K2ZO
           </p>
           <p>
-            <span className="font-medium text-gray-800">Address:</span>
+            <span className="font-medium text-[#1A1A1A]">Address:</span>
             <br />
             House No 10, Street No 01, Krishna Nagar,
             <br />
             Jalandhar, Punjab - 144008, India
           </p>
           <p>
-            <span className="font-medium text-gray-800">Phone:</span>{" "}
+            <span className="font-medium text-[#1A1A1A]">Phone:</span>{" "}
             <a
               href="tel:+919115490001"
-              className="text-[#1B3A6B] underline underline-offset-2 hover:no-underline"
+              className="text-[#C8860A] underline underline-offset-2 hover:no-underline"
             >
               +91 9115490001
             </a>
           </p>
           <p>
-            <span className="font-medium text-gray-800">Email:</span>{" "}
+            <span className="font-medium text-[#1A1A1A]">Email:</span>{" "}
             <a
               href="mailto:hello@nauvaraha.com"
-              className="text-[#1B3A6B] underline underline-offset-2 hover:no-underline"
+              className="text-[#C8860A] underline underline-offset-2 hover:no-underline"
             >
               hello@nauvaraha.com
             </a>
@@ -237,3 +232,7 @@ export default function TermsPage() {
     </div>
   );
 }
+
+
+
+

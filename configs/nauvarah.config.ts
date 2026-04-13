@@ -14,7 +14,7 @@ const nauvarahConfig = {
         accent: "#FFFFFF",
       },
       fonts: {
-        heading: "Playfair Display",
+        heading: "Cormorant Garamond",
         body: "Inter",
       },
     },

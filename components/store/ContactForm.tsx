@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState } from "react";
 
@@ -9,10 +9,10 @@ const SUBJECTS = [
   "General Enquiry",
 ] as const;
 
-const PRIMARY = "#1B3A6B";
+const PRIMARY = "#C8860A";
 
 const inputClass =
-  "w-full rounded-lg border border-gray-200 bg-white px-3 py-2.5 text-sm text-gray-900 outline-none transition focus:border-transparent focus:ring-2 focus:ring-[#1B3A6B] focus:ring-offset-0";
+  "w-full rounded-lg border border-gray-200 bg-white px-3 py-2.5 text-sm text-gray-900 outline-none transition focus:border-transparent focus:ring-2 focus:ring-[#C8860A] focus:ring-offset-0";
 
 export function ContactForm() {
   const [name, setName] = useState("");
@@ -223,3 +223,4 @@ export function ContactForm() {
     </form>
   );
 }
+

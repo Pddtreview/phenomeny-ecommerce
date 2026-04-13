@@ -1,4 +1,4 @@
-import { Header } from "@/components/store/Header";
+﻿import { Header } from "@/components/store/Header";
 import { StoreFooter } from "@/components/store/StoreFooter";
 
 export default function StoreLayout({
@@ -7,10 +7,11 @@ export default function StoreLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className="flex min-h-screen flex-col bg-zinc-50">
+    <div className="flex min-h-screen flex-col bg-[#FDFAF5] text-[#1A1A1A]">
       <Header />
       <main className="flex-1">{children}</main>
       <StoreFooter />
     </div>
   );
 }
+
