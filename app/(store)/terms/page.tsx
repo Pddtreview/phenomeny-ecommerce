@@ -16,7 +16,7 @@ export const dynamic = "force-static";
 export const metadata: Metadata = {
   title: "Terms & Conditions",
   description:
-    "Terms and conditions for shopping at Nauvaraha by Phenomeny LLP.",
+    "Terms and conditions for shopping at Nauvaraha.",
   alternates: {
     canonical: "https://www.nauvaraha.com/terms",
   },
@@ -47,7 +47,7 @@ export default function TermsPage() {
             www.nauvaraha.com
           </a>
           , operated by{" "}
-          <strong className="font-medium text-gray-800">Phenomeny LLP</strong>.
+          <strong className="font-medium text-gray-800">Nauvaraha</strong>.
           Please read them carefully before placing an order.
         </p>
 
@@ -150,7 +150,7 @@ export default function TermsPage() {
           <li>
             All content on nauvaraha.com—including text, graphics, logos,
             images, product descriptions, and layout—is owned by or licensed
-            to <strong className="font-medium text-gray-800">Phenomeny LLP</strong>.
+            to <strong className="font-medium text-gray-800">Nauvaraha</strong>.
           </li>
           <li>
             You may not copy, reproduce, distribute, modify, or create
@@ -191,7 +191,7 @@ export default function TermsPage() {
         <div className="mt-3 space-y-2">
           <p>
             <strong className="font-medium text-gray-800">
-              Nauvaraha by Phenomeny LLP
+              Nauvaraha
             </strong>
           </p>
           <p>

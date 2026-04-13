@@ -28,6 +28,12 @@ export function StoreFooter() {
           <Link href="/terms" className="transition hover:text-white">
             Terms
           </Link>
+          <Link
+            href="/refund-policy"
+            className="transition hover:text-white"
+          >
+            Refund Policy
+          </Link>
         </nav>
       </div>
     </footer>

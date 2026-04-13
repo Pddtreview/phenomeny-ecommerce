@@ -16,7 +16,7 @@ export const dynamic = "force-static";
 export const metadata: Metadata = {
   title: "Privacy Policy",
   description:
-    "How Nauvaraha by Phenomeny LLP collects, uses, and protects your personal information.",
+    "How Nauvaraha by Nauvaraha collects, uses, and protects your personal information.",
   alternates: {
     canonical: "https://www.nauvaraha.com/privacy-policy",
   },
@@ -46,7 +46,7 @@ export default function PrivacyPolicyPage() {
           >
             www.nauvaraha.com
           </a>
-          ), operated by <strong className="font-medium text-gray-800">Phenomeny LLP</strong>,
+          ), operated by <strong className="font-medium text-gray-800">Nauvaraha</strong>,
           collects, uses, and safeguards your information when you use our
           website and services.
         </p>
@@ -150,7 +150,7 @@ export default function PrivacyPolicyPage() {
         <div className="mt-3 space-y-2">
           <p>
             <strong className="font-medium text-gray-800">
-              Nauvaraha by Phenomeny LLP
+              Nauvaraha
             </strong>
           </p>
           <p>
