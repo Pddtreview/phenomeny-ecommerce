@@ -34,6 +34,12 @@ export function StoreFooter() {
           >
             Refund Policy
           </Link>
+          <Link
+            href="/shipping-policy"
+            className="transition hover:text-white"
+          >
+            Shipping Policy
+          </Link>
         </nav>
       </div>
     </footer>
