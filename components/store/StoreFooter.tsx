@@ -40,6 +40,9 @@ export function StoreFooter() {
           >
             Shipping Policy
           </Link>
+          <Link href="/contact" className="transition hover:text-white">
+            Contact
+          </Link>
         </nav>
       </div>
     </footer>
