@@ -97,7 +97,7 @@ export function StoreFooter() {
         </div>
 
         <div className="mt-12 border-t border-[#C8860A]/20 pt-5 text-center font-inter text-xs text-[#6B5E4E]">
-          <p>Â© 2026 Nauvaraha. All rights reserved.</p>
+          <p>© 2026 Nauvaraha. All rights reserved.</p>
           <p className="mt-1">GSTIN: 03BGNPK9576K2ZO</p>
         </div>
       </div>

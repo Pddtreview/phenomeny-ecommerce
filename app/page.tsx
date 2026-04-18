@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
+import { Check, Gem, Home as HomeIcon, Shield } from "lucide-react";
 import { Header } from "@/components/store/Header";
 import { StoreFooter } from "@/components/store/StoreFooter";
 import { createServerSupabaseClient } from "@/lib/supabase-server";
@@ -82,7 +83,7 @@ async function getFeaturedProducts(): Promise<Product[]> {
 }
 
 export const metadata: Metadata = {
-  title: "Nauvaraha ? Align Your Energy. Attract Your Abundance.",
+  title: "Nauvaraha · Align Your Energy. Attract Your Abundance.",
   description:
     "Sacred crystals and vastu tools, energetically charged for the 2026 Sun Year.",
   alternates: { canonical: "https://www.nauvaraha.com" },
@@ -157,15 +158,21 @@ export default async function Home() {
           {[
             "Energetically Charged",
             "Lab Certified Crystals",
-            "Free Shipping Above ?999",
+            <>
+              Free Shipping Above <span className="font-inter rupee">₹</span>999
+            </>,
             "6-Day Easy Returns",
-          ].map((item) => (
+          ].map((item, i) => (
             <p
-              key={item}
-              className="font-inter text-xs uppercase tracking-[0.2em] text-[#6B5E4E]"
+              key={i}
+              className="flex items-start justify-center gap-1.5 font-inter text-xs uppercase tracking-[0.2em] text-[#6B5E4E]"
             >
-              <span className="text-[#C8860A]">? </span>
-              {item}
+              <Check
+                className="mt-0.5 h-3.5 w-3.5 shrink-0 text-[#C8860A]"
+                strokeWidth={2.5}
+                aria-hidden
+              />
+              <span>{item}</span>
             </p>
           ))}
         </div>
@@ -250,15 +257,15 @@ export default async function Home() {
             </h2>
             <p className="mt-6 font-inter font-light leading-relaxed text-[#6B5E4E]">
               Every piece in the Nauvaraha collection is selected, charged, and
-              prescribed by Karan Chopra ? Vedic astrologer with over 15 years
-              of practice. These are not products. They are tools for
+              prescribed by Karan Chopra—Vedic astrologer with over 15 years of
+              practice. These are not products. They are tools for
               transformation.
             </p>
             <Link
               href="/contact"
               className="mt-6 inline-block border-b border-[#C8860A] pb-1 font-cormorant text-sm tracking-[0.12em] text-[#C8860A] transition-colors hover:text-[#A86D08]"
             >
-              Meet Karan ?
+              Meet Karan →
             </Link>
           </div>
         </div>
@@ -271,20 +278,39 @@ export default async function Home() {
           </h2>
           <div className="mt-10 grid gap-6 md:grid-cols-3">
             {[
-              { label: "Wealth & Abundance", href: "/category/crystals" },
-              { label: "Protection & Shielding", href: "/category/bracelets" },
-              { label: "Vastu & Home Energy", href: "/category/vastu-decor" },
-            ].map((item) => (
+              {
+                label: "Wealth & Abundance",
+                href: "/category/crystals",
+                Icon: Gem,
+              },
+              {
+                label: "Protection & Shielding",
+                href: "/category/bracelets",
+                Icon: Shield,
+              },
+              {
+                label: "Vastu & Home Energy",
+                href: "/category/vastu-decor",
+                Icon: HomeIcon,
+              },
+            ].map(({ label, href, Icon }) => (
               <Link
-                key={item.href}
-                href={item.href}
+                key={href}
+                href={href}
                 className="border border-[#C8860A]/20 bg-[#FFF8EE] p-8 text-center transition-colors hover:border-[#C8860A]/60"
               >
-                <p className="text-4xl text-[#C8860A]">?</p>
+                <Icon
+                  className="mx-auto h-10 w-10 text-[#C8860A]"
+                  strokeWidth={1.25}
+                  aria-hidden
+                />
                 <h3 className="mt-3 font-cormorant text-xl text-[#1A1A1A]">
-                  {item.label}
+                  {label}
                 </h3>
-                <p className="mt-2 text-[#C8860A]">?</p>
+                <div
+                  className="mx-auto mt-4 h-px w-10 bg-[#C8860A]/35"
+                  aria-hidden
+                />
               </Link>
             ))}
           </div>
