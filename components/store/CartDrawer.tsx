@@ -111,7 +111,8 @@ export function CartDrawer({ open, onClose }: CartDrawerProps) {
                       className="mt-0.5 text-sm font-semibold"
                       style={{ color: PRIMARY }}
                     >
-                      ₹{item.price.toLocaleString("en-IN")} × {item.quantity}
+                      <span className="font-inter rupee">₹</span>
+                      {item.price.toLocaleString("en-IN")} × {item.quantity}
                     </p>
                     <div className="mt-2 flex items-center gap-2">
                       <div className="flex items-center rounded-lg border border-zinc-200">
@@ -168,7 +169,8 @@ export function CartDrawer({ open, onClose }: CartDrawerProps) {
                 className="text-lg font-bold"
                 style={{ color: PRIMARY }}
               >
-                ₹{totalPrice().toLocaleString("en-IN")}
+                <span className="font-inter rupee">₹</span>
+                {totalPrice().toLocaleString("en-IN")}
               </span>
             </div>
             <Link

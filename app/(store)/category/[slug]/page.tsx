@@ -112,7 +112,7 @@ export default async function CategoryPage({
               const href = `/products/${product.slug ?? product.id}`;
               const hasPrice = product.price !== null;
               const formattedPrice = hasPrice
-                ? `₹${product.price!.toLocaleString("en-IN")}`
+                ? product.price!.toLocaleString("en-IN")
                 : "Price on request";
               const hasCompare =
                 product.compare_price != null &&
@@ -137,11 +137,19 @@ export default async function CategoryPage({
 
                     <div className="mt-1 flex items-baseline text-sm">
                       <span className="font-bold text-[#1B3A6B]">
-                        {formattedPrice}
+                        {hasPrice ? (
+                          <>
+                            <span className="font-inter rupee">₹</span>
+                            {formattedPrice}
+                          </>
+                        ) : (
+                          formattedPrice
+                        )}
                       </span>
                       {hasCompare && (
                         <span className="ml-2 text-xs text-gray-400 line-through">
-                          ₹{product.compare_price!.toLocaleString("en-IN")}
+                          <span className="font-inter rupee">₹</span>
+                          {product.compare_price!.toLocaleString("en-IN")}
                         </span>
                       )}
                     </div>

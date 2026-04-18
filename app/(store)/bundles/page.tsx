@@ -97,16 +97,18 @@ export default async function BundlesPage() {
                         className="text-xl font-bold"
                         style={{ color: GOLD }}
                       >
-                        ₹{Number(b.price).toLocaleString("en-IN")}
+                        <span className="font-inter rupee">₹</span>
+                        {Number(b.price).toLocaleString("en-IN")}
                       </span>
                       {hasCompare && (
                         <>
                           <span className="text-sm text-zinc-400 line-through">
-                            ₹
+                            <span className="font-inter rupee">₹</span>
                             {Number(b.compare_price).toLocaleString("en-IN")}
                           </span>
                           <span className="rounded-full bg-emerald-50 px-3 py-1 text-xs font-semibold text-emerald-700">
-                            Save ₹{savings.toLocaleString("en-IN")}
+                            Save <span className="font-inter rupee">₹</span>
+                            {savings.toLocaleString("en-IN")}
                           </span>
                         </>
                       )}

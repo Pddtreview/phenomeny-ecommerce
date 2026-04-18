@@ -13,6 +13,7 @@ const GOLDEN_LOGO =
 
 const navLinks = [
   { href: "/", label: "Home" },
+  { href: "/about", label: "About" },
   { href: "/products", label: "Products" },
   { href: "/bundles", label: "Bundles" },
 ];

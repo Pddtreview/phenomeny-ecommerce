@@ -174,7 +174,8 @@ export default function AccountOrdersPage() {
                       {String(o.payment_status).replaceAll("_", " ")}
                     </td>
                     <td className="px-4 py-3 font-semibold text-zinc-900">
-                      {"₹" + Number(o.total).toLocaleString("en-IN")}
+                      <span className="font-inter rupee">₹</span>
+                      {Number(o.total).toLocaleString("en-IN")}
                     </td>
                   </tr>
                 ))

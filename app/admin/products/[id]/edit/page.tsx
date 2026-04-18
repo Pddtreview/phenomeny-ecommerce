@@ -420,7 +420,7 @@ export default function AdminEditProductPage() {
               </div>
               <div>
                 <label className="mb-1 block text-xs font-medium text-zinc-600">
-                  Price (₹)
+                  Price (INR)
                 </label>
                 <input
                   type="number"
@@ -434,7 +434,7 @@ export default function AdminEditProductPage() {
               </div>
               <div>
                 <label className="mb-1 block text-xs font-medium text-zinc-600">
-                  Compare at price (₹)
+                  Compare at price (INR)
                 </label>
                 <input
                   type="number"
@@ -447,7 +447,7 @@ export default function AdminEditProductPage() {
               </div>
               <div>
                 <label className="mb-1 block text-xs font-medium text-zinc-600">
-                  Cost price (₹)
+                  Cost price (INR)
                 </label>
                 <input
                   type="number"

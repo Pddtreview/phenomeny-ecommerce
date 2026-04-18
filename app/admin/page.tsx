@@ -113,14 +113,16 @@ export default async function AdminDashboardPage() {
   const cards = [
     { label: "Today's Orders", value: String(data.todayOrders) },
     {
-      label: "Today's Revenue (₹)",
-      value: `₹${data.todayRevenue.toLocaleString("en-IN")}`,
+      label: "Today's Revenue (INR)",
+      value: data.todayRevenue.toLocaleString("en-IN"),
+      isCurrency: true,
     },
     { label: "Pending Shipments", value: String(data.pendingShipments) },
     { label: "Total Orders", value: String(data.totalOrders) },
     {
-      label: "Total Revenue (₹)",
-      value: `₹${data.totalRevenue.toLocaleString("en-IN")}`,
+      label: "Total Revenue (INR)",
+      value: data.totalRevenue.toLocaleString("en-IN"),
+      isCurrency: true,
     },
     { label: "Low Stock Items", value: String(data.lowStockItems) },
   ];
@@ -140,7 +142,14 @@ export default async function AdminDashboardPage() {
               className="mt-2 text-2xl font-bold"
               style={{ color: PRIMARY }}
             >
-              {card.value}
+              {card.isCurrency ? (
+                <>
+                  <span className="font-inter rupee">₹</span>
+                  {card.value}
+                </>
+              ) : (
+                card.value
+              )}
             </p>
           </div>
         ))}
@@ -180,7 +189,8 @@ export default async function AdminDashboardPage() {
                     </td>
                     <td className="px-4 py-3 text-zinc-900">{o.customer_name}</td>
                     <td className="px-4 py-3 font-medium text-zinc-900">
-                      ₹{Number(o.total).toLocaleString("en-IN")}
+                      <span className="font-inter rupee">₹</span>
+                      {Number(o.total).toLocaleString("en-IN")}
                     </td>
                     <td className="px-4 py-3">
                       <span className="inline-flex rounded-full bg-zinc-100 px-2 py-0.5 text-xs font-medium text-zinc-700">

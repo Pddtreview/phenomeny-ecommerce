@@ -146,7 +146,8 @@ export function OrdersTableClient({ orders }: { orders: OrderRow[] }) {
                 <td className="px-4 py-3 text-zinc-900">{o.customer_name}</td>
                 <td className="px-4 py-3 text-zinc-600">{o.phone}</td>
                 <td className="px-4 py-3 font-medium text-zinc-900">
-                  ₹{Number(o.total).toLocaleString("en-IN")}
+                  <span className="font-inter rupee">₹</span>
+                  {Number(o.total).toLocaleString("en-IN")}
                 </td>
                 <td className="px-4 py-3 text-zinc-600">
                   {String(o.payment_method ?? "").replace(/_/g, " ")}

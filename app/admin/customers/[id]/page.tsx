@@ -78,7 +78,8 @@ export default async function AdminCustomerDetailPage({
           <p>
             Total spent:{" "}
             <span className="font-semibold">
-              ₹{Number(customer.total_spent ?? 0).toLocaleString("en-IN")}
+              <span className="font-inter rupee">₹</span>
+              {Number(customer.total_spent ?? 0).toLocaleString("en-IN")}
             </span>
           </p>
         </div>
@@ -135,7 +136,8 @@ export default async function AdminCustomerDetailPage({
                       </Link>
                     </td>
                     <td className="px-3 py-2">
-                      ₹{Number(o.total ?? 0).toLocaleString("en-IN")}
+                      <span className="font-inter rupee">₹</span>
+                      {Number(o.total ?? 0).toLocaleString("en-IN")}
                     </td>
                     <td className="px-3 py-2 text-zinc-700">
                       {String(o.payment_method ?? "").replace(/_/g, " ")}

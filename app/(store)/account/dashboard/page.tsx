@@ -164,7 +164,8 @@ export default function AccountDashboardPage() {
                       className="shrink-0 text-sm font-bold"
                       style={{ color: PRIMARY }}
                     >
-                      {"₹" + Number(o.total).toLocaleString("en-IN")}
+                      <span className="font-inter rupee">₹</span>
+                      {Number(o.total).toLocaleString("en-IN")}
                     </p>
                   </a>
                 ))}

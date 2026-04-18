@@ -71,7 +71,8 @@ export default async function OrderSuccessPage({
           {order.order_number}
         </p>
         <p className="mt-1 text-sm text-zinc-500">
-          ₹{Number(order.total).toLocaleString("en-IN")} • {order.items.length} item(s)
+          <span className="font-inter rupee">₹</span>
+          {Number(order.total).toLocaleString("en-IN")} • {order.items.length} item(s)
         </p>
         <div className="mt-8 flex flex-col gap-3">
           <Link

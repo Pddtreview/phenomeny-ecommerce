@@ -122,7 +122,8 @@ export function InventoryTable({ rows }: { rows: VariantRow[] }) {
                   </div>
                 </td>
                 <td className="px-4 py-3 text-zinc-700">
-                  ₹{Number(row.price).toLocaleString("en-IN")}
+                  <span className="font-inter rupee">₹</span>
+                  {Number(row.price).toLocaleString("en-IN")}
                 </td>
                 <td className="px-4 py-3">
                   <span

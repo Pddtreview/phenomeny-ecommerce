@@ -155,12 +155,13 @@ export default function ProductDetailClient({
                   className="text-2xl font-bold"
                   style={{ color: PRIMARY }}
                 >
-                  ₹{selectedVariant.price.toLocaleString("en-IN")}
+                  <span className="font-inter rupee">₹</span>
+                  {selectedVariant.price.toLocaleString("en-IN")}
                 </span>
                 {selectedVariant.compare_price != null &&
                   selectedVariant.compare_price > selectedVariant.price && (
                     <span className="text-sm text-gray-400 line-through">
-                      ₹
+                      <span className="font-inter rupee">₹</span>
                       {selectedVariant.compare_price.toLocaleString("en-IN")}
                     </span>
                   )}

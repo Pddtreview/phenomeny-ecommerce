@@ -54,6 +54,10 @@ export function StoreFooter() {
               Help
             </h3>
             <div className="space-y-2">
+              <Link href="/about" className={linkClass}>
+                About Us
+              </Link>
+              <br />
               <Link href="/track" className={linkClass}>
                 Track Order
               </Link>

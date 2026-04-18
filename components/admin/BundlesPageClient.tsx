@@ -69,10 +69,12 @@ export function BundlesPageClient({ bundles }: { bundles: BundleListRow[] }) {
                 </td>
                 <td className="px-4 py-3 text-zinc-600">{b.slug}</td>
                 <td className="px-4 py-3 text-zinc-900">
-                  ₹{Number(b.price).toLocaleString("en-IN")}
+                  <span className="font-inter rupee">₹</span>
+                  {Number(b.price).toLocaleString("en-IN")}
                   {b.compare_price != null && b.compare_price > b.price && (
                     <span className="ml-2 text-xs text-zinc-400 line-through">
-                      ₹{Number(b.compare_price).toLocaleString("en-IN")}
+                      <span className="font-inter rupee">₹</span>
+                      {Number(b.compare_price).toLocaleString("en-IN")}
                     </span>
                   )}
                 </td>

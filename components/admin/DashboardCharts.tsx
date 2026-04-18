@@ -66,7 +66,7 @@ export function DashboardCharts({
   }
 
   function formatYAxisTick(v: number) {
-    return '₹' + v;
+    return 'INR ' + v;
   }
 
   function tooltipToNumber(value: TooltipValueType | undefined): number {
@@ -79,11 +79,11 @@ export function DashboardCharts({
 
   function formatRevenueTooltip(value: TooltipValueType | undefined) {
     const v = tooltipToNumber(value);
-    return ['₹' + v.toLocaleString('en-IN'), 'Revenue'];
+    return ['INR ' + v.toLocaleString('en-IN'), 'Revenue'];
   }
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-8 font-inter">
       <div className="rounded-xl border border-zinc-200 bg-white p-4 shadow-sm">
         <h3 className="mb-4 text-lg font-semibold text-zinc-900">Daily Revenue (Last 30 days)</h3>
         <div className="h-80 w-full">
@@ -179,7 +179,7 @@ export function DashboardCharts({
               <tr className="border-b border-zinc-100 bg-zinc-50">
                 <th className="px-4 py-3 font-medium text-zinc-600">Rank</th>
                 <th className="px-4 py-3 font-medium text-zinc-600">Product</th>
-                <th className="px-4 py-3 font-medium text-zinc-600">Total Revenue (₹)</th>
+                <th className="px-4 py-3 font-medium text-zinc-600">Total Revenue (INR)</th>
                 <th className="px-4 py-3 font-medium text-zinc-600">Orders</th>
               </tr>
             </thead>
@@ -189,7 +189,8 @@ export function DashboardCharts({
                   <td className="px-4 py-3 font-medium text-zinc-900">{row.rank}</td>
                   <td className="px-4 py-3 text-zinc-900">{row.product_name}</td>
                   <td className="px-4 py-3 font-medium text-zinc-900">
-                    ₹{Number(row.revenue).toLocaleString('en-IN')}
+                    <span className="font-inter rupee">₹</span>
+                    {Number(row.revenue).toLocaleString('en-IN')}
                   </td>
                   <td className="px-4 py-3 text-zinc-600">{row.orders_count}</td>
                 </tr>

@@ -1,4 +1,4 @@
-﻿import type { Metadata } from "next";
+import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { Header } from "@/components/store/Header";
@@ -90,7 +90,12 @@ export const metadata: Metadata = {
 
 function formatPrice(value: number | null) {
   if (value === null) return "Price on request";
-  return `?${value.toLocaleString("en-IN")}`;
+  return (
+    <>
+      <span className="font-inter rupee">₹</span>
+      {value.toLocaleString("en-IN")}
+    </>
+  );
 }
 
 export default async function Home() {

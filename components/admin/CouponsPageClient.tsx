@@ -67,7 +67,12 @@ export function CouponsPageClient({ coupons }: { coupons: CouponRow[] }) {
                 <td className="px-4 py-3 text-zinc-900">
                   {c.type === "percent"
                     ? `${c.value}%`
-                    : `₹${c.value}`}
+                    : (
+                        <>
+                          <span className="font-inter rupee">₹</span>
+                          {c.value}
+                        </>
+                      )}
                 </td>
                 <td className="px-4 py-3 text-zinc-900">{c.used_count}</td>
                 <td className="px-4 py-3 text-zinc-600">

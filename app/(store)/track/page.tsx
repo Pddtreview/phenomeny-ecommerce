@@ -112,7 +112,12 @@ function formatDateTime(value: string) {
 }
 
 function formatCurrency(value: number) {
-  return `₹${Number(value || 0).toLocaleString("en-IN")}`;
+  return (
+    <>
+      <span className="font-inter rupee">₹</span>
+      {Number(value || 0).toLocaleString("en-IN")}
+    </>
+  );
 }
 
 export default function PublicTrackPage() {

@@ -86,7 +86,8 @@ export function CustomersTable({ customers }: { customers: CustomerRow[] }) {
                 </td>
                 <td className="px-4 py-3 text-zinc-900">{c.order_count}</td>
                 <td className="px-4 py-3 font-medium text-zinc-900">
-                  ₹{Number(c.total_spent).toLocaleString("en-IN")}
+                  <span className="font-inter rupee">₹</span>
+                  {Number(c.total_spent).toLocaleString("en-IN")}
                 </td>
                 <td className="px-4 py-3 text-zinc-600">
                   {c.last_order_at

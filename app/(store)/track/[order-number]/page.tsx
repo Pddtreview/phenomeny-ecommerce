@@ -143,7 +143,8 @@ export default async function TrackOrderPage({
             <div className="text-right">
               <p className="text-xs text-zinc-500">Total</p>
               <p className="text-lg font-bold" style={{ color: PRIMARY }}>
-                ₹{Number(order.total).toLocaleString("en-IN")}
+                <span className="font-inter rupee">₹</span>
+                {Number(order.total).toLocaleString("en-IN")}
               </p>
             </div>
           </div>
@@ -269,7 +270,8 @@ export default async function TrackOrderPage({
                     </p>
                   </div>
                   <p className="shrink-0 text-sm font-bold" style={{ color: PRIMARY }}>
-                    ₹{Number(it.total_price).toLocaleString("en-IN")}
+                    <span className="font-inter rupee">₹</span>
+                    {Number(it.total_price).toLocaleString("en-IN")}
                   </p>
                 </li>
               ))}

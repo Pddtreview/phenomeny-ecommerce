@@ -186,7 +186,7 @@ export default function CheckoutPage() {
         });
         setCouponMessage({
           type: "success",
-          text: `Coupon applied. You save ₹${data.discountAmount.toLocaleString("en-IN")}.`,
+          text: `Coupon applied. You save INR ${data.discountAmount.toLocaleString("en-IN")}.`,
         });
       } else {
         setAppliedCoupon(null);
@@ -484,7 +484,8 @@ export default function CheckoutPage() {
                     {i.name} × {i.quantity}
                   </span>
                   <span className="font-medium text-zinc-900">
-                    ₹{(i.price * i.quantity).toLocaleString("en-IN")}
+                    <span className="font-inter rupee">₹</span>
+                    {(i.price * i.quantity).toLocaleString("en-IN")}
                   </span>
                 </li>
               ))}
@@ -492,26 +493,40 @@ export default function CheckoutPage() {
             <div className="mt-4 space-y-1 text-sm">
               <div className="flex justify-between">
                 <span className="text-zinc-600">Subtotal</span>
-                <span>₹{subtotal.toLocaleString("en-IN")}</span>
+                <span>
+                  <span className="font-inter rupee">₹</span>
+                  {subtotal.toLocaleString("en-IN")}
+                </span>
               </div>
               <div className="flex justify-between">
                 <span className="text-zinc-600">Shipping</span>
                 <span>
                   {shippingCharge === 0
                     ? "Free"
-                    : `₹${shippingCharge}`}
+                    : (
+                        <>
+                          <span className="font-inter rupee">₹</span>
+                          {shippingCharge}
+                        </>
+                      )}
                 </span>
               </div>
               {paymentMethod === "cod" && (
                 <div className="flex justify-between">
                   <span className="text-zinc-600">COD charge</span>
-                  <span>₹{COD_CHARGE}</span>
+                  <span>
+                    <span className="font-inter rupee">₹</span>
+                    {COD_CHARGE}
+                  </span>
                 </div>
               )}
               {paymentMethod === "prepaid" && (
                 <div className="flex justify-between text-[#C8860A]">
                   <span>Prepaid discount</span>
-                  <span>−₹{PREPAID_DISCOUNT}</span>
+                  <span>
+                    −<span className="font-inter rupee">₹</span>
+                    {PREPAID_DISCOUNT}
+                  </span>
                 </div>
               )}
               {/* Coupon */}
@@ -559,14 +574,18 @@ export default function CheckoutPage() {
                 {appliedCoupon && (
                   <div className="mt-2 flex justify-between text-sm text-emerald-600">
                     <span>Coupon ({appliedCoupon.code})</span>
-                    <span>−₹{appliedCoupon.discountAmount.toLocaleString("en-IN")}</span>
+                    <span>
+                      −<span className="font-inter rupee">₹</span>
+                      {appliedCoupon.discountAmount.toLocaleString("en-IN")}
+                    </span>
                   </div>
                 )}
               </div>
               <div className="flex justify-between border-t border-zinc-100 pt-2 font-semibold">
                 <span>Total</span>
                 <span style={{ color: PRIMARY }}>
-                  ₹{total.toLocaleString("en-IN")}
+                  <span className="font-inter rupee">₹</span>
+                  {total.toLocaleString("en-IN")}
                 </span>
               </div>
             </div>
@@ -702,7 +721,7 @@ export default function CheckoutPage() {
                   className="ml-2 rounded px-2 py-0.5 text-xs font-medium text-white"
                   style={{ backgroundColor: GOLD }}
                 >
-                  ₹75 off
+                  <span className="font-inter rupee">₹</span>75 off
                 </span>
                 <p className="mt-1 text-xs text-zinc-500">Razorpay</p>
                 <span className="mt-1 inline-block text-xs font-medium text-[#1B3A6B]">
@@ -723,7 +742,10 @@ export default function CheckoutPage() {
               <span className="font-semibold text-zinc-900">
                 Cash on Delivery
               </span>
-              <p className="mt-1 text-xs text-zinc-500">₹{COD_CHARGE} COD charge</p>
+              <p className="mt-1 text-xs text-zinc-500">
+                <span className="font-inter rupee">₹</span>
+                {COD_CHARGE} COD charge
+              </p>
             </button>
           </div>
         </section>

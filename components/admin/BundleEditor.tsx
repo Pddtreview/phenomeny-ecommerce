@@ -279,7 +279,7 @@ export function BundleEditor({ bundleId }: { bundleId?: string }) {
             </div>
             <div>
               <label className="mb-1 block text-xs font-medium text-zinc-600">
-                Bundle price (₹)
+                Bundle price (INR)
               </label>
               <input
                 type="number"
@@ -387,7 +387,8 @@ export function BundleEditor({ bundleId }: { bundleId?: string }) {
                       {v.product_name} — {v.name}
                     </span>
                     <span className="shrink-0 text-xs text-zinc-500">
-                      {v.sku} · ₹{v.price} · stock {v.stock_quantity}
+                      {v.sku} · <span className="font-inter rupee">₹</span>
+                      {v.price} · stock {v.stock_quantity}
                     </span>
                   </button>
                 </li>

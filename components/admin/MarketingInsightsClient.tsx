@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useMemo, useRef, useState } from "react";
+import type { ReactNode } from "react";
 import type { MarketingInsightsPayload } from "@/lib/marketing-insights";
 
 const PRIMARY = "#1B3A6B";
@@ -164,12 +165,22 @@ export function MarketingInsightsClient() {
               />
               <StatCard
                 label="Revenue"
-                value={`₹${metrics.revenue_inr.toLocaleString("en-IN")}`}
+                value={
+                  <>
+                    <span className="font-inter rupee">₹</span>
+                    {metrics.revenue_inr.toLocaleString("en-IN")}
+                  </>
+                }
                 sub="Sum of order totals"
               />
               <StatCard
                 label="AOV"
-                value={`₹${metrics.aov_inr.toLocaleString("en-IN")}`}
+                value={
+                  <>
+                    <span className="font-inter rupee">₹</span>
+                    {metrics.aov_inr.toLocaleString("en-IN")}
+                  </>
+                }
                 sub="Revenue ÷ orders"
               />
               <StatCard
@@ -349,7 +360,7 @@ function StatCard({
   sub,
 }: {
   label: string;
-  value: string;
+  value: ReactNode;
   sub: string;
 }) {
   return (

@@ -213,7 +213,8 @@ export default function ProductsClient({ products }: Props) {
                   </p>
                   {price != null && price > 0 && (
                     <p className="mt-1 text-xs font-semibold" style={{ color: PRIMARY }}>
-                      ₹{Number(price).toLocaleString('en-IN')}
+                      <span className="font-inter rupee">₹</span>
+                      {Number(price).toLocaleString('en-IN')}
                     </p>
                   )}
                 </Link>
@@ -259,7 +260,8 @@ export default function ProductsClient({ products }: Props) {
                   </h3>
                   {price != null && price > 0 ? (
                     <p className="mt-2 text-lg font-bold" style={{ color: PRIMARY }}>
-                      ₹{Number(price).toLocaleString('en-IN')}
+                      <span className="font-inter rupee">₹</span>
+                      {Number(price).toLocaleString('en-IN')}
                     </p>
                   ) : (
                     <p className="mt-2 text-sm font-medium text-zinc-500">Price on request</p>
