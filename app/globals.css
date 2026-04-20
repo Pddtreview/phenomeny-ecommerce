@@ -111,7 +111,7 @@
 
 @layer utilities {
   .font-cormorant {
-    font-family: "Cormorant Garamond", serif;
+    font-family: var(--font-cormorant), "Cormorant Garamond", serif;
   }
 
   .font-inter {

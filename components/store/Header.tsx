@@ -1,6 +1,6 @@
 ﻿"use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useCart } from "@/hooks/useCart";
@@ -18,20 +18,52 @@ const navLinks = [
   { href: "/bundles", label: "Bundles" },
 ];
 
+const iconBtn =
+  "flex h-12 w-12 items-center justify-center rounded-md text-[#1A1A1A] transition-all duration-300 hover:bg-black/5";
+
 export function Header() {
   const [mounted, setMounted] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+  const [hidden, setHidden] = useState(false);
   const [cartOpen, setCartOpen] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const lastScrollY = useRef(0);
   const totalItems = useCart((s) => s.totalItems());
 
   useEffect(() => {
     setMounted(true);
   }, []);
 
+  useEffect(() => {
+    const onScroll = () => {
+      const currentY = window.scrollY;
+      setScrolled(currentY > 8);
+
+      if (currentY > lastScrollY.current + 4 && currentY > 80) {
+        setHidden(true);
+      } else if (currentY < lastScrollY.current - 2) {
+        setHidden(false);
+      }
+
+      lastScrollY.current = currentY;
+    };
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
   return (
     <>
-      <header className="sticky top-0 z-50 border-b border-[#C8860A]/20 bg-white shadow-sm">
-        <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4 sm:h-[4.5rem]">
+      <header
+        className={cn(
+          "sticky top-0 z-50 border-b border-black/5 backdrop-blur-lg transition-transform duration-300 ease-out",
+          hidden ? "-translate-y-full" : "translate-y-0",
+          scrolled
+            ? "bg-[#FDFAF5]/78 shadow-[0_8px_30px_rgb(0,0,0,0.04)] backdrop-saturate-150"
+            : "bg-[#FDFAF5]/95"
+        )}
+      >
+        <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4 sm:h-[4.5rem] lg:px-8">
           <Link href="/" className="block" aria-label="Nauvaraha home">
             <Image
               src={GOLDEN_LOGO}
@@ -44,22 +76,22 @@ export function Header() {
             />
           </Link>
 
-          <nav className="hidden items-center gap-8 md:flex" aria-label="Main">
+          <nav className="hidden items-center gap-10 md:flex" aria-label="Main">
             {navLinks.map((link) => (
               <Link
                 key={link.href}
                 href={link.href}
-                className="font-cormorant text-sm tracking-[0.18em] text-[#6B5E4E] transition-colors hover:text-[#C8860A]"
+                className="font-cormorant text-[13px] font-medium tracking-[0.22em] text-[#1A1A1A] transition-colors duration-300 hover:text-[#C8860A]"
               >
                 {link.label}
               </Link>
             ))}
           </nav>
 
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1 sm:gap-2">
             <Link
               href="/products"
-              className="flex h-10 w-10 items-center justify-center rounded-lg text-[#C8860A] transition hover:bg-[#FFF8EE]"
+              className={iconBtn}
               aria-label="Search products"
             >
               <svg
@@ -81,7 +113,7 @@ export function Header() {
               type="button"
               onClick={() => setCartOpen(true)}
               suppressHydrationWarning
-              className="relative flex h-10 w-10 items-center justify-center rounded-lg text-[#C8860A] transition hover:bg-[#FFF8EE]"
+              className={cn(iconBtn, "relative")}
               aria-label="Open cart"
             >
               <svg
@@ -101,7 +133,7 @@ export function Header() {
               </svg>
               {mounted && totalItems > 0 && (
                 <span
-                  className="absolute -right-1 -top-1 flex h-4 min-w-4 items-center justify-center rounded-full px-1 text-[10px] font-medium text-white"
+                  className="absolute -right-0.5 -top-0.5 flex h-4 min-w-4 items-center justify-center rounded-full px-1 text-[10px] font-medium text-white shadow-sm"
                   style={{ backgroundColor: GOLD }}
                 >
                   {totalItems > 99 ? "99+" : totalItems}
@@ -112,7 +144,7 @@ export function Header() {
             <button
               type="button"
               onClick={() => setMobileMenuOpen((o) => !o)}
-              className="flex h-10 w-10 items-center justify-center rounded-lg text-[#C8860A] transition hover:bg-[#FFF8EE] md:hidden"
+              className={cn(iconBtn, "md:hidden")}
               aria-label={mobileMenuOpen ? "Close menu" : "Open menu"}
               aria-expanded={mobileMenuOpen}
             >
@@ -150,17 +182,18 @@ export function Header() {
 
         <div
           className={cn(
-            "border-t border-[#C8860A]/20 bg-white md:hidden",
+            "border-t border-black/5 md:hidden",
+            scrolled ? "bg-[#FDFAF5]/80 backdrop-blur-md" : "bg-[#FDFAF5]/95",
             mobileMenuOpen ? "block" : "hidden"
           )}
         >
-          <nav className="flex flex-col px-4 py-3" aria-label="Mobile">
+          <nav className="flex flex-col px-4 py-4" aria-label="Mobile">
             {navLinks.map((link) => (
               <Link
                 key={link.href}
                 href={link.href}
                 onClick={() => setMobileMenuOpen(false)}
-                className="font-cormorant py-2.5 text-sm tracking-[0.18em] text-[#6B5E4E] transition-colors hover:text-[#C8860A]"
+                className="font-cormorant py-3 text-sm font-medium tracking-[0.22em] text-[#1A1A1A] transition-colors duration-300 hover:text-[#C8860A]"
               >
                 {link.label}
               </Link>
@@ -173,4 +206,3 @@ export function Header() {
     </>
   );
 }
-

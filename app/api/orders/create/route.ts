@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createSupabaseServiceRoleClient } from "@/lib/supabase-server";
 import { expandOrderItemToVariantQuantities } from "@/lib/bundle-stock";
+import { sendOrderConfirmationEmail } from "@/lib/notifications";
 
 type OrderItemInput = {
   variantId?: string;
@@ -310,6 +311,25 @@ export async function POST(request: NextRequest) {
         body: JSON.stringify({ orderId }),
       }).catch((err) => console.error("Shiprocket create-order trigger:", err));
     }
+
+    // Fire-and-forget: send order confirmation email (does not block order success)
+    sendOrderConfirmationEmail(
+      customer.email || "",
+      orderNumber,
+      items.map((it) => ({
+        name: it.name,
+        quantity: Number(it.quantity),
+        total_price: Number(it.totalPrice),
+      })),
+      Number(total),
+      {
+        line1: address.line1,
+        line2: address.line2,
+        city: address.city,
+        state: address.state,
+        pincode: address.pincode,
+      }
+    ).catch((err) => console.error("order confirmation email:", err));
 
     return NextResponse.json({
       success: true,

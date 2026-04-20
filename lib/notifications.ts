@@ -107,12 +107,21 @@ export async function sendOrderConfirmationEmail(
 ): Promise<void> {
   if (!to || !to.includes("@")) return;
   const key = getResendKey();
+  const logoUrl =
+    "https://res.cloudinary.com/dwhpxdp18/image/upload/v1776068357/Nauvaraha_golden_logo_kmgjir.png";
   const itemsList = items
-    .map((i) => `${i.name} x ${i.quantity} — ₹${Number(i.total_price).toLocaleString("en-IN")}`)
+    .map(
+      (i) =>
+        `<tr>
+          <td style="padding:8px 0;color:#1A1A1A;font-size:14px;line-height:1.6;">${i.name}</td>
+          <td style="padding:8px 0;color:#4A3F35;font-size:14px;line-height:1.6;text-align:center;">x${Number(i.quantity)}</td>
+          <td style="padding:8px 0;color:#4A3F35;font-size:14px;line-height:1.6;text-align:right;">₹${Number(i.total_price).toLocaleString("en-IN")}</td>
+        </tr>`
+    )
     .join("\n");
   const addr = [address.line1, address.line2, `${address.city}, ${address.state} ${address.pincode}`]
     .filter(Boolean)
-    .join("\n");
+    .join("<br/>");
 
   const res = await fetch("https://api.resend.com/emails", {
     method: "POST",
@@ -123,17 +132,50 @@ export async function sendOrderConfirmationEmail(
     body: JSON.stringify({
       from: FROM_EMAIL,
       to: [to],
-      subject: `Order ${orderNumber} confirmed — Nauvarah`,
+      subject: `Order Confirmed - ${orderNumber} | Nauvaraha`,
       html: `
-        <h2>Order Confirmed</h2>
-        <p>Your order <strong>${orderNumber}</strong> has been confirmed.</p>
-        <p><strong>Total: ₹${total.toLocaleString("en-IN")}</strong></p>
-        <h3>Items</h3>
-        <pre>${itemsList}</pre>
-        <h3>Delivery address</h3>
-        <pre>${addr}</pre>
-        <p>Track your order: <a href="https://nauvarah.com/track/${orderNumber}">nauvarah.com/track/${orderNumber}</a></p>
-        <p>— Team Nauvarah</p>
+        <div style="margin:0;padding:24px;background:#FDFAF5;font-family:Inter,Arial,sans-serif;color:#1A1A1A;">
+          <div style="max-width:640px;margin:0 auto;background:#ffffff;border:1px solid #f0ece6;border-radius:12px;padding:24px;">
+            <div style="text-align:center;margin-bottom:16px;">
+              <img src="${logoUrl}" alt="Nauvaraha" style="width:180px;height:auto;" />
+            </div>
+            <h2 style="margin:0 0 8px;font-size:28px;line-height:1.2;font-weight:600;color:#1A1A1A;">Thank you for your order!</h2>
+            <p style="margin:0 0 18px;font-size:15px;line-height:1.7;color:#4A3F35;">
+              Your order has been confirmed. Order number:
+              <strong style="color:#C8860A;"> ${orderNumber}</strong>
+            </p>
+
+            <h3 style="margin:20px 0 8px;font-size:16px;color:#1A1A1A;">Items Ordered</h3>
+            <table style="width:100%;border-collapse:collapse;border-top:1px solid #eee;border-bottom:1px solid #eee;">
+              <thead>
+                <tr>
+                  <th style="text-align:left;padding:10px 0;font-size:12px;letter-spacing:0.08em;text-transform:uppercase;color:#6f665c;">Item</th>
+                  <th style="text-align:center;padding:10px 0;font-size:12px;letter-spacing:0.08em;text-transform:uppercase;color:#6f665c;">Qty</th>
+                  <th style="text-align:right;padding:10px 0;font-size:12px;letter-spacing:0.08em;text-transform:uppercase;color:#6f665c;">Price</th>
+                </tr>
+              </thead>
+              <tbody>
+                ${itemsList}
+              </tbody>
+            </table>
+
+            <h3 style="margin:20px 0 8px;font-size:16px;color:#1A1A1A;">Delivery Address</h3>
+            <p style="margin:0;font-size:14px;line-height:1.7;color:#4A3F35;">${addr}</p>
+
+            <p style="margin:20px 0 0;font-size:16px;line-height:1.4;color:#1A1A1A;">
+              <strong>Total Amount: <span style="color:#C8860A;">₹${total.toLocaleString("en-IN")}</span></strong>
+            </p>
+            <p style="margin:12px 0 0;font-size:14px;line-height:1.7;color:#4A3F35;">
+              Expected delivery: <strong>4-7 business days</strong>
+            </p>
+            <p style="margin:8px 0 0;font-size:14px;line-height:1.7;color:#4A3F35;">
+              Track your order at <a href="https://nauvaraha.com/track" style="color:#C8860A;">nauvaraha.com/track</a>
+            </p>
+            <p style="margin:8px 0 0;font-size:14px;line-height:1.7;color:#4A3F35;">
+              Need help? Contact us at <a href="mailto:hello@nauvaraha.com" style="color:#C8860A;">hello@nauvaraha.com</a>
+            </p>
+          </div>
+        </div>
       `,
     }),
   });

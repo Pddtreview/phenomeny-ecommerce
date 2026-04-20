@@ -9,8 +9,6 @@ import { useCart } from "@/hooks/useCart";
 import nauvarahConfig from "@/configs/nauvarah.config";
 import { cn } from "@/lib/utils";
 
-const SKIP_COD_OTP = false;
-
 const COD_ONLY_MODE = process.env.COD_ONLY_MODE === "true";
 
 const PRIMARY = "#1B3A6B";
@@ -22,6 +20,7 @@ const PREPAID_DISCOUNT = nauvarahConfig.shipping.prepaidDiscount;
 
 const addressSchema = z.object({
   name: z.string().min(1, "Name is required"),
+  email: z.string().email("Enter a valid email address"),
   phone: z.string().regex(/^\d{10}$/, "Enter 10 digit phone"),
   address_line1: z.string().min(1, "Address is required"),
   address_line2: z.string().optional(),
@@ -69,13 +68,8 @@ export default function CheckoutPage() {
   const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>(
     COD_ONLY_MODE ? "cod" : "prepaid"
   );
-  const [otpSent, setOtpSent] = useState(false);
-  const [otp, setOtp] = useState("");
-  const [otpVerified, setOtpVerified] = useState(false);
-  const [resendTimer, setResendTimer] = useState(0);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [devOtpAutoFilled, setDevOtpAutoFilled] = useState(false);
   const [couponCodeInput, setCouponCodeInput] = useState("");
   const [couponApplying, setCouponApplying] = useState(false);
   const [couponMessage, setCouponMessage] = useState<{
@@ -87,8 +81,6 @@ export default function CheckoutPage() {
     couponId: string;
     discountAmount: number;
   } | null>(null);
-
-  const isDev = process.env.NODE_ENV === "development";
 
   const subtotal = totalPrice();
   const shippingCharge =
@@ -105,14 +97,13 @@ export default function CheckoutPage() {
     register,
     handleSubmit,
     setValue,
-    trigger,
-    getValues,
     watch,
     formState: { errors },
   } = useForm<AddressForm>({
     resolver: zodResolver(addressSchema),
     defaultValues: {
       name: "",
+      email: "",
       phone: "",
       address_line1: "",
       address_line2: "",
@@ -129,24 +120,6 @@ export default function CheckoutPage() {
       router.replace("/products");
     }
   }, [items.length, router]);
-
-  useEffect(() => {
-    // Reset COD OTP flow when switching payment method.
-    setOtpSent(false);
-    setOtp("");
-    setOtpVerified(false);
-    setResendTimer(0);
-    setError(null);
-    setDevOtpAutoFilled(false);
-  }, [paymentMethod]);
-
-  useEffect(() => {
-    if (!otpSent || resendTimer <= 0) return;
-    const id = window.setInterval(() => {
-      setResendTimer((t) => (t > 0 ? t - 1 : 0));
-    }, 1000);
-    return () => window.clearInterval(id);
-  }, [otpSent, resendTimer]);
 
   const onPincodeBlur = async () => {
     const pin = (pincode || "").replace(/\D/g, "");
@@ -215,7 +188,7 @@ export default function CheckoutPage() {
       customer: {
         name: data.name,
         phone: data.phone,
-        email: undefined as string | undefined,
+        email: data.email,
       },
       address: {
         line1: data.address_line1,
@@ -333,78 +306,14 @@ export default function CheckoutPage() {
     setLoading(false);
   };
 
-  const sendOtp = async (phone: string): Promise<string | null> => {
-    const res = await fetch("/api/otp/send", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ phone }),
-    });
-    const json = await res.json();
-    if (!res.ok || !json.success) {
-      throw new Error(json?.error || "Failed to send OTP");
-    }
-    return typeof json?.devOtp === "string" ? json.devOtp : null;
-  };
-
-  const verifyOtp = async (phone: string, otpToVerify: string) => {
-    const verifyRes = await fetch("/api/otp/verify", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ phone, otp: otpToVerify }),
-    });
-    const verifyJson = await verifyRes.json();
-    if (!verifyRes.ok || !verifyJson.success) {
-      throw new Error("Invalid OTP. Please try again.");
-    }
-  };
-
-  const onCodPlaceOrderClick = async () => {
-    setError(null);
-    setLoading(true);
-    try {
-      const isValid = await trigger();
-      if (!isValid) return;
-
-      const phone = getValues("phone").replace(/\D/g, "").slice(-10);
-      if (phone.length !== 10) {
-        setError("Enter a valid 10 digit phone number");
-        return;
-      }
-
-      if (SKIP_COD_OTP) {
-        const payload = buildOrderPayload(getValues());
-        const result = await createOrder(payload);
-        clearCart();
-        router.replace(`/order-success/${result.orderId}`);
-        return;
-      }
-
-      const devOtp = await sendOtp(phone);
-      setOtpSent(true);
-      setOtp(devOtp ?? "");
-      setOtpVerified(false);
-      setResendTimer(30);
-      setDevOtpAutoFilled(Boolean(devOtp));
-    } catch (e) {
-      setError(e instanceof Error ? e.message : "Failed to send OTP");
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const onCodVerifyAndPlaceOrder = handleSubmit(async (data) => {
+  const onCodPlaceOrder = handleSubmit(async (data) => {
     setError(null);
     setLoading(true);
     try {
       const phone = data.phone.replace(/\D/g, "").slice(-10);
-      if (!SKIP_COD_OTP && (otp.length < 4 || otp.length > 6)) {
-        setError("Enter a valid OTP");
+      if (phone.length !== 10) {
+        setError("Enter a valid 10 digit phone number");
         return;
-      }
-
-      if (!SKIP_COD_OTP) {
-        await verifyOtp(phone, otp);
-        setOtpVerified(true);
       }
 
       const payload = buildOrderPayload(data);
@@ -412,36 +321,11 @@ export default function CheckoutPage() {
       clearCart();
       router.replace(`/order-success/${result.orderId}`);
     } catch (e) {
-      setError(e instanceof Error ? e.message : "Invalid OTP. Please try again.");
+      setError(e instanceof Error ? e.message : "Order failed");
     } finally {
       setLoading(false);
     }
   });
-
-  const onResendOtp = async () => {
-    if (resendTimer > 0) return;
-    setError(null);
-    setLoading(true);
-    try {
-      const isValid = await trigger(["phone"]);
-      if (!isValid) return;
-      const phone = getValues("phone").replace(/\D/g, "").slice(-10);
-      if (phone.length !== 10) {
-        setError("Enter a valid 10 digit phone number");
-        return;
-      }
-      const devOtp = await sendOtp(phone);
-      if (devOtp) {
-        setOtp(devOtp);
-        setDevOtpAutoFilled(true);
-      }
-      setResendTimer(30);
-    } catch (e) {
-      setError(e instanceof Error ? e.message : "Failed to resend OTP");
-    } finally {
-      setLoading(false);
-    }
-  };
 
   if (items.length === 0) {
     return (
@@ -613,6 +497,19 @@ export default function CheckoutPage() {
             </div>
             <div>
               <label className="mb-1 block text-xs font-medium text-zinc-600">
+                Email
+              </label>
+              <input
+                {...register("email")}
+                type="email"
+                className="w-full rounded-lg border border-zinc-200 px-3 py-2 text-sm"
+              />
+              {errors.email && (
+                <p className="mt-1 text-xs text-red-600">{errors.email.message}</p>
+              )}
+            </div>
+            <div>
+              <label className="mb-1 block text-xs font-medium text-zinc-600">
                 Phone (10 digits)
               </label>
               <input
@@ -750,54 +647,6 @@ export default function CheckoutPage() {
           </div>
         </section>
 
-        {/* OTP step for COD */}
-        {paymentMethod === "cod" && otpSent && (
-          <section className="mt-6 rounded-xl border border-zinc-200 bg-white p-4">
-            <label className="mb-2 block text-sm font-medium text-zinc-700">
-              Enter OTP sent to your phone
-            </label>
-            <input
-              value={otp}
-              onChange={(e) =>
-                setOtp(e.target.value.replace(/\D/g, "").slice(0, 6))
-              }
-              maxLength={6}
-              className="w-full rounded-lg border border-zinc-200 px-3 py-2 text-sm"
-              placeholder="000000"
-            />
-            {isDev && devOtpAutoFilled && (
-              <p className="mt-2 text-xs text-zinc-500">
-                Dev mode: OTP auto-filled
-              </p>
-            )}
-            <div className="mt-3 flex items-center justify-between">
-              <button
-                type="button"
-                onClick={onCodVerifyAndPlaceOrder}
-                disabled={loading || otpVerified}
-                className="rounded-lg px-4 py-2 text-sm font-semibold text-white disabled:opacity-70"
-                style={{ backgroundColor: PRIMARY }}
-              >
-                {loading ? "Verifying..." : "Verify & Place Order"}
-              </button>
-
-              {resendTimer > 0 ? (
-                <span className="text-xs text-zinc-500">
-                  Resend in {resendTimer}s
-                </span>
-              ) : (
-                <button
-                  type="button"
-                  onClick={onResendOtp}
-                  className="text-xs font-medium text-zinc-600 hover:text-zinc-900"
-                >
-                  Resend OTP
-                </button>
-              )}
-            </div>
-          </section>
-        )}
-
         {error && (
           <p className="mt-4 text-sm text-red-600">{error}</p>
         )}
@@ -814,17 +663,17 @@ export default function CheckoutPage() {
             >
               {loading ? "Processing..." : "Place Order"}
             </button>
-          ) : !otpSent ? (
+          ) : (
             <button
               type="button"
-              onClick={onCodPlaceOrderClick}
+              onClick={onCodPlaceOrder}
               disabled={loading}
               className="w-full rounded-lg py-3 text-sm font-semibold text-white disabled:opacity-70"
               style={{ backgroundColor: PRIMARY }}
             >
-              {loading ? "Sending OTP..." : "Place Order"}
+              {loading ? "Processing..." : "Place Order - Cash on Delivery"}
             </button>
-          ) : null}
+          )}
         </div>
       </div>
     </div>
