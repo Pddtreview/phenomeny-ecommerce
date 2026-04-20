@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useCart } from "@/hooks/useCart";
 import { CartDrawer } from "@/components/store/CartDrawer";
 import { cn } from "@/lib/utils";
@@ -22,6 +23,7 @@ const iconBtn =
   "flex h-12 w-12 items-center justify-center rounded-md text-[#1A1A1A] transition-all duration-300 hover:bg-black/5";
 
 export function Header() {
+  const pathname = usePathname();
   const [mounted, setMounted] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [hidden, setHidden] = useState(false);
@@ -33,6 +35,13 @@ export function Header() {
   useEffect(() => {
     setMounted(true);
   }, []);
+
+  const handleLogoClick = () => {
+    setMobileMenuOpen(false);
+    if (pathname === "/" && typeof window !== "undefined") {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+  };
 
   useEffect(() => {
     const onScroll = () => {
@@ -64,7 +73,12 @@ export function Header() {
         )}
       >
         <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4 sm:h-[4.5rem] lg:px-8">
-          <Link href="/" className="block" aria-label="Nauvaraha home">
+          <Link
+            href="/"
+            onClick={handleLogoClick}
+            className="relative z-20 block shrink-0 cursor-pointer"
+            aria-label="Nauvaraha home"
+          >
             <Image
               src={GOLDEN_LOGO}
               alt="Nauvaraha"

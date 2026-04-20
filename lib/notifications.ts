@@ -58,7 +58,7 @@ export async function sendOrderConfirmationSMS(
   orderNumber: string,
   total: number
 ): Promise<void> {
-  const message = `Dear customer, your Nauvarah order ${orderNumber} for ₹${total.toLocaleString("en-IN")} has been confirmed. Track at nauvarah.com/track/${orderNumber}. - Team Nauvarah`;
+  const message = `Dear customer, your Nauvaraha order ${orderNumber} for ₹${total.toLocaleString("en-IN")} has been confirmed. Track at nauvarah.com/track/${orderNumber}. - Team Nauvaraha`;
   await sendSMS(phone, message);
 }
 
@@ -68,7 +68,7 @@ export async function sendShippingConfirmationSMS(
   awb: string,
   courier: string
 ): Promise<void> {
-  const message = `Your Nauvarah order ${orderNumber} has been shipped via ${courier}. AWB: ${awb}. Track at nauvarah.com/track/${orderNumber}`;
+  const message = `Your Nauvaraha order ${orderNumber} has been shipped via ${courier}. AWB: ${awb}. Track at nauvarah.com/track/${orderNumber}`;
   await sendSMS(phone, message);
 }
 
@@ -76,7 +76,7 @@ export async function sendDeliveryConfirmationSMS(
   phone: string,
   orderNumber: string
 ): Promise<void> {
-  const message = `Your Nauvarah order ${orderNumber} has been delivered. Thank you for shopping with us! Share your experience.`;
+  const message = `Your Nauvaraha order ${orderNumber} has been delivered. Thank you for shopping with us! Share your experience.`;
   await sendSMS(phone, message);
 }
 
@@ -96,7 +96,8 @@ function getResendKey(): string {
   return key;
 }
 
-const FROM_EMAIL = process.env.RESEND_FROM_EMAIL || "Nauvarah <orders@nauvarah.com>";
+const FROM_EMAIL =
+  process.env.RESEND_FROM_EMAIL || "Nauvaraha <orders@nauvaraha.com>";
 
 export async function sendOrderConfirmationEmail(
   to: string,
@@ -130,7 +131,7 @@ export async function sendOrderConfirmationEmail(
       Authorization: `Bearer ${key}`,
     },
     body: JSON.stringify({
-      from: FROM_EMAIL,
+      from: `Nauvaraha <${process.env.RESEND_FROM_EMAIL}>`,
       to: [to],
       subject: `Order Confirmed - ${orderNumber} | Nauvaraha`,
       html: `
@@ -205,13 +206,13 @@ export async function sendShippingConfirmationEmail(
     body: JSON.stringify({
       from: FROM_EMAIL,
       to: [to],
-      subject: `Order ${orderNumber} shipped — Nauvarah`,
+      subject: `Order ${orderNumber} shipped — Nauvaraha`,
       html: `
         <h2>Your order has been shipped</h2>
         <p>Order <strong>${orderNumber}</strong> is on its way via <strong>${courier}</strong>.</p>
         <p>AWB: <strong>${awb}</strong></p>
         <p><a href="${trackLink}">Track your order</a></p>
-        <p>— Team Nauvarah</p>
+        <p>— Team Nauvaraha</p>
       `,
     }),
   });
