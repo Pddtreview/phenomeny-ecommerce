@@ -72,7 +72,7 @@ export async function POST(request: NextRequest) {
 
     console.log(
       "PayU Hash String:",
-      `${PAYU_KEY}|${txnid}|${amount}|${productinfo}|${firstname}|${email}|${udf1}||||||||||${PAYU_SALT}`
+      `${PAYU_KEY}|${txnid}|${amount}|${productinfo}|${firstname}|${email}|${udf1}||||||${PAYU_SALT}`
     );
 
     console.log("PayU Params:", {
