@@ -13,7 +13,7 @@ async function getOrder(id: string) {
   const { data: order, error } = await supabase
     .from("orders")
     .select(
-      "id, order_number, created_at, order_status, payment_status, payment_method, subtotal, discount, shipping_charge, cod_charge, total, coupon_code, discount_amount, razorpay_order_id, customer_id, address_id, shiprocket_order_id, shiprocket_shipment_id, awb_number, courier_name, label_url, tracking_url, admin_notes"
+      "id, order_number, created_at, order_status, payment_status, payment_method, subtotal, discount, shipping_charge, cod_charge, total, coupon_code, discount_amount, payu_transaction_id, customer_id, address_id, shiprocket_order_id, shiprocket_shipment_id, awb_number, courier_name, label_url, tracking_url, admin_notes"
     )
     .eq("id", id)
     .single();
@@ -307,11 +307,11 @@ export default async function AdminOrderDetailPage({
               {String(order.payment_status ?? "").replace(/_/g, " ")}
             </span>
           </div>
-          {order.razorpay_order_id && (
+          {order.payu_transaction_id && (
             <div className="flex justify-between">
-              <span className="text-zinc-600">Razorpay order ID</span>
+              <span className="text-zinc-600">PayU transaction ID</span>
               <span className="font-mono text-xs">
-                {order.razorpay_order_id}
+                {order.payu_transaction_id}
               </span>
             </div>
           )}

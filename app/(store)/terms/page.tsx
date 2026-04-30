@@ -82,7 +82,7 @@ export default function TermsPage() {
           </li>
           <li>
             We accept UPI, cards, and net banking through{" "}
-            <strong className="font-medium text-[#1A1A1A]">Razorpay</strong>.
+            <strong className="font-medium text-[#1A1A1A]">PayU</strong>.
           </li>
           <li>
             Cash on delivery (COD) may be available where offered, subject to
@@ -136,7 +136,7 @@ export default function TermsPage() {
           </li>
           <li>
             For prepaid orders, refunds are credited to the original payment
-            method, in line with Razorpay and bank processing times.
+            method, in line with PayU and bank processing times.
           </li>
         </ul>
 

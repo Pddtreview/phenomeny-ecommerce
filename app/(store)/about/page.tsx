@@ -1,12 +1,5 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { Inter } from "next/font/google";
-
-const inter = Inter({
-  subsets: ["latin"],
-  display: "swap",
-});
-
 export const dynamic = "force-static";
 
 export const metadata: Metadata = {
@@ -18,20 +11,21 @@ export const metadata: Metadata = {
   },
 };
 
-const heading = "mt-10 font-semibold text-[#C8860A] first:mt-0";
+const sectionHeading = "mt-10 text-2xl font-bold text-[#1A1A1A] first:mt-0";
+const bodyText = "mt-4 text-base font-normal text-[#666666] sm:text-[1.05rem]";
 
 export default function AboutPage() {
   return (
-    <div className={`bg-[#FFFFFF] pb-16 pt-16 ${inter.className}`}>
-      <article className="mx-auto max-w-3xl px-4 leading-relaxed text-[#1A1A1A]">
-        <h1 className="font-cormorant text-4xl text-[#1A1A1A] sm:text-[2.5rem]">
+    <div className="bg-[#FFFFFF] pb-16 pt-16">
+      <article className="mx-auto max-w-3xl px-4 font-inter leading-relaxed">
+        <h1 className="text-5xl font-black tracking-tight text-[#1A1A1A]">
           About Nauvaraha
         </h1>
-        <p className="mt-4 font-cormorant text-xl italic text-[#C8860A] sm:text-2xl">
+        <p className="mt-4 text-xl font-normal text-[#666666]">
           Ancient Wisdom. Modern Intention.
         </p>
 
-        <p className="mt-6 text-base sm:text-[1.05rem]">
+        <p className="mt-6 text-base font-normal text-[#666666] sm:text-[1.05rem]">
           Established in 2013 in Jalandhar, Punjab, Nauvaraha is a premier
           destination for authentic spiritual tools and Vedic remedies. We
           believe that spiritual growth should be supported by genuine,
@@ -40,13 +34,13 @@ export default function AboutPage() {
         </p>
 
         <section
-          className="mt-10 rounded-lg border border-[#C8860A]/20 bg-white p-6 sm:p-8"
+          className="mt-10 rounded-2xl border border-[#EEEEEE] bg-white p-6 sm:p-8"
           aria-labelledby="story-heading"
         >
-          <h2 id="story-heading" className="font-cormorant text-2xl text-[#C8860A] sm:text-3xl">
+          <h2 id="story-heading" className="text-2xl font-bold text-[#1A1A1A]">
             The Nauvaraha Story
           </h2>
-          <p className="mt-4 text-base sm:text-[1.05rem]">
+          <p className={bodyText}>
             Every piece in our collection is more than just a product; it is a
             tool for personal transformation. Our founder, Karan Chopra, is a
             seasoned Vedic astrologer with over 15 years of dedicated practice.
@@ -56,11 +50,11 @@ export default function AboutPage() {
           </p>
         </section>
 
-        <h2 className={heading}>Our Commitment to Quality</h2>
-        <p className="mt-3">
+        <h2 className={sectionHeading}>Our Commitment to Quality</h2>
+        <p className="mt-3 text-base font-normal text-[#666666]">
           At Nauvaraha, we specialise in:
         </p>
-        <ul className="mt-4 list-disc space-y-3 pl-6 text-base sm:text-[1.05rem]">
+        <ul className="mt-4 list-disc space-y-3 pl-6 text-base font-normal text-[#666666] sm:text-[1.05rem]">
           <li>
             <span className="font-medium text-[#1A1A1A]">
               Authentic Gemstones &amp; Crystals:
@@ -80,8 +74,8 @@ export default function AboutPage() {
           </li>
         </ul>
 
-        <h2 className={heading}>Why Choose Us?</h2>
-        <ul className="mt-4 list-disc space-y-3 pl-6 text-base sm:text-[1.05rem]">
+        <h2 className={sectionHeading}>Why Choose Us?</h2>
+        <ul className="mt-4 list-disc space-y-3 pl-6 text-base font-normal text-[#666666] sm:text-[1.05rem]">
           <li>
             <span className="font-medium text-[#1A1A1A]">Expert Curation:</span>{" "}
             Products are handpicked and verified by a practicing astrologer.
@@ -99,13 +93,13 @@ export default function AboutPage() {
         </ul>
 
         <section
-          className="mt-10 rounded-lg border border-[#C8860A]/20 bg-white p-6 sm:p-8"
+          className="mt-10 rounded-2xl border border-[#EEEEEE] bg-white p-6 sm:p-8"
           aria-labelledby="connect-heading"
         >
-          <h2 id="connect-heading" className="font-cormorant text-2xl text-[#C8860A] sm:text-3xl">
+          <h2 id="connect-heading" className="text-2xl font-bold text-[#1A1A1A]">
             Connect With Us
           </h2>
-          <p className="mt-4 text-base sm:text-[1.05rem]">
+          <p className={bodyText}>
             We operate from our office in Jalandhar, Punjab, and are committed to
             responding to all inquiries within 24 hours. Whether you are looking
             for Vastu consultation or a specific crystal for your home, our team
@@ -114,7 +108,7 @@ export default function AboutPage() {
           <p className="mt-6">
             <Link
               href="/contact"
-              className="font-medium text-[#C8860A] underline underline-offset-2 hover:no-underline"
+              className="inline-flex rounded-full bg-[linear-gradient(135deg,#FF4500,#E91E8C)] px-6 py-2.5 text-sm font-semibold text-white transition-opacity hover:opacity-90"
             >
               Get in touch
             </Link>

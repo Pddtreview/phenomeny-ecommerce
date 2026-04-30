@@ -24,9 +24,8 @@ type CreateOrderBody = {
     pincode: string;
   };
   items: OrderItemInput[];
-  paymentMethod: "prepaid" | "cod";
-  razorpayOrderId?: string;
-  razorpayPaymentId?: string;
+  paymentMethod?: "prepaid" | "cod";
+  payment_method?: "prepaid" | "cod";
   coupon_code?: string;
   discount_amount?: number;
   subtotal: number;
@@ -54,9 +53,8 @@ export async function POST(request: NextRequest) {
       customer,
       address,
       items,
-      paymentMethod,
-      razorpayOrderId,
-      razorpayPaymentId,
+      paymentMethod: paymentMethodFromBody,
+      payment_method,
       coupon_code,
       discount_amount,
       subtotal,
@@ -65,6 +63,8 @@ export async function POST(request: NextRequest) {
       codCharge,
       total,
     } = body;
+
+    const paymentMethod = paymentMethodFromBody || payment_method;
 
     if (
       !customer?.name ||
@@ -75,6 +75,7 @@ export async function POST(request: NextRequest) {
       !address?.pincode ||
       !Array.isArray(items) ||
       items.length === 0 ||
+      !paymentMethod ||
       !["prepaid", "cod"].includes(paymentMethod)
     ) {
       return NextResponse.json(
@@ -191,7 +192,8 @@ export async function POST(request: NextRequest) {
     }
 
     const orderNumber = "NV" + Math.floor(100000 + Math.random() * 900000).toString();
-    const payment_status = paymentMethod === "prepaid" ? "paid" : "pending";
+    const payment_status = "pending";
+    const order_status = paymentMethod === "prepaid" ? "pending" : "confirmed";
     const cod_otp_verified = paymentMethod === "cod";
 
     const { data: orderRow, error: orderErr } = await supabase
@@ -202,9 +204,7 @@ export async function POST(request: NextRequest) {
         address_id: addressId,
         payment_method: paymentMethod,
         payment_status,
-        order_status: "confirmed",
-        razorpay_order_id: razorpayOrderId || null,
-        razorpay_payment_id: razorpayPaymentId || null,
+        order_status,
         cod_otp_verified,
         coupon_code: coupon_code || null,
         discount_amount: discount_amount != null ? Number(discount_amount) : null,
@@ -299,37 +299,39 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    // Fire-and-forget: trigger Shiprocket order creation (do not await)
-    const baseUrl =
-      process.env.NEXT_PUBLIC_SITE_URL ||
-      (typeof request.url === "string" ? new URL(request.url).origin : null) ||
-      "http://localhost:3000";
-    if (baseUrl) {
-      fetch(`${baseUrl}/api/shiprocket/create-order`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ orderId }),
-      }).catch((err) => console.error("Shiprocket create-order trigger:", err));
-    }
-
-    // Fire-and-forget: send order confirmation email (does not block order success)
-    sendOrderConfirmationEmail(
-      customer.email || "",
-      orderNumber,
-      items.map((it) => ({
-        name: it.name,
-        quantity: Number(it.quantity),
-        total_price: Number(it.totalPrice),
-      })),
-      Number(total),
-      {
-        line1: address.line1,
-        line2: address.line2,
-        city: address.city,
-        state: address.state,
-        pincode: address.pincode,
+    if (paymentMethod === "cod") {
+      // Fire-and-forget: trigger Shiprocket order creation (do not await)
+      const baseUrl =
+        process.env.NEXT_PUBLIC_SITE_URL ||
+        (typeof request.url === "string" ? new URL(request.url).origin : null) ||
+        "http://localhost:3000";
+      if (baseUrl) {
+        fetch(`${baseUrl}/api/shiprocket/create-order`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ orderId }),
+        }).catch((err) => console.error("Shiprocket create-order trigger:", err));
       }
-    ).catch((err) => console.error("order confirmation email:", err));
+
+      // Fire-and-forget: send order confirmation email (does not block order success)
+      sendOrderConfirmationEmail(
+        customer.email || "",
+        orderNumber,
+        items.map((it) => ({
+          name: it.name,
+          quantity: Number(it.quantity),
+          total_price: Number(it.totalPrice),
+        })),
+        Number(total),
+        {
+          line1: address.line1,
+          line2: address.line2,
+          city: address.city,
+          state: address.state,
+          pincode: address.pincode,
+        }
+      ).catch((err) => console.error("order confirmation email:", err));
+    }
 
     return NextResponse.json({
       success: true,

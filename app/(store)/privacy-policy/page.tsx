@@ -88,7 +88,7 @@ export default function PrivacyPolicyPage() {
           </li>
           <li>
             Payment processing is handled by{" "}
-            <strong className="font-medium text-[#1A1A1A]">Razorpay</strong>; we
+            <strong className="font-medium text-[#1A1A1A]">PayU</strong>; we
             do not receive or store your full card or UPI credentials on our
             servers.
           </li>
@@ -113,7 +113,7 @@ export default function PrivacyPolicyPage() {
             Our website is served over HTTPS with SSL encryption on all pages.
           </li>
           <li>
-            Payment data is processed securely by Razorpay; we do not store your
+            Payment data is processed securely by PayU; we do not store your
             payment card details.
           </li>
         </ul>

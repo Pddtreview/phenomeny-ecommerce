@@ -36,7 +36,7 @@ const nauvarahConfig = {
       gstNumber: "",
       panNumber: "",
       bankName: "",
-      razorpayKeyId: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID || "",
+      payuMerchantKey: process.env.PAYU_MERCHANT_KEY || "",
     },
     social: {
       instagram: "https://instagram.com/nauvarah.official",

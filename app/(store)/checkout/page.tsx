@@ -9,7 +9,7 @@ import { useCart } from "@/hooks/useCart";
 import nauvarahConfig from "@/configs/nauvarah.config";
 import { cn } from "@/lib/utils";
 
-const COD_ONLY_MODE = process.env.COD_ONLY_MODE === "true";
+const SHOW_PREPAID_OPTION = process.env.COD_ONLY_MODE !== "true";
 
 const PRIMARY = "#1A1A1A";
 const GOLD = "#E91E8C";
@@ -33,40 +33,12 @@ type AddressForm = z.infer<typeof addressSchema>;
 
 type PaymentMethod = "prepaid" | "cod";
 
-declare global {
-  interface Window {
-    Razorpay: new (options: {
-      key: string;
-      order_id: string;
-      amount: number;
-      currency: string;
-      name: string;
-      handler: (res: { razorpay_payment_id: string }) => void;
-    }) => { open: () => void };
-  }
-}
-
-function loadRazorpayScript(): Promise<void> {
-  return new Promise((resolve) => {
-    if (typeof window !== "undefined" && window.Razorpay) {
-      resolve();
-      return;
-    }
-    const script = document.createElement("script");
-    script.src = "https://checkout.razorpay.com/v1/checkout.js";
-    script.async = true;
-    script.onload = () => resolve();
-    script.onerror = () => resolve();
-    document.body.appendChild(script);
-  });
-}
-
 export default function CheckoutPage() {
   const router = useRouter();
   const { items, totalPrice, clearCart } = useCart();
   const [summaryOpen, setSummaryOpen] = useState(false);
   const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>(
-    COD_ONLY_MODE ? "cod" : "prepaid"
+    SHOW_PREPAID_OPTION ? "prepaid" : "cod"
   );
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -232,18 +204,15 @@ export default function CheckoutPage() {
   };
 
   const createOrder = async (
-    payload: ReturnType<typeof buildOrderPayload>,
-    razorpayOrderId?: string,
-    razorpayPaymentId?: string
+    payload: ReturnType<typeof buildOrderPayload> & {
+      payment_method?: PaymentMethod;
+      payment_status?: "pending";
+    }
   ) => {
     const res = await fetch("/api/orders/create", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        ...payload,
-        razorpayOrderId: razorpayOrderId || undefined,
-        razorpayPaymentId: razorpayPaymentId || undefined,
-      }),
+      body: JSON.stringify(payload),
     });
     const json = await res.json();
     if (!res.ok) throw new Error(json?.error || "Order failed");
@@ -254,56 +223,42 @@ export default function CheckoutPage() {
     setLoading(true);
     setError(null);
     try {
-      await loadRazorpayScript();
-      const createOrderRes = await fetch("/api/payments/razorpay/create-order", {
+      const payload = buildOrderPayload(data);
+      const result = await createOrder({
+        ...payload,
+        paymentMethod: "prepaid",
+        payment_method: "prepaid",
+        payment_status: "pending",
+      });
+      const initiateRes = await fetch("/api/payments/payu/initiate", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          amount: total * 100,
-          receipt: `nv_${Date.now()}`,
-        }),
+        body: JSON.stringify({ orderId: result.orderId }),
       });
-      const razorpayOrder = await createOrderRes.json();
-      if (!createOrderRes.ok || !razorpayOrder.orderId) {
-        throw new Error(
-          razorpayOrder?.message ||
-            razorpayOrder?.error ||
-            "Could not create payment order"
-        );
+      const initiateData = await initiateRes.json();
+      if (!initiateRes.ok || !initiateData?.payuUrl || !initiateData?.params) {
+        throw new Error(initiateData?.error || "Could not initiate PayU payment");
       }
 
-      const key = process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID;
-      if (!key) throw new Error("Razorpay key not configured");
+      const form = document.createElement("form");
+      form.method = "POST";
+      form.action = initiateData.payuUrl;
+      form.style.display = "none";
 
-      const payload = buildOrderPayload(data);
-
-      const razorpay = new window.Razorpay({
-        key,
-        order_id: razorpayOrder.orderId,
-        amount: razorpayOrder.amount,
-        currency: razorpayOrder.currency || "INR",
-        name: "Nauvarah",
-        handler: async (res) => {
-          try {
-            const result = await createOrder(
-              payload,
-              razorpayOrder.orderId,
-              res.razorpay_payment_id
-            );
-            clearCart();
-            router.replace(`/order-success/${result.orderId}`);
-          } catch (e) {
-            setError(e instanceof Error ? e.message : "Order failed");
-            setLoading(false);
-          }
-          setLoading(false);
-        },
+      Object.entries(initiateData.params).forEach(([key, value]) => {
+        const input = document.createElement("input");
+        input.type = "hidden";
+        input.name = key;
+        input.value = String(value ?? "");
+        form.appendChild(input);
       });
-      razorpay.open();
+
+      document.body.appendChild(form);
+      form.submit();
     } catch (e) {
       setError(e instanceof Error ? e.message : "Something went wrong");
+      setLoading(false);
     }
-    setLoading(false);
   };
 
   const onCodPlaceOrder = handleSubmit(async (data) => {
@@ -598,10 +553,10 @@ export default function CheckoutPage() {
           <div
             className={cn(
               "grid gap-4",
-              COD_ONLY_MODE ? "grid-cols-1" : "grid-cols-2"
+              SHOW_PREPAID_OPTION ? "grid-cols-2" : "grid-cols-1"
             )}
           >
-            {!COD_ONLY_MODE && (
+            {SHOW_PREPAID_OPTION && (
               <button
                 type="button"
                 onClick={() => setPaymentMethod("prepaid")}
@@ -619,9 +574,9 @@ export default function CheckoutPage() {
                 >
                   <span className="font-inter rupee">₹</span>75 off
                 </span>
-                <p className="mt-1 text-xs text-zinc-500">Razorpay</p>
+                <p className="mt-1 text-xs text-zinc-500">UPI, Cards, Net Banking</p>
                 <span className="mt-1 inline-block text-xs font-medium text-[#1A1A1A]">
-                  Recommended
+                  Save ₹75 on prepaid orders
                 </span>
               </button>
             )}
