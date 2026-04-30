@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createSupabaseServiceRoleClient } from "@/lib/supabase-server";
-import { generatePayUHash, PAYU_BASE_URL, PAYU_KEY } from "@/lib/payu";
+import { generatePayUHash, PAYU_BASE_URL, PAYU_KEY, PAYU_SALT } from "@/lib/payu";
 
 export const runtime = "nodejs";
 
@@ -67,6 +67,22 @@ export async function POST(request: NextRequest) {
       firstname: params.firstname,
       email: params.email,
       udf1: params.udf1,
+    });
+    const { productinfo, firstname, email, udf1 } = params;
+
+    console.log(
+      "PayU Hash String:",
+      `${PAYU_KEY}|${txnid}|${amount}|${productinfo}|${firstname}|${email}|${udf1}||||||||||${PAYU_SALT}`
+    );
+
+    console.log("PayU Params:", {
+      key: PAYU_KEY,
+      txnid,
+      amount,
+      productinfo,
+      firstname,
+      email,
+      hash,
     });
 
     return NextResponse.json({

@@ -21,6 +21,7 @@ export function generatePayUHash(params: {
   const amount = Number(params.amount).toFixed(2);
 
   const hashString = `${String(key).trim()}|${String(params.txnid).trim()}|${amount}|${String(params.productinfo).trim()}|${String(params.firstname).trim()}|${String(params.email).trim()}|${String(params.udf1 || "").trim()}|${String(params.udf2 || "").trim()}|${String(params.udf3 || "").trim()}|${String(params.udf4 || "").trim()}|${String(params.udf5 || "").trim()}||||||${String(salt).trim()}`;
+  console.log("HASH INPUT STRING:", hashString);
 
   return crypto.createHash("sha512").update(hashString).digest("hex");
 }
@@ -64,4 +65,4 @@ export function verifyPayUHash(params: {
   return expectedHash === params.hash;
 }
 
-export { PAYU_BASE_URL, PAYU_KEY };
+export { PAYU_BASE_URL, PAYU_KEY, PAYU_SALT };
