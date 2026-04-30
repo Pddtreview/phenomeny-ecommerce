@@ -1,8 +1,8 @@
 import Link from "next/link";
 import { createServerSupabaseClient } from "@/lib/supabase-server";
 
-const PRIMARY = "#1B3A6B";
-const GOLD = "#C8860A";
+const PRIMARY = "#1A1A1A";
+const GOLD = "#E91E8C";
 
 const steps = [
   "confirmed",
@@ -63,7 +63,7 @@ export default async function TrackOrderPage({
 
   if (!data) {
     return (
-      <div className="min-h-screen bg-zinc-50 px-4 py-12">
+      <div className="min-h-screen bg-[#FFFFFF] px-4 py-12">
         <div className="mx-auto max-w-md rounded-2xl border border-zinc-200 bg-white p-6">
           <h1 className="text-xl font-bold text-zinc-900">Track your order</h1>
           <p className="mt-2 text-sm text-zinc-600">
@@ -92,8 +92,7 @@ export default async function TrackOrderPage({
             </div>
             <button
               type="submit"
-              className="w-full rounded-lg py-3 text-sm font-semibold text-white"
-              style={{ backgroundColor: PRIMARY }}
+              className="btn-gradient w-full py-3 text-sm font-semibold hover:scale-105 hover:opacity-90"
             >
               Search
             </button>
@@ -111,15 +110,15 @@ export default async function TrackOrderPage({
   const progressPct = (idx / (steps.length - 1)) * 100;
 
   return (
-    <div className="min-h-screen bg-zinc-50">
-      <header className="w-full px-4 py-10 text-white" style={{ backgroundColor: PRIMARY }}>
+    <div className="min-h-screen bg-[#FFFFFF]">
+      <header className="w-full bg-[#FFFFFF] px-4 py-10 text-[#1A1A1A]">
         <div className="mx-auto max-w-4xl">
-          <Link href="/" className="text-sm font-medium text-white/80 hover:text-white">
+          <Link href="/" className="text-sm font-medium text-[#666666] hover:text-[#1A1A1A]">
             ← Back to Home
           </Link>
-          <h1 className="mt-3 text-2xl font-bold">Order Tracking</h1>
-          <p className="mt-1 text-sm text-white/70">
-            Order <span className="font-semibold text-white">{order.order_number}</span>
+          <h1 className="mt-3 text-2xl font-bold text-[#1A1A1A]">Order Tracking</h1>
+          <p className="mt-1 text-sm text-[#666666]">
+            Order <span className="font-semibold text-[#1A1A1A]">{order.order_number}</span>
           </p>
         </div>
       </header>

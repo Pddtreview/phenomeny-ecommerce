@@ -3,8 +3,8 @@
 import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 
-const PRIMARY = "#1B3A6B";
-const GOLD = "#C8860A";
+const PRIMARY = "#1A1A1A";
+const GOLD = "#E91E8C";
 
 type AuthMeResponse =
   | { authenticated: false }
@@ -153,7 +153,7 @@ export default function AccountPage() {
 
   if (initialLoading) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-zinc-50 px-4">
+      <div className="flex min-h-screen items-center justify-center bg-[#FFFFFF] px-4">
         <div className="rounded-2xl border border-zinc-200 bg-white px-6 py-4 text-sm text-zinc-600">
           Checking your account...
         </div>
@@ -162,13 +162,10 @@ export default function AccountPage() {
   }
 
   return (
-    <div className="min-h-screen bg-zinc-50 px-4 py-10">
+    <div className="min-h-screen bg-[#FFFFFF] px-4 py-10">
       <div className="mx-auto max-w-md">
         <div className="rounded-2xl border border-zinc-200 bg-white p-6">
-          <p
-            className="text-xs font-semibold uppercase tracking-[0.2em]"
-            style={{ color: GOLD }}
-          >
+          <p className="pill-gradient inline-flex px-3 py-1 text-xs font-semibold uppercase tracking-[0.2em]">
             Nauvarah
           </p>
           <h1 className="mt-2 text-2xl font-bold text-zinc-900">
@@ -200,8 +197,7 @@ export default function AccountPage() {
               <button
                 type="submit"
                 disabled={sending}
-                className="w-full rounded-lg py-3 text-sm font-semibold text-white disabled:opacity-70"
-                style={{ backgroundColor: PRIMARY }}
+                className="btn-gradient w-full py-3 text-sm font-semibold disabled:opacity-70 hover:scale-105 hover:opacity-90"
               >
                 {sending ? "Sending OTP..." : "Send OTP"}
               </button>
@@ -235,8 +231,7 @@ export default function AccountPage() {
               <button
                 type="submit"
                 disabled={verifying}
-                className="w-full rounded-lg py-3 text-sm font-semibold text-white disabled:opacity-70"
-                style={{ backgroundColor: PRIMARY }}
+                className="btn-gradient w-full py-3 text-sm font-semibold disabled:opacity-70 hover:scale-105 hover:opacity-90"
               >
                 {verifying ? "Verifying..." : "Verify OTP"}
               </button>

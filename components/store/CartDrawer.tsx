@@ -4,8 +4,8 @@ import Link from "next/link";
 import { useCart, getCartLineKey } from "@/hooks/useCart";
 import { cn } from "@/lib/utils";
 
-const PRIMARY = "#1B3A6B";
-const GOLD = "#C8860A";
+const PRIMARY = "#1A1A1A";
+const GOLD = "#E91E8C";
 
 type CartDrawerProps = {
   open: boolean;
@@ -73,8 +73,7 @@ export function CartDrawer({ open, onClose }: CartDrawerProps) {
               <Link
                 href="/products"
                 onClick={onClose}
-                className="mt-4 inline-block rounded-lg px-4 py-2 text-sm font-medium text-white"
-                style={{ backgroundColor: PRIMARY }}
+                className="btn-gradient mt-4 inline-block px-4 py-2 text-sm font-medium hover:scale-105 hover:opacity-90"
               >
                 Shop Products
               </Link>
@@ -176,8 +175,7 @@ export function CartDrawer({ open, onClose }: CartDrawerProps) {
             <Link
               href="/checkout"
               onClick={onClose}
-              className="mt-3 block w-full rounded-lg py-3 text-center text-sm font-medium text-white"
-              style={{ backgroundColor: PRIMARY }}
+              className="btn-gradient mt-3 block w-full py-3 text-center text-sm font-medium hover:scale-105 hover:opacity-90"
             >
               Checkout
             </Link>

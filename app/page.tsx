@@ -106,7 +106,7 @@ export default async function Home() {
       <Header />
       <section className="bg-white px-4 py-20 text-center sm:px-6 lg:px-8 lg:py-32">
         <div className="mx-auto max-w-6xl">
-          <p className="mx-auto inline-flex rounded-full bg-[#F5F5F5] px-4 py-1.5 text-xs font-semibold tracking-widest uppercase text-[#666666]">
+          <p className="mx-auto inline-flex pill-gradient px-4 py-1.5 text-xs font-semibold tracking-widest uppercase">
             ✦ 2026 Sun Year Collection
           </p>
           <h1 className="mt-8 text-[clamp(3rem,8vw,7rem)] leading-[0.95] font-black tracking-[-0.03em] text-[#1A1A1A]">
@@ -124,7 +124,7 @@ export default async function Home() {
           <div className="mt-10 flex flex-col justify-center gap-3 sm:flex-row">
             <Link
               href="/products"
-              className="rounded-full bg-[#1A1A1A] px-8 py-3 font-semibold text-white hover:scale-105 hover:shadow-lg"
+              className="btn-gradient px-8 py-3 font-semibold hover:scale-105 hover:opacity-90 hover:shadow-lg"
             >
               Explore Collection
             </Link>
@@ -168,7 +168,7 @@ export default async function Home() {
       <section className="bg-white px-4 py-24 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-6xl">
           <div className="text-center">
-            <p className="inline-flex rounded-full bg-[#F5F5F5] px-4 py-1 text-xs font-medium tracking-widest uppercase text-[#666666]">
+            <p className="inline-flex pill-gradient px-4 py-1 text-xs font-medium tracking-widest uppercase">
               Sacred Collection
             </p>
             <h2 className="mt-4 text-5xl font-black tracking-tight text-[#1A1A1A]">Our Bestsellers</h2>
@@ -199,7 +199,7 @@ export default async function Home() {
       >
         <div className="mx-auto grid max-w-6xl items-center gap-12 md:grid-cols-2">
           <div>
-            <p className="inline-flex rounded-full bg-white/70 px-4 py-1 text-xs font-medium tracking-widest uppercase text-[#666666]">
+            <p className="inline-flex pill-gradient px-4 py-1 text-xs font-medium tracking-widest uppercase">
               The Nauvaraha Story
             </p>
             <h2 className="mt-5 text-5xl leading-[0.95] font-black tracking-[-0.03em] text-[#1A1A1A]">
@@ -213,7 +213,7 @@ export default async function Home() {
             </p>
             <Link
               href="/about"
-              className="mt-8 inline-flex rounded-full bg-[#1A1A1A] px-8 py-3 font-semibold text-white hover:scale-105 hover:shadow-lg"
+              className="btn-gradient mt-8 inline-flex px-8 py-3 font-semibold hover:scale-105 hover:opacity-90 hover:shadow-lg"
             >
               Meet Karan
             </Link>

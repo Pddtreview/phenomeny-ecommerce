@@ -108,14 +108,20 @@ export function ProductCard({
             <button
               type="button"
               onClick={handleQuickAdd}
-              className="w-full rounded-full bg-[#1A1A1A] py-2.5 text-sm font-semibold text-white hover:bg-[#333333]"
+              className="btn-gradient w-full py-2.5 text-sm font-semibold hover:scale-105 hover:opacity-90"
             >
               Add to Cart
             </button>
           ) : (
             <Link
               href={href}
-              className="inline-flex w-full items-center justify-center rounded-full bg-[#1A1A1A] py-2.5 text-sm font-semibold text-white hover:bg-[#333333]"
+              className="btn-gradient inline-flex w-full items-center justify-center py-2.5 text-sm font-semibold hover:scale-105 hover:opacity-90"
             >
               View Product
-            </L
+            </Link>
+          )}
+        </div>
+      </div>
+    </motion.article>
+  );
+}

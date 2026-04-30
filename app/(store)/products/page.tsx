@@ -74,13 +74,13 @@ export default async function ProductsPage() {
   const products = await getAllProducts();
 
   return (
-    <div className="min-h-screen bg-zinc-50">
-      <header className="w-full bg-[#1B3A6B] px-4 py-12 text-center text-white">
-        <p className="text-[11px] font-semibold uppercase tracking-[0.25em] text-[#C8860A]">
+    <div className="min-h-screen bg-[#FFFFFF]">
+      <header className="w-full bg-[#FFFFFF] px-4 py-12 text-center text-[#1A1A1A]">
+        <p className="mx-auto inline-flex rounded-full px-4 py-1 text-[11px] font-semibold uppercase tracking-[0.25em] pill-gradient">
           2026 Sun Year Collection
         </p>
-        <h1 className="mt-3 text-3xl font-semibold">Our Collection</h1>
-        <p className="mt-2 text-sm text-white/70">
+        <h1 className="mt-3 text-3xl font-semibold text-[#1A1A1A]">Our Collection</h1>
+        <p className="mt-2 text-sm text-[#666666]">
           Handpicked pyrite and crystal products for wealth and abundance.
         </p>
       </header>

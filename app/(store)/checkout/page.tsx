@@ -11,8 +11,8 @@ import { cn } from "@/lib/utils";
 
 const COD_ONLY_MODE = process.env.COD_ONLY_MODE === "true";
 
-const PRIMARY = "#1B3A6B";
-const GOLD = "#C8860A";
+const PRIMARY = "#1A1A1A";
+const GOLD = "#E91E8C";
 const FREE_SHIPPING_ABOVE = nauvarahConfig.shipping.freeShippingAbove;
 const SHIPPING_CHARGE = nauvarahConfig.shipping.flatShippingCharge;
 const COD_CHARGE = nauvarahConfig.shipping.codCharge;
@@ -336,7 +336,7 @@ export default function CheckoutPage() {
   }
 
   return (
-    <div className="min-h-screen bg-zinc-50 px-4 py-8">
+    <div className="min-h-screen bg-[#FFFFFF] px-4 py-8">
       <div className="mx-auto max-w-2xl">
         <h1 className="text-2xl font-bold text-zinc-900">Checkout</h1>
 
@@ -437,8 +437,7 @@ export default function CheckoutPage() {
                       type="button"
                       onClick={applyCoupon}
                       disabled={couponApplying || !couponCodeInput.trim()}
-                      className="rounded-lg px-3 py-2 text-sm font-medium text-white disabled:opacity-70"
-                      style={{ backgroundColor: PRIMARY }}
+                      className="btn-gradient rounded-full px-3 py-2 text-sm font-medium disabled:opacity-70"
                     >
                       {couponApplying ? "Apply…" : "Apply"}
                     </button>
@@ -658,8 +657,7 @@ export default function CheckoutPage() {
               type="button"
               onClick={handleSubmit(onPlaceOrderPrepaid)}
               disabled={loading}
-              className="w-full rounded-lg py-3 text-sm font-semibold text-white disabled:opacity-70"
-              style={{ backgroundColor: PRIMARY }}
+              className="btn-gradient w-full py-3 text-sm font-semibold disabled:opacity-70"
             >
               {loading ? "Processing..." : "Place Order"}
             </button>
@@ -668,8 +666,7 @@ export default function CheckoutPage() {
               type="button"
               onClick={onCodPlaceOrder}
               disabled={loading}
-              className="w-full rounded-lg py-3 text-sm font-semibold text-white disabled:opacity-70"
-              style={{ backgroundColor: PRIMARY }}
+              className="btn-gradient w-full py-3 text-sm font-semibold disabled:opacity-70"
             >
               {loading ? "Processing..." : "Place Order - Cash on Delivery"}
             </button>

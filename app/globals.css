@@ -47,6 +47,10 @@
 }
 
 :root {
+  --gradient: linear-gradient(135deg, #FF4500, #E91E8C, #7B2FBE);
+  --orange: #FF4500;
+  --pink: #E91E8C;
+  --purple: #7B2FBE;
   --white: #FFFFFF;
   --black: #1A1A1A;
   --gray-light: #F5F5F5;
@@ -121,6 +125,29 @@
 
   .rupee {
     font-family: "Inter", sans-serif;
+  }
+
+  .btn-gradient {
+    background: linear-gradient(135deg, #FF4500, #E91E8C);
+    color: #FFFFFF;
+    border-radius: 9999px;
+  }
+
+  .pill-gradient {
+    background: linear-gradient(135deg, #FF4500, #E91E8C);
+    color: #FFFFFF;
+    border-radius: 9999px;
+  }
+
+  .text-gradient-accent {
+    background: linear-gradient(135deg, #FF4500, #E91E8C, #7B2FBE);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .divider-gradient {
+    height: 2px;
+    background: linear-gradient(135deg, #FF4500, #E91E8C, #7B2FBE);
   }
 }
 

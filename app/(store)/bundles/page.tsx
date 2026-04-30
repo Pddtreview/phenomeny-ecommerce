@@ -1,8 +1,8 @@
 import Link from "next/link";
 import { createServerSupabaseClient } from "@/lib/supabase-server";
 
-const PRIMARY = "#1B3A6B";
-const GOLD = "#C8860A";
+const PRIMARY = "#1A1A1A";
+const GOLD = "#E91E8C";
 
 type BundleRow = {
   id: string;
@@ -33,13 +33,13 @@ export default async function BundlesPage() {
   const bundles = await getBundles();
 
   return (
-    <div className="min-h-screen bg-zinc-50">
-      <header
-        className="w-full px-4 py-12 text-center text-white"
-        style={{ backgroundColor: PRIMARY }}
-      >
-        <h1 className="text-3xl font-semibold">Our Bundles</h1>
-        <p className="mt-2 text-sm text-white/70">
+    <div className="min-h-screen bg-[#FFFFFF]">
+      <header className="w-full bg-[#FFFFFF] px-4 py-12 text-center text-[#1A1A1A]">
+        <p className="mx-auto inline-flex pill-gradient px-4 py-1 text-xs font-semibold uppercase tracking-wider">
+          Curated Bundle Sets
+        </p>
+        <h1 className="mt-3 text-3xl font-semibold text-[#1A1A1A]">Our Bundles</h1>
+        <p className="mt-2 text-sm text-[#666666]">
           Complete sets curated for maximum abundance
         </p>
       </header>
@@ -116,8 +116,7 @@ export default async function BundlesPage() {
 
                     <Link
                       href={`/bundles/${b.slug}`}
-                      className="mt-5 block w-full rounded-lg py-3 text-center text-sm font-semibold text-white"
-                      style={{ backgroundColor: PRIMARY }}
+                      className="btn-gradient mt-5 block w-full py-3 text-center text-sm font-semibold hover:scale-105 hover:opacity-90"
                     >
                       View Bundle
                     </Link>

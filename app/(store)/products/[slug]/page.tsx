@@ -5,8 +5,8 @@ import { createServerSupabaseClient } from "@/lib/supabase-server";
 import ProductDetailClient from "@/components/store/ProductDetailClient";
 import SaveRecentlyViewed from "@/components/store/SaveRecentlyViewed";
 
-const PRIMARY = "#1B3A6B";
-const GOLD = "#C8860A";
+const PRIMARY = "#1A1A1A";
+const GOLD = "#E91E8C";
 
 type ProductVariantRow = {
   id: string;
@@ -158,7 +158,7 @@ export default async function ProductPage({
   const productSchemaJson = JSON.stringify(productSchema);
 
   return (
-    <div className="min-h-screen bg-zinc-50">
+    <div className="min-h-screen bg-[#FFFFFF]">
       <SaveRecentlyViewed
         id={product.id}
         slug={product.slug}

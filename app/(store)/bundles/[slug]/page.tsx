@@ -4,8 +4,8 @@ import { notFound } from "next/navigation";
 import { createServerSupabaseClient } from "@/lib/supabase-server";
 import AddBundleToCart from "@/components/store/AddBundleToCart";
 
-const PRIMARY = "#1B3A6B";
-const GOLD = "#C8860A";
+const PRIMARY = "#1A1A1A";
+const GOLD = "#E91E8C";
 
 type BundleRow = {
   id: string;
@@ -151,7 +151,7 @@ export default async function BundleDetailPage({
   const heroImage = heroImages[0] ?? null;
 
   return (
-    <div className="min-h-screen bg-zinc-50">
+    <div className="min-h-screen bg-[#FFFFFF]">
       <div className="mx-auto max-w-4xl px-4 py-6">
         <Link
           href="/bundles"

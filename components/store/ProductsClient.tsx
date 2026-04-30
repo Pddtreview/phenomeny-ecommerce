@@ -5,8 +5,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import Fuse from 'fuse.js';
 
-const PRIMARY = '#1B3A6B';
-const GOLD = '#C8860A';
+const PRIMARY = '#1A1A1A';
 
 const RECENTLY_VIEWED_KEY = 'recently_viewed';
 
@@ -159,14 +158,9 @@ export default function ProductsClient({ products }: Props) {
             onClick={() => setCategory(key)}
             className={`rounded-full px-4 py-2 text-sm font-medium transition ${
               category === key
-                ? 'text-white shadow-sm'
+                ? 'text-white shadow-sm btn-gradient'
                 : 'border border-zinc-200 bg-white text-zinc-700 hover:bg-zinc-50'
             }`}
-            style={
-              category === key
-                ? { backgroundColor: PRIMARY }
-                : undefined
-            }
           >
             {label}
           </button>
@@ -175,10 +169,7 @@ export default function ProductsClient({ products }: Props) {
 
       {recentItems.length > 0 && (
         <section className="mt-10">
-          <h2
-            className="mb-4 text-sm font-semibold uppercase tracking-wider"
-            style={{ color: GOLD }}
-          >
+          <h2 className="mb-4 text-sm font-semibold uppercase tracking-wider text-gradient-accent">
             Recently viewed
           </h2>
           <div className="flex gap-4 overflow-x-auto pb-2 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
@@ -209,7 +200,7 @@ export default function ProductsClient({ products }: Props) {
                     )}
                   </div>
                   <p className="mt-2 line-clamp-2 text-xs font-medium text-zinc-900">
-                    {item.name}
+                    {item.name ?? <span className="text-red-600">No name</span>}
                   </p>
                   {price != null && price > 0 && (
                     <p className="mt-1 text-xs font-semibold" style={{ color: PRIMARY }}>
@@ -256,7 +247,7 @@ export default function ProductsClient({ products }: Props) {
                 </div>
                 <div className="flex flex-1 flex-col p-4">
                   <h3 className="line-clamp-2 text-base font-semibold text-zinc-900 group-hover:underline">
-                    {p.name}
+                    {p.name ?? <span className="text-red-600">No name</span>}
                   </h3>
                   {price != null && price > 0 ? (
                     <p className="mt-2 text-lg font-bold" style={{ color: PRIMARY }}>
