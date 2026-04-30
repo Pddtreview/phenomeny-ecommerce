@@ -37,6 +37,7 @@ export function ProductCard({
   className,
 }: ProductCardProps) {
   const addItem = useCart((s) => s.addItem);
+  const product = { name };
 
   const canQuickAdd = Boolean(variantId && sku && typeof price === "number" && price > 0);
 
@@ -77,7 +78,7 @@ export function ProductCard({
         aria-label={`View ${name}`}
       />
 
-      <div className="m-3 aspect-square overflow-hidden rounded-2xl bg-[#F5F5F5]">
+      <div className="relative m-3 aspect-square overflow-hidden rounded-2xl bg-[#F5F5F5]">
         <Image
           src={image || fallbackImage}
           alt={name}
@@ -87,11 +88,11 @@ export function ProductCard({
           sizes="(max-width: 1200px) 50vw, 25vw"
         />
       </div>
+      <p className="font-semibold text-[#1A1A1A] text-sm leading-snug line-clamp-2 px-4 mt-2 mb-1 relative z-20">
+        {product.name ?? <span className="text-red-600">No name</span>}
+      </p>
 
       <div className="px-4 pb-4 pt-2">
-        <h3 className="line-clamp-2 text-base font-semibold leading-snug text-[#1A1A1A]">
-          {name}
-        </h3>
         <div className="mt-2 flex items-center justify-between gap-2">
           <p className="text-lg font-bold text-[#1A1A1A]">
             {formatPrice(price)}
@@ -117,10 +118,4 @@ export function ProductCard({
               className="inline-flex w-full items-center justify-center rounded-full bg-[#1A1A1A] py-2.5 text-sm font-semibold text-white hover:bg-[#333333]"
             >
               View Product
-            </Link>
-          )}
-        </div>
-      </div>
-    </motion.article>
-  );
-}
+            </L

@@ -137,10 +137,7 @@ export default async function Home() {
           </div>
           <div
             className="relative mt-16 flex h-[250px] items-center justify-center rounded-3xl md:h-[400px]"
-            style={{
-              background:
-                "linear-gradient(135deg, #FFF0ED 0%, #FFE4E0 40%, #F0E8FF 80%, #FFFFFF 100%)",
-            }}
+            style={{ background: "#FFFFFF" }}
           >
             <Image
               src={GOLD_SYMBOL}
@@ -198,7 +195,7 @@ export default async function Home() {
       <section
         id="story"
         className="rounded-t-[3rem] px-4 py-24 sm:px-6 lg:px-8"
-        style={{ background: "linear-gradient(135deg, #FFF0ED 0%, #FFE4DD 50%, #F5F0FF 100%)" }}
+        style={{ background: "#FFFFFF" }}
       >
         <div className="mx-auto grid max-w-6xl items-center gap-12 md:grid-cols-2">
           <div>
@@ -248,35 +245,27 @@ export default async function Home() {
           <div className="mt-14 grid gap-6 md:grid-cols-3">
             {[
               {
-                emoji: "💰",
                 title: "Wealth",
                 desc: "For abundance, prosperity, and financial confidence.",
                 href: "/category/crystals",
-                gradient: "linear-gradient(135deg, #FFF0ED, #FFE4DD)",
               },
               {
-                emoji: "🛡️",
                 title: "Protection",
                 desc: "Shield your energy from stress, negativity, and drain.",
                 href: "/category/bracelets",
-                gradient: "linear-gradient(135deg, #EDF5FF, #E4EEFF)",
               },
               {
-                emoji: "🏠",
                 title: "Vastu",
                 desc: "Harmonize your home and workspace for better flow.",
                 href: "/category/vastu-decor",
-                gradient: "linear-gradient(135deg, #F0FFF4, #E4FFE4)",
               },
             ].map((item) => (
               <Link
                 key={item.title}
                 href={item.href}
-                className="group rounded-3xl p-8 transition-all duration-300 hover:scale-[1.02]"
-                style={{ background: item.gradient }}
+                className="group rounded-3xl border border-[#EEEEEE] bg-[#FFFFFF] p-8 transition-all duration-300 hover:scale-[1.02]"
               >
-                <p className="text-4xl">{item.emoji}</p>
-                <h3 className="mt-5 text-2xl font-bold text-[#1A1A1A]">{item.title}</h3>
+                <h3 className="text-2xl font-bold text-[#1A1A1A]">{item.title}</h3>
                 <p className="mt-3 text-sm text-[#666666]">{item.desc}</p>
                 <p className="mt-6 inline-flex items-center gap-1 font-semibold text-[#1A1A1A] transition-all duration-200 group-hover:gap-2">
                   Shop now <span aria-hidden>→</span>

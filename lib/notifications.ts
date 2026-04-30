@@ -135,7 +135,7 @@ export async function sendOrderConfirmationEmail(
       to: [to],
       subject: `Order Confirmed - ${orderNumber} | Nauvaraha`,
       html: `
-        <div style="margin:0;padding:24px;background:#FDFAF5;font-family:Inter,Arial,sans-serif;color:#1A1A1A;">
+        <div style="margin:0;padding:24px;background:#FFFFFF;font-family:Inter,Arial,sans-serif;color:#1A1A1A;">
           <div style="max-width:640px;margin:0 auto;background:#ffffff;border:1px solid #f0ece6;border-radius:12px;padding:24px;">
             <div style="text-align:center;margin-bottom:16px;">
               <img src="${logoUrl}" alt="Nauvaraha" style="width:180px;height:auto;" />

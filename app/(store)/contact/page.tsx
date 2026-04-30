@@ -25,7 +25,7 @@ const helloMail = "hello@nauvaraha.com";
 
 export default function ContactPage() {
   return (
-    <div className={`bg-[#FDFAF5] pb-16 pt-16 ${inter.className}`}>
+    <div className={`bg-[#FFFFFF] pb-16 pt-16 ${inter.className}`}>
       <div className="mx-auto max-w-3xl px-4 leading-relaxed text-[#1A1A1A]">
         <h1 className="font-cormorant text-4xl text-[#1A1A1A] sm:text-[2.5rem]">
           Contact Us

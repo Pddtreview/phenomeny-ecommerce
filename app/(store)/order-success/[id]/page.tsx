@@ -3,7 +3,7 @@ import Link from "next/link";
 import { createSupabaseServiceRoleClient } from "@/lib/supabase-server";
 
 const GOLD = "#C8860A";
-const CREAM = "#FDFAF5";
+const CREAM = "#FFFFFF";
 const TEXT = "#1A1A1A";
 const MUTED = "#6B5E4E";
 
@@ -202,10 +202,10 @@ export default async function OrderSuccessPage({
                 Order Confirmed ✓
               </p>
             </div>
-            <div className="rounded-lg border border-[#C8860A]/15 bg-[#FDFAF5] p-4 text-center">
+            <div className="rounded-lg border border-[#C8860A]/15 bg-[#FFFFFF] p-4 text-center">
               <p className="font-inter text-sm text-[#6B5E4E]">Dispatched in 24hrs</p>
             </div>
-            <div className="rounded-lg border border-[#C8860A]/15 bg-[#FDFAF5] p-4 text-center">
+            <div className="rounded-lg border border-[#C8860A]/15 bg-[#FFFFFF] p-4 text-center">
               <p className="font-inter text-sm text-[#6B5E4E]">Delivered in 4-7 days</p>
             </div>
           </div>
