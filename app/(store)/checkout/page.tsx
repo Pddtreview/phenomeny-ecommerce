@@ -405,7 +405,7 @@ export default function CheckoutPage() {
                 </div>
               )}
               {paymentMethod === "prepaid" && (
-                <div className="flex justify-between text-[#C8860A]">
+                <div className="flex justify-between text-[#1A1A1A]">
                   <span>Prepaid discount</span>
                   <span>
                     −<span className="font-inter rupee">₹</span>
@@ -608,7 +608,7 @@ export default function CheckoutPage() {
                 className={cn(
                   "rounded-xl border-2 p-4 text-left transition",
                   paymentMethod === "prepaid"
-                    ? "border-[#1B3A6B] bg-[#1B3A6B]/5"
+                    ? "border-[#1A1A1A] bg-[#F5F5F5]"
                     : "border-zinc-200 bg-white"
                 )}
               >
@@ -620,7 +620,7 @@ export default function CheckoutPage() {
                   <span className="font-inter rupee">₹</span>75 off
                 </span>
                 <p className="mt-1 text-xs text-zinc-500">Razorpay</p>
-                <span className="mt-1 inline-block text-xs font-medium text-[#1B3A6B]">
+                <span className="mt-1 inline-block text-xs font-medium text-[#1A1A1A]">
                   Recommended
                 </span>
               </button>
@@ -631,7 +631,7 @@ export default function CheckoutPage() {
               className={cn(
                 "rounded-xl border-2 p-4 text-left transition",
                 paymentMethod === "cod"
-                  ? "border-[#1B3A6B] bg-[#1B3A6B]/5"
+                  ? "border-[#1A1A1A] bg-[#F5F5F5]"
                   : "border-zinc-200 bg-white"
               )}
             >

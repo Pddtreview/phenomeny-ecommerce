@@ -2,10 +2,10 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import { createSupabaseServiceRoleClient } from "@/lib/supabase-server";
 
-const GOLD = "#C8860A";
+const GOLD = "#E91E8C";
 const CREAM = "#FFFFFF";
 const TEXT = "#1A1A1A";
-const MUTED = "#6B5E4E";
+const MUTED = "#666666";
 
 type OrderSummary = {
   id: string;
@@ -86,33 +86,33 @@ export default async function OrderSuccessPage({
         {/* SECTION 1 - SUCCESS HEADER */}
         <section className="text-center">
           <div
-            className="mx-auto flex h-20 w-20 items-center justify-center rounded-full border-2 border-[#C8860A]/30 bg-[#C8860A]/10 text-4xl font-semibold"
+            className="mx-auto flex h-20 w-20 items-center justify-center rounded-full border-2 border-[#E91E8C]/30 bg-[#E91E8C]/10 text-4xl font-semibold"
             style={{ color: GOLD }}
           >
             ✓
           </div>
-          <h1 className="mt-6 font-cormorant text-4xl font-semibold text-[#1A1A1A]">
+          <h1 className="mt-6 font-inter text-4xl font-bold text-[#1A1A1A]">
             Thank You for Your Order!
           </h1>
-          <p className="mx-auto mt-3 max-w-xl font-inter text-base text-[#6B5E4E]">
+          <p className="mx-auto mt-3 max-w-xl font-inter text-base text-[#666666]">
             Your order has been confirmed and will be dispatched within 24 hours.
           </p>
-          <p className="mt-4 font-cormorant text-xl text-[#C8860A]">
+          <p className="mt-4 font-inter text-xl font-semibold text-[#1A1A1A]">
             Order #{order.order_number}
           </p>
         </section>
 
         {/* SECTION 2 - ORDER DETAILS CARD */}
-        <section className="mt-8 rounded-xl border border-[#C8860A]/30 bg-white p-6">
-          <h2 className="font-cormorant text-2xl font-semibold text-[#1A1A1A]">
+        <section className="mt-8 rounded-xl border border-[#E8E8E8] bg-white p-6">
+          <h2 className="font-inter text-2xl font-bold text-[#1A1A1A]">
             Order Details
           </h2>
 
-          <ul className="mt-4 space-y-2 border-b border-[#C8860A]/20 pb-4">
+          <ul className="mt-4 space-y-2 border-b border-[#E8E8E8] pb-4">
             {order.items.map((item) => (
               <li key={item.id} className="flex items-start justify-between gap-3 text-sm">
                 <div className="font-inter text-[#1A1A1A]">
-                  {item.name} <span className="text-[#6B5E4E]">× {item.quantity}</span>
+                  {item.name} <span className="text-[#666666]">× {item.quantity}</span>
                 </div>
                 <div className="shrink-0 font-inter text-[#1A1A1A]">
                   <span className="font-inter rupee">₹</span>
@@ -123,14 +123,14 @@ export default async function OrderSuccessPage({
           </ul>
 
           <div className="mt-4 space-y-2 font-inter text-sm">
-            <div className="flex justify-between text-[#6B5E4E]">
+            <div className="flex justify-between text-[#666666]">
               <span>Subtotal</span>
               <span>
                 <span className="font-inter rupee">₹</span>
                 {Number(order.subtotal || 0).toLocaleString("en-IN")}
               </span>
             </div>
-            <div className="flex justify-between text-[#6B5E4E]">
+            <div className="flex justify-between text-[#666666]">
               <span>Shipping</span>
               <span>
                 <span className="font-inter rupee">₹</span>
@@ -138,7 +138,7 @@ export default async function OrderSuccessPage({
               </span>
             </div>
             {Number(order.cod_charge || 0) > 0 && (
-              <div className="flex justify-between text-[#6B5E4E]">
+              <div className="flex justify-between text-[#666666]">
                 <span>COD Charge</span>
                 <span>
                   <span className="font-inter rupee">₹</span>
@@ -146,11 +146,11 @@ export default async function OrderSuccessPage({
                 </span>
               </div>
             )}
-            <div className="flex justify-between text-[#6B5E4E]">
+            <div className="flex justify-between text-[#666666]">
               <span>Payment Method</span>
               <span>{paymentMethodLabel}</span>
             </div>
-            <div className="mt-2 flex justify-between border-t border-[#C8860A]/20 pt-3 font-semibold text-[#C8860A]">
+            <div className="mt-2 flex justify-between border-t border-[#E8E8E8] pt-3 font-semibold text-[#1A1A1A]">
               <span>Total</span>
               <span>
                 <span className="font-inter rupee">₹</span>
@@ -161,13 +161,13 @@ export default async function OrderSuccessPage({
         </section>
 
         {/* SECTION 3 - DELIVERY DETAILS */}
-        <section className="mt-6 rounded-xl border border-[#C8860A]/30 bg-white p-6">
-          <h2 className="font-cormorant text-2xl font-semibold text-[#1A1A1A]">
+        <section className="mt-6 rounded-xl border border-[#E8E8E8] bg-white p-6">
+          <h2 className="font-inter text-2xl font-bold text-[#1A1A1A]">
             Delivery Details
           </h2>
 
           {order.address ? (
-            <div className="mt-4 font-inter text-sm leading-relaxed text-[#6B5E4E]">
+            <div className="mt-4 font-inter text-sm leading-relaxed text-[#666666]">
               {order.address.name ? <p className="font-medium text-[#1A1A1A]">{order.address.name}</p> : null}
               <p>{order.address.line1}</p>
               {order.address.line2 ? <p>{order.address.line2}</p> : null}
@@ -177,36 +177,36 @@ export default async function OrderSuccessPage({
               {order.address.phone ? <p className="mt-1">Phone: {order.address.phone}</p> : null}
             </div>
           ) : (
-            <p className="mt-4 font-inter text-sm text-[#6B5E4E]">Address information unavailable.</p>
+            <p className="mt-4 font-inter text-sm text-[#666666]">Address information unavailable.</p>
           )}
 
-          <p className="mt-4 font-inter text-sm text-[#6B5E4E]">
+          <p className="mt-4 font-inter text-sm text-[#666666]">
             Expected delivery: <span className="font-medium text-[#1A1A1A]">4-7 business days</span>
           </p>
           <Link
             href={trackHref}
-            className="mt-2 inline-block font-inter text-sm text-[#C8860A] underline underline-offset-2"
+            className="mt-2 inline-block font-inter text-sm text-gradient-accent underline underline-offset-2"
           >
             Track order
           </Link>
         </section>
 
         {/* SECTION 4 - WHAT HAPPENS NEXT */}
-        <section className="mt-6 rounded-xl border border-[#C8860A]/20 bg-white p-6">
-          <h2 className="font-cormorant text-2xl font-semibold text-[#1A1A1A]">
+        <section className="mt-6 rounded-xl border border-[#E8E8E8] bg-white p-6">
+          <h2 className="font-inter text-2xl font-bold text-[#1A1A1A]">
             What Happens Next
           </h2>
           <div className="mt-4 grid gap-3 sm:grid-cols-3">
-            <div className="rounded-lg border border-[#C8860A]/25 bg-[#C8860A]/10 p-4 text-center">
-              <p className="font-inter text-sm font-medium text-[#C8860A]">
+            <div className="rounded-lg border border-[#E91E8C]/25 bg-[#E91E8C]/10 p-4 text-center">
+              <p className="font-inter text-sm font-medium text-[#1A1A1A]">
                 Order Confirmed ✓
               </p>
             </div>
-            <div className="rounded-lg border border-[#C8860A]/15 bg-[#FFFFFF] p-4 text-center">
-              <p className="font-inter text-sm text-[#6B5E4E]">Dispatched in 24hrs</p>
+            <div className="rounded-lg border border-[#E8E8E8] bg-[#FFFFFF] p-4 text-center">
+              <p className="font-inter text-sm text-[#666666]">Dispatched in 24hrs</p>
             </div>
-            <div className="rounded-lg border border-[#C8860A]/15 bg-[#FFFFFF] p-4 text-center">
-              <p className="font-inter text-sm text-[#6B5E4E]">Delivered in 4-7 days</p>
+            <div className="rounded-lg border border-[#E8E8E8] bg-[#FFFFFF] p-4 text-center">
+              <p className="font-inter text-sm text-[#666666]">Delivered in 4-7 days</p>
             </div>
           </div>
         </section>
@@ -215,13 +215,13 @@ export default async function OrderSuccessPage({
         <section className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
           <Link
             href={trackHref}
-            className="inline-flex items-center justify-center rounded-lg bg-[#C8860A] px-8 py-3 font-cormorant text-sm font-medium tracking-[0.08em] text-white transition-colors hover:bg-[#A86D08]"
+            className="btn-gradient inline-flex items-center justify-center px-8 py-3 font-inter text-sm font-semibold tracking-[0.02em] hover:scale-105 hover:opacity-90"
           >
             Track Your Order
           </Link>
           <Link
             href="/products"
-            className="inline-flex items-center justify-center rounded-lg border border-[#C8860A] px-8 py-3 font-cormorant text-sm font-medium tracking-[0.08em] text-[#C8860A] transition-colors hover:bg-[#C8860A]/5"
+            className="inline-flex items-center justify-center rounded-full border border-[#E8E8E8] px-8 py-3 font-inter text-sm font-semibold tracking-[0.02em] text-[#1A1A1A] transition-colors hover:bg-[#F5F5F5]"
           >
             Continue Shopping
           </Link>
