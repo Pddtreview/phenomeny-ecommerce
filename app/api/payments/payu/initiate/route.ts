@@ -72,18 +72,17 @@ export async function POST(request: NextRequest) {
       productinfo: params.productinfo,
       firstname: params.firstname,
       email: params.email,
-      udf1: params.udf1,
     });
     const { productinfo, firstname, email, udf1 } = params;
 
     console.log(
       "PayU Hash String:",
-      `${PAYU_KEY}|${txnid}|${amount}|${productinfo}|${firstname}|${email}|${udf1}||||||${PAYU_SALT}`
+      `${PAYU_KEY}|${txnid}|${amount}|${productinfo}|${firstname}|${email}|||||||||||${PAYU_SALT}`
     );
     if (PAYU_SALT2) {
       console.log(
         "PayU Hash String (SALT2):",
-        `${PAYU_KEY}|${txnid}|${amount}|${productinfo}|${firstname}|${email}|${udf1}||||||${PAYU_SALT2}`
+        `${PAYU_KEY}|${txnid}|${amount}|${productinfo}|${firstname}|${email}|||||||||||${PAYU_SALT2}`
       );
     }
 

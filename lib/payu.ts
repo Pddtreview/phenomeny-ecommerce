@@ -35,17 +35,7 @@ export function generatePayUHash(params: {
     clean(params.firstname) +
     "|" +
     clean(params.email) +
-    "|" +
-    clean(params.udf1 || "") +
-    "|" +
-    clean(params.udf2 || "") +
-    "|" +
-    clean(params.udf3 || "") +
-    "|" +
-    clean(params.udf4 || "") +
-    "|" +
-    clean(params.udf5 || "") +
-    "||||||" +
+    "|||||||||||" +
     salt;
   const hash = crypto.createHash("sha512").update(hashString).digest("hex");
 
