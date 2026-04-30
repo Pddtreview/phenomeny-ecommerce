@@ -64,74 +64,63 @@ export function ProductCard({
       transition={{ type: "spring", stiffness: 260, damping: 24 }}
       variants={{
         rest: { y: 0 },
-        hover: { y: -8 },
+        hover: { y: -4 },
       }}
       className={cn(
-        "group relative overflow-hidden rounded-xl border border-black/5 bg-white shadow-[0_8px_30px_rgb(0,0,0,0.04)] transition-shadow duration-500 hover:shadow-[0_12px_40px_rgb(0,0,0,0.06)]",
+        "group relative overflow-hidden rounded-3xl bg-white shadow-[0_2px_20px_rgba(0,0,0,0.06)] transition-all duration-300 hover:shadow-[0_20px_60px_rgba(0,0,0,0.12)]",
         className
       )}
     >
       <Link
         href={href}
-        className="absolute inset-0 z-10 rounded-xl focus:outline-none focus-visible:ring-2 focus-visible:ring-[#C8860A]/35 focus-visible:ring-offset-2"
+        className="absolute inset-0 z-10 rounded-3xl focus:outline-none focus-visible:ring-2 focus-visible:ring-black/20 focus-visible:ring-offset-2"
         aria-label={`View ${name}`}
       />
 
-      <div className="relative aspect-square overflow-hidden bg-[#F5F0E8]">
+      <div className="m-3 aspect-square overflow-hidden rounded-2xl bg-[#F5F5F5]">
         <Image
           src={image || fallbackImage}
           alt={name}
           fill
           quality={90}
-          className="object-cover transition-transform duration-500 group-hover:scale-105"
+          className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
           sizes="(max-width: 1200px) 50vw, 25vw"
         />
       </div>
 
-      <div className="space-y-3 px-5 pb-6 pt-5">
-        <h3 className="text-balance font-cormorant text-lg font-medium leading-snug tracking-[0.03em] text-[#1A1A1A]">
+      <div className="px-4 pb-4 pt-2">
+        <h3 className="line-clamp-2 text-base font-semibold leading-snug text-[#1A1A1A]">
           {name}
         </h3>
-        <div className="flex flex-wrap items-baseline gap-x-2 gap-y-1">
-          <p className="font-inter text-sm font-normal tracking-wide text-[#6D553F]">
+        <div className="mt-2 flex items-center justify-between gap-2">
+          <p className="text-lg font-bold text-[#1A1A1A]">
             {formatPrice(price)}
           </p>
           {typeof comparePrice === "number" && comparePrice > 0 ? (
-            <p className="font-inter text-xs font-normal text-[#4A3F35]/70 line-through">
+            <p className="text-sm text-[#999999] line-through">
               {formatPrice(comparePrice)}
             </p>
           ) : null}
         </div>
+        <div className="relative z-20 mt-3">
+          {canQuickAdd ? (
+            <button
+              type="button"
+              onClick={handleQuickAdd}
+              className="w-full rounded-full bg-[#1A1A1A] py-2.5 text-sm font-semibold text-white hover:bg-[#333333]"
+            >
+              Add to Cart
+            </button>
+          ) : (
+            <Link
+              href={href}
+              className="inline-flex w-full items-center justify-center rounded-full bg-[#1A1A1A] py-2.5 text-sm font-semibold text-white hover:bg-[#333333]"
+            >
+              View Product
+            </Link>
+          )}
+        </div>
       </div>
-
-      <motion.div
-        variants={{
-          rest: { y: 20, opacity: 0 },
-          hover: {
-            y: 0,
-            opacity: 1,
-            transition: { type: "spring", stiffness: 300, damping: 24 },
-          },
-        }}
-        className="pointer-events-none absolute inset-x-0 bottom-0 z-20 p-4"
-      >
-        {canQuickAdd ? (
-          <button
-            type="button"
-            onClick={handleQuickAdd}
-            className="pointer-events-auto min-h-12 w-full rounded-md bg-[#C8860A] px-4 py-3 text-center font-cormorant text-xs font-medium uppercase tracking-[0.18em] text-white transition-colors duration-300 hover:bg-[#A86D08]"
-          >
-            Quick Add
-          </button>
-        ) : (
-          <Link
-            href={href}
-            className="pointer-events-auto inline-flex min-h-12 w-full items-center justify-center rounded-md bg-[#C8860A] px-4 py-3 text-center font-cormorant text-xs font-medium uppercase tracking-[0.18em] text-white transition-colors duration-300 hover:bg-[#A86D08]"
-          >
-            View Product
-          </Link>
-        )}
-      </motion.div>
     </motion.article>
   );
 }

@@ -4,16 +4,13 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        gold: "#C8860A",
-        "gold-dark": "#A86D08",
-        "gold-light": "#F0A500",
-        "sacred-orange": "#D4722A",
-        cream: "#FDFAF5",
-        warm: "#FFF8EE",
-        muted: "#6B5E4E",
+        black: "#1A1A1A",
+        white: "#FFFFFF",
+        "gray-light": "#F5F5F5",
+        "gray-mid": "#E8E8E8",
+        "gray-text": "#666666",
       },
       fontFamily: {
-        cormorant: ["Cormorant Garamond", "serif"],
         inter: ["Inter", "sans-serif"],
       },
     },

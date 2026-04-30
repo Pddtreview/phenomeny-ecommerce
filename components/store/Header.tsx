@@ -1,6 +1,6 @@
 ﻿"use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -8,28 +8,23 @@ import { useCart } from "@/hooks/useCart";
 import { CartDrawer } from "@/components/store/CartDrawer";
 import { cn } from "@/lib/utils";
 
-const GOLD = "#C8860A";
 const GOLDEN_LOGO =
   "https://res.cloudinary.com/dwhpxdp18/image/upload/v1776068357/Nauvaraha_golden_logo_kmgjir.png";
 
-const navLinks = [
-  { href: "/", label: "Home" },
-  { href: "/about", label: "About" },
-  { href: "/products", label: "Products" },
-  { href: "/bundles", label: "Bundles" },
+const shopLinks = [
+  { href: "/category/bracelets", label: "Bracelets" },
+  { href: "/category/vastu-decor", label: "Vastu Decor" },
+  { href: "/category/crystals", label: "Crystals & Frames" },
+  { href: "/products", label: "All Products" },
 ];
-
-const iconBtn =
-  "flex h-12 w-12 items-center justify-center rounded-md text-[#1A1A1A] transition-all duration-300 hover:bg-black/5";
 
 export function Header() {
   const pathname = usePathname();
   const [mounted, setMounted] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-  const [hidden, setHidden] = useState(false);
   const [cartOpen, setCartOpen] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const lastScrollY = useRef(0);
+  const [shopOpen, setShopOpen] = useState(false);
   const totalItems = useCart((s) => s.totalItems());
 
   useEffect(() => {
@@ -47,14 +42,6 @@ export function Header() {
     const onScroll = () => {
       const currentY = window.scrollY;
       setScrolled(currentY > 8);
-
-      if (currentY > lastScrollY.current + 4 && currentY > 80) {
-        setHidden(true);
-      } else if (currentY < lastScrollY.current - 2) {
-        setHidden(false);
-      }
-
-      lastScrollY.current = currentY;
     };
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
@@ -65,11 +52,10 @@ export function Header() {
     <>
       <header
         className={cn(
-          "sticky top-0 z-50 border-b border-black/5 backdrop-blur-lg transition-transform duration-300 ease-out",
-          hidden ? "-translate-y-full" : "translate-y-0",
+          "sticky top-0 z-50 border-b border-[#F0F0F0] transition-all duration-300",
           scrolled
-            ? "bg-[#FDFAF5]/78 shadow-[0_8px_30px_rgb(0,0,0,0.04)] backdrop-saturate-150"
-            : "bg-[#FDFAF5]/95"
+            ? "bg-white/90 shadow-[0_8px_24px_rgba(0,0,0,0.05)] backdrop-blur-sm"
+            : "bg-[#FFFFFF]"
         )}
       >
         <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4 sm:h-[4.5rem] lg:px-8">
@@ -82,20 +68,60 @@ export function Header() {
             <Image
               src={GOLDEN_LOGO}
               alt="Nauvaraha"
-              width={280}
-              height={88}
+              width={226}
+              height={36}
               quality={90}
-              className="h-9 w-auto sm:h-11"
+              className="h-9 w-auto"
               priority
             />
           </Link>
 
           <nav className="hidden items-center gap-10 md:flex" aria-label="Main">
-            {navLinks.map((link) => (
+            <div
+              className="relative"
+              onMouseEnter={() => setShopOpen(true)}
+              onMouseLeave={() => setShopOpen(false)}
+            >
+              <button
+                type="button"
+                className="flex items-center gap-1 text-sm font-semibold text-[#1A1A1A] hover:opacity-70"
+              >
+                Shop
+                <span className={cn("transition-transform duration-200", shopOpen && "rotate-180")}>
+                  ▾
+                </span>
+              </button>
+              <div
+                className={cn(
+                  "absolute left-0 top-full pt-4 transition-all duration-200",
+                  shopOpen
+                    ? "pointer-events-auto translate-y-0 opacity-100"
+                    : "pointer-events-none -translate-y-1 opacity-0"
+                )}
+              >
+                <div className="min-w-[200px] rounded-2xl bg-white p-6 shadow-2xl">
+                  <div className="flex flex-col gap-1">
+                    {shopLinks.map((link) => (
+                      <Link
+                        key={link.href}
+                        href={link.href}
+                        className="rounded-lg px-3 py-2 text-sm font-medium text-[#1A1A1A] hover:bg-[#F5F5F5]"
+                      >
+                        {link.label}
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </div>
+            {[
+              { href: "/bundles", label: "Bundles" },
+              { href: "/about", label: "About" },
+            ].map((link) => (
               <Link
                 key={link.href}
                 href={link.href}
-                className="font-cormorant text-[13px] font-medium tracking-[0.22em] text-[#1A1A1A] transition-colors duration-300 hover:text-[#C8860A]"
+                className="text-sm font-semibold text-[#1A1A1A] hover:opacity-70"
               >
                 {link.label}
               </Link>
@@ -105,7 +131,7 @@ export function Header() {
           <div className="flex items-center gap-1 sm:gap-2">
             <Link
               href="/products"
-              className={iconBtn}
+              className="flex h-11 w-11 items-center justify-center rounded-full text-[#1A1A1A] transition-opacity duration-200 hover:opacity-70"
               aria-label="Search products"
             >
               <svg
@@ -127,7 +153,7 @@ export function Header() {
               type="button"
               onClick={() => setCartOpen(true)}
               suppressHydrationWarning
-              className={cn(iconBtn, "relative")}
+              className="relative flex h-11 w-11 items-center justify-center rounded-full text-[#1A1A1A] transition-opacity duration-200 hover:opacity-70"
               aria-label="Open cart"
             >
               <svg
@@ -147,8 +173,7 @@ export function Header() {
               </svg>
               {mounted && totalItems > 0 && (
                 <span
-                  className="absolute -right-0.5 -top-0.5 flex h-4 min-w-4 items-center justify-center rounded-full px-1 text-[10px] font-medium text-white shadow-sm"
-                  style={{ backgroundColor: GOLD }}
+                  className="absolute -right-1 -top-1 flex h-5 min-w-5 items-center justify-center rounded-full bg-[#1A1A1A] px-1 text-[10px] font-semibold text-white"
                 >
                   {totalItems > 99 ? "99+" : totalItems}
                 </span>
@@ -158,7 +183,7 @@ export function Header() {
             <button
               type="button"
               onClick={() => setMobileMenuOpen((o) => !o)}
-              className={cn(iconBtn, "md:hidden")}
+              className="flex h-11 w-11 items-center justify-center rounded-full text-[#1A1A1A] transition-opacity duration-200 hover:opacity-70 md:hidden"
               aria-label={mobileMenuOpen ? "Close menu" : "Open menu"}
               aria-expanded={mobileMenuOpen}
             >
@@ -196,18 +221,38 @@ export function Header() {
 
         <div
           className={cn(
-            "border-t border-black/5 md:hidden",
-            scrolled ? "bg-[#FDFAF5]/80 backdrop-blur-md" : "bg-[#FDFAF5]/95",
-            mobileMenuOpen ? "block" : "hidden"
+            "fixed inset-0 top-16 z-40 bg-white transition-transform duration-300 md:hidden",
+            mobileMenuOpen ? "translate-x-0" : "translate-x-full"
           )}
         >
-          <nav className="flex flex-col px-4 py-4" aria-label="Mobile">
-            {navLinks.map((link) => (
+          <nav className="flex h-full flex-col justify-center gap-8 px-8" aria-label="Mobile">
+            <Link
+              href="/products"
+              onClick={() => setMobileMenuOpen(false)}
+              className="text-3xl font-extrabold tracking-[-0.03em] text-[#1A1A1A]"
+            >
+              Shop
+            </Link>
+            <Link
+              href="/bundles"
+              onClick={() => setMobileMenuOpen(false)}
+              className="text-3xl font-extrabold tracking-[-0.03em] text-[#1A1A1A]"
+            >
+              Bundles
+            </Link>
+            <Link
+              href="/about"
+              onClick={() => setMobileMenuOpen(false)}
+              className="text-3xl font-extrabold tracking-[-0.03em] text-[#1A1A1A]"
+            >
+              About
+            </Link>
+            {shopLinks.map((link) => (
               <Link
                 key={link.href}
                 href={link.href}
                 onClick={() => setMobileMenuOpen(false)}
-                className="font-cormorant py-3 text-sm font-medium tracking-[0.22em] text-[#1A1A1A] transition-colors duration-300 hover:text-[#C8860A]"
+                className="text-base font-medium text-[#666666] hover:text-[#1A1A1A]"
               >
                 {link.label}
               </Link>
