@@ -19,8 +19,9 @@ export function generatePayUHash(params: {
   const key = process.env.PAYU_MERCHANT_KEY!;
   const salt = process.env.PAYU_MERCHANT_SALT!;
 
-  const hashString = `${key}|${params.txnid}|${params.amount}|${params.productinfo}|${params.firstname}|${params.email}|${params.udf1 || ""}|${params.udf2 || ""}|${params.udf3 || ""}|${params.udf4 || ""}|${params.udf5 || ""}||||||${salt}`;
-  console.log("HASH INPUT STRING:", hashString);
+  const hashString = key + "|" + params.txnid + "|" + params.amount + "|" + params.productinfo + "|" + params.firstname + "|" + params.email + "|" + (params.udf1 || "") + "|" + (params.udf2 || "") + "|" + (params.udf3 || "") + "|" + (params.udf4 || "") + "|" + (params.udf5 || "") + "||||||" + salt;
+  console.log("EXACT HASH STRING LENGTH:", hashString.length);
+  console.log("EXACT HASH STRING:", hashString);
 
   return crypto.createHash("sha512").update(hashString).digest("hex");
 }
