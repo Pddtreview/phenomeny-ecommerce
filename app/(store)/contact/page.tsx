@@ -8,8 +8,6 @@ const inter = Inter({
   display: "swap",
 });
 
-const GOLD = "#C8860A";
-
 export const dynamic = "force-static";
 
 export const metadata: Metadata = {
@@ -25,21 +23,21 @@ const helloMail = "hello@nauvaraha.com";
 
 export default function ContactPage() {
   return (
-    <div className={`bg-[#FFFFFF] pb-16 pt-16 ${inter.className}`}>
+    <div className={`bg-[#FFFFFF] pb-16 pt-16 font-inter ${inter.className}`}>
       <div className="mx-auto max-w-3xl px-4 leading-relaxed text-[#1A1A1A]">
-        <h1 className="font-cormorant text-4xl text-[#1A1A1A] sm:text-[2.5rem]">
+        <h1 className="text-4xl font-bold text-[#1A1A1A] sm:text-[2.5rem]">
           Contact Us
         </h1>
-        <p className="mb-10 mt-3 text-base text-[#6B5E4E]">
+        <p className="mb-10 mt-3 text-base text-[#666666]">
           We are here to help. Reach out and we will respond within 24 hours.
         </p>
 
         <div className="space-y-6">
           <section
-            className="rounded-lg border border-[#C8860A]/20 bg-white p-6"
+            className="rounded-lg border border-[#E8E8E8] bg-white p-6"
             aria-labelledby="contact-details-heading"
           >
-            <h2 id="contact-details-heading" className="font-semibold text-[#C8860A]">
+            <h2 id="contact-details-heading" className="font-semibold text-[#1A1A1A]">
               Contact details
             </h2>
             <ul className="mt-4 space-y-3 text-sm sm:text-base">
@@ -47,8 +45,7 @@ export default function ContactPage() {
                 <span className="font-medium">Email: </span>
                 <a
                   href={`mailto:${helloMail}`}
-                  className="underline underline-offset-2 hover:no-underline"
-                  style={{ color: GOLD }}
+                  className="text-gradient-accent underline underline-offset-2 hover:no-underline"
                 >
                   {helloMail}
                 </a>
@@ -57,8 +54,7 @@ export default function ContactPage() {
                 <span className="font-medium">Phone: </span>
                 <a
                   href="tel:+919115490001"
-                  className="underline underline-offset-2 hover:no-underline"
-                  style={{ color: GOLD }}
+                  className="text-gradient-accent underline underline-offset-2 hover:no-underline"
                 >
                   +91 9115490001
                 </a>
@@ -75,10 +71,10 @@ export default function ContactPage() {
           </section>
 
           <section
-            className="rounded-lg border border-[#C8860A]/20 bg-white p-6"
+            className="rounded-lg border border-[#E8E8E8] bg-white p-6"
             aria-labelledby="office-address-heading"
           >
-            <h2 id="office-address-heading" className="font-semibold text-[#C8860A]">
+            <h2 id="office-address-heading" className="font-semibold text-[#1A1A1A]">
               Office address
             </h2>
             <address className="mt-4 not-italic text-sm sm:text-base">
@@ -94,17 +90,17 @@ export default function ContactPage() {
           </section>
 
           <section
-            className="rounded-lg border border-[#C8860A]/20 bg-white p-6"
+            className="rounded-lg border border-[#E8E8E8] bg-white p-6"
             aria-labelledby="order-queries-heading"
           >
-            <h2 id="order-queries-heading" className="font-semibold text-[#C8860A]">
+            <h2 id="order-queries-heading" className="font-semibold text-[#1A1A1A]">
               Order-related queries
             </h2>
             <ul className="mt-4 list-disc space-y-3 pl-5 text-sm sm:text-base">
               <li>
                 <Link
                   href="/track"
-                  className="font-medium text-[#C8860A] underline underline-offset-2 hover:no-underline"
+                  className="font-medium text-gradient-accent underline underline-offset-2 hover:no-underline"
                 >
                   Track your order
                 </Link>
@@ -114,8 +110,7 @@ export default function ContactPage() {
                 email{" "}
                 <a
                   href={`mailto:${helloMail}?subject=${encodeURIComponent("Return Request - Order Number")}`}
-                  className="underline underline-offset-2 hover:no-underline"
-                  style={{ color: GOLD }}
+                  className="text-gradient-accent underline underline-offset-2 hover:no-underline"
                 >
                   {helloMail}
                 </a>{" "}
@@ -126,8 +121,7 @@ export default function ContactPage() {
                 email{" "}
                 <a
                   href={`mailto:${helloMail}?subject=${encodeURIComponent("Cancel - Order Number")}`}
-                  className="underline underline-offset-2 hover:no-underline"
-                  style={{ color: GOLD }}
+                  className="text-gradient-accent underline underline-offset-2 hover:no-underline"
                 >
                   {helloMail}
                 </a>{" "}
@@ -137,14 +131,14 @@ export default function ContactPage() {
           </section>
         </div>
 
-        <h2 className="mt-12 font-cormorant text-2xl text-[#C8860A] sm:text-3xl">
+        <h2 className="mt-12 text-2xl font-bold text-[#1A1A1A] sm:text-3xl">
           Send Us a Message
         </h2>
         <div className="mt-6">
           <ContactForm />
         </div>
 
-        <p className="mt-10 text-sm italic leading-relaxed text-[#6B5E4E] sm:text-base">
+        <p className="mt-10 text-sm italic leading-relaxed text-[#666666] sm:text-base">
           For crystal guidance, vastu consultation, or product recommendations,
           our team is happy to help you find the right piece for your intentions.
         </p>

@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import Image from "next/image";
 import Link from "next/link";
 import { Header } from "@/components/store/Header";
 import { ProductCard } from "@/components/store/ProductCard";
@@ -135,21 +134,6 @@ export default async function Home() {
               Our Story
             </Link>
           </div>
-          <div
-            className="relative mt-16 flex h-[250px] items-center justify-center rounded-3xl md:h-[400px]"
-            style={{ background: "#FFFFFF" }}
-          >
-            <Image
-              src={GOLD_SYMBOL}
-              alt="Nauvaraha symbol"
-              width={200}
-              height={200}
-              quality={90}
-              className="h-auto w-[140px] drop-shadow-[0_15px_30px_rgba(0,0,0,0.16)] md:w-[200px]"
-              style={{ animation: "float 4s ease-in-out infinite" }}
-              priority
-            />
-          </div>
         </div>
       </section>
 
@@ -217,22 +201,6 @@ export default async function Home() {
             >
               Meet Karan
             </Link>
-          </div>
-          <div className="relative flex justify-center">
-            <div
-              className="absolute h-[280px] w-[280px] rounded-full"
-              style={{
-                background: "radial-gradient(circle, rgba(255,107,53,0.2) 0%, transparent 70%)",
-              }}
-            />
-            <Image
-              src={GOLD_SYMBOL}
-              alt="Nauvaraha symbol"
-              width={250}
-              height={250}
-              className="relative h-auto w-[200px] md:w-[250px]"
-              style={{ animation: "float 4s ease-in-out infinite" }}
-            />
           </div>
         </div>
       </section>

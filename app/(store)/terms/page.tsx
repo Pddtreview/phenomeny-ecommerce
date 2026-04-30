@@ -17,18 +17,18 @@ export const metadata: Metadata = {
   },
 };
 
-const heading = "mt-8 font-semibold text-[#C8860A]";
+const heading = "mt-8 font-semibold text-[#1A1A1A]";
 
 export default function TermsPage() {
   return (
-    <div className={`bg-[#FFFFFF] pb-16 pt-16 ${inter.className}`}>
+    <div className={`bg-[#FFFFFF] pb-16 pt-16 font-inter ${inter.className}`}>
       <article className="mx-auto max-w-3xl px-4 leading-relaxed text-[#1A1A1A]">
         <h1
-          className="font-cormorant text-4xl text-[#1A1A1A] sm:text-[2.5rem]"
+          className="text-4xl font-bold text-[#1A1A1A] sm:text-[2.5rem]"
         >
           Terms &amp; Conditions
         </h1>
-        <p className="mt-4 text-sm text-[#6B5E4E]">
+        <p className="mt-4 text-sm text-[#666666]">
           Last updated: April 2026
         </p>
 
@@ -37,7 +37,7 @@ export default function TermsPage() {
           <strong className="font-medium text-[#1A1A1A]">Nauvaraha</strong> at{" "}
           <a
             href="https://www.nauvaraha.com"
-            className="text-[#C8860A] underline underline-offset-2 hover:no-underline"
+            className="text-gradient-accent underline underline-offset-2 hover:no-underline"
           >
             www.nauvaraha.com
           </a>
@@ -103,7 +103,7 @@ export default function TermsPage() {
             <strong className="font-medium text-[#1A1A1A]">Shiprocket</strong>.
           </li>
           <li>
-            Estimated delivery is typically within 4Ã¢â‚¬â€œ7 business days after
+            Estimated delivery is typically within 4-7 business days after
             dispatch, unless stated otherwise at checkout.
           </li>
           <li>
@@ -111,7 +111,7 @@ export default function TermsPage() {
             capacity, weather, or force majeure events.
           </li>
           <li>
-            Free shipping applies to orders above Ã¢â€šÂ¹999, where this offer is
+            Free shipping applies to orders above ₹999, where this offer is
             active and displayed on the site.
           </li>
         </ul>
@@ -143,8 +143,8 @@ export default function TermsPage() {
         <h2 className={heading}>6. Intellectual Property</h2>
         <ul className="mt-3 list-disc space-y-2 pl-6">
           <li>
-            All content on nauvaraha.comÃ¢â‚¬â€including text, graphics, logos,
-            images, product descriptions, and layoutÃ¢â‚¬â€is owned by or licensed
+            All content on nauvaraha.com - including text, graphics, logos,
+            images, product descriptions, and layout - is owned by or licensed
             to <strong className="font-medium text-[#1A1A1A]">Nauvaraha</strong>.
           </li>
           <li>
@@ -193,7 +193,7 @@ export default function TermsPage() {
             <span className="font-medium text-[#1A1A1A]">Website:</span>{" "}
             <a
               href="https://www.nauvaraha.com"
-              className="text-[#C8860A] underline underline-offset-2 hover:no-underline"
+              className="text-gradient-accent underline underline-offset-2 hover:no-underline"
             >
               https://www.nauvaraha.com
             </a>
@@ -213,7 +213,7 @@ export default function TermsPage() {
             <span className="font-medium text-[#1A1A1A]">Phone:</span>{" "}
             <a
               href="tel:+919115490001"
-              className="text-[#C8860A] underline underline-offset-2 hover:no-underline"
+              className="text-gradient-accent underline underline-offset-2 hover:no-underline"
             >
               +91 9115490001
             </a>
@@ -222,7 +222,7 @@ export default function TermsPage() {
             <span className="font-medium text-[#1A1A1A]">Email:</span>{" "}
             <a
               href="mailto:hello@nauvaraha.com"
-              className="text-[#C8860A] underline underline-offset-2 hover:no-underline"
+              className="text-gradient-accent underline underline-offset-2 hover:no-underline"
             >
               hello@nauvaraha.com
             </a>

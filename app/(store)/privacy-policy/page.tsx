@@ -17,18 +17,18 @@ export const metadata: Metadata = {
   },
 };
 
-const heading = "mt-8 font-semibold text-[#C8860A]";
+const heading = "mt-8 font-semibold text-[#1A1A1A]";
 
 export default function PrivacyPolicyPage() {
   return (
-    <div className={`bg-[#FFFFFF] pb-16 pt-16 ${inter.className}`}>
+    <div className={`bg-[#FFFFFF] pb-16 pt-16 font-inter ${inter.className}`}>
       <article className="mx-auto max-w-3xl px-4 leading-relaxed text-[#1A1A1A]">
         <h1
-          className="font-cormorant text-4xl text-[#1A1A1A] sm:text-[2.5rem]"
+          className="text-4xl font-bold text-[#1A1A1A] sm:text-[2.5rem]"
         >
           Privacy Policy
         </h1>
-        <p className="mt-4 text-sm text-[#6B5E4E]">
+        <p className="mt-4 text-sm text-[#666666]">
           Last updated: April 2026
         </p>
 
@@ -37,7 +37,7 @@ export default function PrivacyPolicyPage() {
           <strong className="font-medium text-[#1A1A1A]">Nauvaraha</strong> (
           <a
             href="https://www.nauvaraha.com"
-            className="text-[#C8860A] underline underline-offset-2 hover:no-underline"
+            className="text-gradient-accent underline underline-offset-2 hover:no-underline"
           >
             www.nauvaraha.com
           </a>
@@ -126,7 +126,7 @@ export default function PrivacyPolicyPage() {
             To exercise these rights, contact us at{" "}
             <a
               href="mailto:hello@nauvaraha.com"
-              className="text-[#C8860A] underline underline-offset-2 hover:no-underline"
+              className="text-gradient-accent underline underline-offset-2 hover:no-underline"
             >
               hello@nauvaraha.com
             </a>
@@ -152,7 +152,7 @@ export default function PrivacyPolicyPage() {
             <span className="font-medium text-[#1A1A1A]">Website:</span>{" "}
             <a
               href="https://www.nauvaraha.com"
-              className="text-[#C8860A] underline underline-offset-2 hover:no-underline"
+              className="text-gradient-accent underline underline-offset-2 hover:no-underline"
             >
               https://www.nauvaraha.com
             </a>
@@ -172,7 +172,7 @@ export default function PrivacyPolicyPage() {
             <span className="font-medium text-[#1A1A1A]">Phone:</span>{" "}
             <a
               href="tel:+919115490001"
-              className="text-[#C8860A] underline underline-offset-2 hover:no-underline"
+              className="text-gradient-accent underline underline-offset-2 hover:no-underline"
             >
               +91 9115490001
             </a>
@@ -181,7 +181,7 @@ export default function PrivacyPolicyPage() {
             <span className="font-medium text-[#1A1A1A]">Email:</span>{" "}
             <a
               href="mailto:hello@nauvaraha.com"
-              className="text-[#C8860A] underline underline-offset-2 hover:no-underline"
+              className="text-gradient-accent underline underline-offset-2 hover:no-underline"
             >
               hello@nauvaraha.com
             </a>

@@ -17,20 +17,20 @@ export const metadata: Metadata = {
   },
 };
 
-const heading = "mt-8 font-semibold text-[#C8860A]";
+const heading = "mt-8 font-semibold text-[#1A1A1A]";
 
 const helloMail = "hello@nauvaraha.com";
 
 export default function ShippingPolicyPage() {
   return (
-    <div className={`bg-[#FFFFFF] pb-16 pt-16 ${inter.className}`}>
+    <div className={`bg-[#FFFFFF] pb-16 pt-16 font-inter ${inter.className}`}>
       <article className="mx-auto max-w-3xl px-4 leading-relaxed text-[#1A1A1A]">
         <h1
-          className="font-cormorant text-4xl text-[#1A1A1A] sm:text-[2.5rem]"
+          className="text-4xl font-bold text-[#1A1A1A] sm:text-[2.5rem]"
         >
           Shipping Policy
         </h1>
-        <p className="mt-4 text-sm text-[#6B5E4E]">
+        <p className="mt-4 text-sm text-[#666666]">
           Last updated: April 2026
         </p>
 
@@ -40,7 +40,7 @@ export default function ShippingPolicyPage() {
           orders placed on{" "}
           <a
             href="https://www.nauvaraha.com"
-            className="text-[#C8860A] underline underline-offset-2 hover:no-underline"
+            className="text-gradient-accent underline underline-offset-2 hover:no-underline"
           >
             www.nauvaraha.com
           </a>
@@ -63,16 +63,16 @@ export default function ShippingPolicyPage() {
         <ul className="mt-3 list-disc space-y-2 pl-6">
           <li>
             <strong className="font-medium text-[#1A1A1A]">Standard delivery:</strong>{" "}
-            typically 4Ã¢â‚¬â€œ7 business days after dispatch.
+            typically 4-7 business days after dispatch.
           </li>
           <li>
             <strong className="font-medium text-[#1A1A1A]">Metro cities</strong>{" "}
             (Delhi, Mumbai, Bangalore, Chennai, Hyderabad, Kolkata): typically
-            3Ã¢â‚¬â€œ5 business days after dispatch.
+            3-5 business days after dispatch.
           </li>
           <li>
             <strong className="font-medium text-[#1A1A1A]">Remote areas and Northeast India:</strong>{" "}
-            typically 7Ã¢â‚¬â€œ10 business days after dispatch.
+            typically 7-10 business days after dispatch.
           </li>
           <li>
             Business days exclude Sundays and public holidays.
@@ -81,10 +81,10 @@ export default function ShippingPolicyPage() {
 
         <h2 className={heading}>3. Shipping Charges</h2>
         <ul className="mt-3 list-disc space-y-2 pl-6">
-          <li>Free shipping on orders above Ã¢â€šÂ¹999.</li>
-          <li>Flat Ã¢â€šÂ¹79 shipping on orders below Ã¢â€šÂ¹999.</li>
+          <li>Free shipping on orders above ₹999.</li>
+          <li>Flat ₹79 shipping on orders below ₹999.</li>
           <li>
-            Cash on delivery (COD): an additional COD handling charge of Ã¢â€šÂ¹49
+            Cash on delivery (COD): an additional COD handling charge of ₹49
             applies where COD is available.
           </li>
           <li>No hidden charges beyond what is shown at checkout.</li>
@@ -111,7 +111,7 @@ export default function ShippingPolicyPage() {
             Track your order at{" "}
             <a
               href="https://www.nauvaraha.com/track"
-              className="text-[#C8860A] underline underline-offset-2 hover:no-underline"
+              className="text-gradient-accent underline underline-offset-2 hover:no-underline"
             >
               https://www.nauvaraha.com/track
             </a>
@@ -172,7 +172,7 @@ export default function ShippingPolicyPage() {
             dispatch, please contact us at{" "}
             <a
               href={`mailto:${helloMail}`}
-              className="text-[#C8860A] underline underline-offset-2 hover:no-underline"
+              className="text-gradient-accent underline underline-offset-2 hover:no-underline"
             >
               {helloMail}
             </a>
@@ -200,7 +200,7 @@ export default function ShippingPolicyPage() {
             <span className="font-medium text-[#1A1A1A]">Phone:</span>{" "}
             <a
               href="tel:+919115490001"
-              className="text-[#C8860A] underline underline-offset-2 hover:no-underline"
+              className="text-gradient-accent underline underline-offset-2 hover:no-underline"
             >
               +91 9115490001
             </a>
@@ -209,7 +209,7 @@ export default function ShippingPolicyPage() {
             <span className="font-medium text-[#1A1A1A]">Email:</span>{" "}
             <a
               href={`mailto:${helloMail}`}
-              className="text-[#C8860A] underline underline-offset-2 hover:no-underline"
+              className="text-gradient-accent underline underline-offset-2 hover:no-underline"
             >
               {helloMail}
             </a>

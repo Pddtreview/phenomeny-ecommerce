@@ -1,4 +1,5 @@
-﻿import { Inter } from "next/font/google";
+﻿import type { Metadata } from "next";
+import { Inter } from "next/font/google";
 import { generateDefaultSeo } from "next-seo/pages";
 import seoConfig from "@/next-seo.config";
 import { Analytics } from "@/components/Analytics";
@@ -10,6 +11,16 @@ const inter = Inter({
   display: "swap",
   weight: ["400", "500", "600", "700", "800", "900"],
 });
+
+export const metadata: Metadata = {
+  icons: {
+    icon: "https://res.cloudinary.com/dwhpxdp18/image/upload/v1776068357/Nauvaraha_logo_symble_golden_xvhcp8.png",
+    shortcut:
+      "https://res.cloudinary.com/dwhpxdp18/image/upload/v1776068357/Nauvaraha_logo_symble_golden_xvhcp8.png",
+    apple:
+      "https://res.cloudinary.com/dwhpxdp18/image/upload/v1776068357/Nauvaraha_logo_symble_golden_xvhcp8.png",
+  },
+};
 
 export default function RootLayout({
   children,

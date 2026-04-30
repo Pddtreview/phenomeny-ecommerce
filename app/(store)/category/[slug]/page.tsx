@@ -2,9 +2,6 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { createServerSupabaseClient } from "@/lib/supabase-server";
 
-const PRIMARY = "#1B3A6B";
-const GOLD = "#C8860A";
-
 type Product = {
   id: string;
   name: string;
@@ -26,11 +23,16 @@ function formatCategory(slug: string) {
 
 async function getCategoryProducts(categorySlug: string): Promise<Product[]> {
   const supabase = await createServerSupabaseClient();
+  const slugWithSpaces = categorySlug.replace(/-/g, " ");
+  const slugWithoutHyphens = categorySlug.replace(/-/g, "");
+  const categoryCandidates = Array.from(
+    new Set([categorySlug, slugWithSpaces, slugWithoutHyphens, "vastu"])
+  );
 
   const { data: products, error } = await supabase
     .from("products")
     .select("id, name, slug, description, category")
-    .eq("category", categorySlug)
+    .in("category", categoryCandidates)
     .eq("is_active", true)
     .order("created_at", { ascending: false });
 
@@ -79,12 +81,12 @@ export default async function CategoryPage({
   const title = formatCategory(slug);
 
   return (
-    <div className="min-h-screen bg-zinc-50">
-      <header className="w-full px-4 py-10 text-center text-white" style={{ backgroundColor: PRIMARY }}>
-        <p className="text-xs font-semibold uppercase tracking-[0.2em]" style={{ color: GOLD }}>
+    <div className="min-h-screen bg-[#FFFFFF] font-inter text-[#1A1A1A]">
+      <header className="w-full bg-[#FFFFFF] px-4 py-10 text-center text-[#1A1A1A]">
+        <p className="mx-auto inline-flex pill-gradient px-4 py-1 text-xs font-semibold uppercase tracking-[0.2em]">
           Category
         </p>
-        <h1 className="mt-2 text-3xl font-semibold">{title}</h1>
+        <h1 className="mt-2 text-3xl font-bold text-[#1A1A1A]">{title}</h1>
       </header>
 
       <main className="mx-auto max-w-6xl px-4 py-8">
@@ -124,8 +126,8 @@ export default async function CategoryPage({
                   key={product.id}
                   className="flex h-full flex-col overflow-hidden rounded-xl bg-white shadow-sm"
                 >
-                  <div className="flex h-48 items-center justify-center bg-[#1B3A6B] px-2 text-center">
-                    <p className="text-sm font-medium text-[#C8860A] line-clamp-3">
+                  <div className="flex h-48 items-center justify-center bg-[#FFFFFF] px-2 text-center">
+                    <p className="text-sm font-semibold text-[#1A1A1A] line-clamp-3">
                       {product.name}
                     </p>
                   </div>
@@ -136,7 +138,7 @@ export default async function CategoryPage({
                     </h2>
 
                     <div className="mt-1 flex items-baseline text-sm">
-                      <span className="font-bold text-[#1B3A6B]">
+                      <span className="font-bold text-[#1A1A1A]">
                         {hasPrice ? (
                           <>
                             <span className="font-inter rupee">₹</span>
@@ -156,7 +158,7 @@ export default async function CategoryPage({
 
                     <Link
                       href={href}
-                      className="mt-3 block rounded-lg bg-[#1B3A6B] py-2 text-center text-xs font-medium text-white transition hover:bg-[#162f55]"
+                      className="btn-gradient mt-3 block py-2 text-center text-xs font-medium hover:scale-105 hover:opacity-90"
                     >
                       View Product
                     </Link>

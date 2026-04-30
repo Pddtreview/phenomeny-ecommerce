@@ -17,20 +17,20 @@ export const metadata: Metadata = {
   },
 };
 
-const heading = "mt-8 font-semibold text-[#C8860A]";
+const heading = "mt-8 font-semibold text-[#1A1A1A]";
 
 const helloMail = "hello@nauvaraha.com";
 
 export default function RefundPolicyPage() {
   return (
-    <div className={`bg-[#FFFFFF] pb-16 pt-16 ${inter.className}`}>
+    <div className={`bg-[#FFFFFF] pb-16 pt-16 font-inter ${inter.className}`}>
       <article className="mx-auto max-w-3xl px-4 leading-relaxed text-[#1A1A1A]">
         <h1
-          className="font-cormorant text-4xl text-[#1A1A1A] sm:text-[2.5rem]"
+          className="text-4xl font-bold text-[#1A1A1A] sm:text-[2.5rem]"
         >
           Refund &amp; Return Policy
         </h1>
-        <p className="mt-4 text-sm text-[#6B5E4E]">
+        <p className="mt-4 text-sm text-[#666666]">
           Last updated: April 2026
         </p>
 
@@ -39,7 +39,7 @@ export default function RefundPolicyPage() {
           <strong className="font-medium text-[#1A1A1A]">Nauvaraha</strong> at{" "}
           <a
             href="https://www.nauvaraha.com"
-            className="text-[#C8860A] underline underline-offset-2 hover:no-underline"
+            className="text-gradient-accent underline underline-offset-2 hover:no-underline"
           >
             www.nauvaraha.com
           </a>
@@ -80,7 +80,7 @@ export default function RefundPolicyPage() {
         <ul className="mt-3 list-disc space-y-2 pl-6">
           <li>Change of mind after delivery.</li>
           <li>
-            Slight natural variations in crystals, stone, or woodÃ¢â‚¬â€these are
+            Slight natural variations in crystals, stone, or wood - these are
             inherent to natural products and are not considered defects.
           </li>
           <li>Products returned without original packaging.</li>
@@ -93,7 +93,7 @@ export default function RefundPolicyPage() {
             Email{" "}
             <a
               href={`mailto:${helloMail}`}
-              className="text-[#C8860A] underline underline-offset-2 hover:no-underline"
+              className="text-gradient-accent underline underline-offset-2 hover:no-underline"
             >
               {helloMail}
             </a>{" "}
@@ -143,7 +143,7 @@ export default function RefundPolicyPage() {
             To cancel before dispatch, email{" "}
             <a
               href={`mailto:${helloMail}`}
-              className="text-[#C8860A] underline underline-offset-2 hover:no-underline"
+              className="text-gradient-accent underline underline-offset-2 hover:no-underline"
             >
               {helloMail}
             </a>{" "}
@@ -165,7 +165,7 @@ export default function RefundPolicyPage() {
             Email the photos to{" "}
             <a
               href={`mailto:${helloMail}`}
-              className="text-[#C8860A] underline underline-offset-2 hover:no-underline"
+              className="text-gradient-accent underline underline-offset-2 hover:no-underline"
             >
               {helloMail}
             </a>{" "}
@@ -197,7 +197,7 @@ export default function RefundPolicyPage() {
             <span className="font-medium text-[#1A1A1A]">Phone:</span>{" "}
             <a
               href="tel:+919115490001"
-              className="text-[#C8860A] underline underline-offset-2 hover:no-underline"
+              className="text-gradient-accent underline underline-offset-2 hover:no-underline"
             >
               +91 9115490001
             </a>
@@ -206,7 +206,7 @@ export default function RefundPolicyPage() {
             <span className="font-medium text-[#1A1A1A]">Email:</span>{" "}
             <a
               href={`mailto:${helloMail}`}
-              className="text-[#C8860A] underline underline-offset-2 hover:no-underline"
+              className="text-gradient-accent underline underline-offset-2 hover:no-underline"
             >
               {helloMail}
             </a>
