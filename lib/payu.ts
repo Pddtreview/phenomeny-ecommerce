@@ -2,6 +2,7 @@ import crypto from "crypto";
 
 const PAYU_KEY = process.env.PAYU_MERCHANT_KEY!;
 const PAYU_SALT = process.env.PAYU_MERCHANT_SALT!;
+const PAYU_SALT2 = process.env.PAYU_MERCHANT_SALT2 || "";
 const PAYU_BASE_URL = process.env.PAYU_BASE_URL || "https://secure.payu.in";
 
 export function generatePayUHash(params: {
@@ -16,14 +17,53 @@ export function generatePayUHash(params: {
   udf4?: string;
   udf5?: string;
 }): string {
-  const key = process.env.PAYU_MERCHANT_KEY!;
-  const salt = process.env.PAYU_MERCHANT_SALT!;
+  const key = (process.env.PAYU_MERCHANT_KEY || "").trim();
+  const salt = (process.env.PAYU_MERCHANT_SALT || "").trim();
+  const salt2 = (process.env.PAYU_MERCHANT_SALT2 || "").trim();
+  const clean = (value: unknown) => String(value ?? "").trim();
+  const amount = Number(clean(params.amount)).toFixed(2);
 
-  const hashString = key + "|" + params.txnid + "|" + params.amount + "|" + params.productinfo + "|" + params.firstname + "|" + params.email + "|" + (params.udf1 || "") + "|" + (params.udf2 || "") + "|" + (params.udf3 || "") + "|" + (params.udf4 || "") + "|" + (params.udf5 || "") + "||||||" + salt;
+  const hashString =
+    key +
+    "|" +
+    clean(params.txnid) +
+    "|" +
+    amount +
+    "|" +
+    clean(params.productinfo) +
+    "|" +
+    clean(params.firstname) +
+    "|" +
+    clean(params.email) +
+    "|" +
+    clean(params.udf1 || "") +
+    "|" +
+    clean(params.udf2 || "") +
+    "|" +
+    clean(params.udf3 || "") +
+    "|" +
+    clean(params.udf4 || "") +
+    "|" +
+    clean(params.udf5 || "") +
+    "||||||" +
+    salt;
+  const hash = crypto.createHash("sha512").update(hashString).digest("hex");
+
   console.log("EXACT HASH STRING LENGTH:", hashString.length);
   console.log("EXACT HASH STRING:", hashString);
+  console.log("PAYU HASH (SALT1):", hash);
 
-  return crypto.createHash("sha512").update(hashString).digest("hex");
+  if (salt2) {
+    const hashStringSalt2 = hashString.slice(0, hashString.lastIndexOf("|") + 1) + salt2;
+    const hashSalt2 = crypto
+      .createHash("sha512")
+      .update(hashStringSalt2)
+      .digest("hex");
+    console.log("EXACT HASH STRING (SALT2):", hashStringSalt2);
+    console.log("PAYU HASH (SALT2):", hashSalt2);
+  }
+
+  return hash;
 }
 
 export function verifyPayUHash(params: {
@@ -65,4 +105,4 @@ export function verifyPayUHash(params: {
   return expectedHash === params.hash;
 }
 
-export { PAYU_BASE_URL, PAYU_KEY, PAYU_SALT };
+export { PAYU_BASE_URL, PAYU_KEY, PAYU_SALT, PAYU_SALT2 };
