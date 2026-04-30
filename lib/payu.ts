@@ -16,25 +16,11 @@ export function generatePayUHash(params: {
   udf4?: string;
   udf5?: string;
 }): string {
-  const hashString = [
-    PAYU_KEY,
-    params.txnid,
-    params.amount,
-    params.productinfo,
-    params.firstname,
-    params.email,
-    params.udf1 || "",
-    params.udf2 || "",
-    params.udf3 || "",
-    params.udf4 || "",
-    params.udf5 || "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    PAYU_SALT,
-  ].join("|");
+  const key = process.env.PAYU_MERCHANT_KEY!;
+  const salt = process.env.PAYU_MERCHANT_SALT!;
+  const amount = Number(params.amount).toFixed(2);
+
+  const hashString = `${String(key).trim()}|${String(params.txnid).trim()}|${amount}|${String(params.productinfo).trim()}|${String(params.firstname).trim()}|${String(params.email).trim()}|${String(params.udf1 || "").trim()}|${String(params.udf2 || "").trim()}|${String(params.udf3 || "").trim()}|${String(params.udf4 || "").trim()}|${String(params.udf5 || "").trim()}||||||${String(salt).trim()}`;
 
   return crypto.createHash("sha512").update(hashString).digest("hex");
 }

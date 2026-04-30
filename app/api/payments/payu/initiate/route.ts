@@ -30,12 +30,12 @@ export async function POST(request: NextRequest) {
 
     const customerName =
       typeof customer?.name === "string" && customer.name.trim()
-        ? customer.name.trim()
+        ? customer.name.trim().split(" ")[0].replace(/[^a-zA-Z]/g, "") || "Customer"
         : "Customer";
     const customerEmail =
       typeof customer?.email === "string" && customer.email.trim()
         ? customer.email.trim()
-        : "noreply@nauvaraha.com";
+        : "customer@nauvaraha.com";
     const customerPhone =
       typeof customer?.phone === "string" && customer.phone.trim()
         ? customer.phone.trim()
@@ -48,7 +48,10 @@ export async function POST(request: NextRequest) {
       key: PAYU_KEY,
       txnid,
       amount,
-      productinfo: `Nauvaraha Order ${order.order_number}`,
+      productinfo: `Nauvaraha Order ${order.order_number}`.replace(
+        /[^a-zA-Z0-9\s_-]/g,
+        ""
+      ),
       firstname: customerName,
       email: customerEmail,
       phone: customerPhone,
