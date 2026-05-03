@@ -66,8 +66,8 @@ async function getAllProducts(): Promise<Product[]> {
 export const metadata: Metadata = {
   title: "All Products",
   description:
-    "Shop all Nauvarah products — pyrite frames, crystals, vastu items, and abundance bundles.",
-  alternates: { canonical: "https://nauvarah.com/products" },
+    "Shop all Nauvaraha products — pyrite frames, crystals, vastu items, and abundance bundles.",
+  alternates: { canonical: "https://nauvaraha.com/products" },
 };
 
 export default async function ProductsPage() {

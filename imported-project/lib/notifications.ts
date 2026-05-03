@@ -58,7 +58,7 @@ export async function sendOrderConfirmationSMS(
   orderNumber: string,
   total: number
 ): Promise<void> {
-  const message = `Dear customer, your Nauvaraha order ${orderNumber} for ₹${total.toLocaleString("en-IN")} has been confirmed. Track at nauvarah.com/track/${orderNumber}. - Team Nauvaraha`;
+  const message = `Dear customer, your Nauvaraha order ${orderNumber} for INR ${total.toLocaleString("en-IN")} has been confirmed. Track at nauvaraha.com/track/${orderNumber}. - Team Nauvaraha`;
   await sendSMS(phone, message);
 }
 
@@ -68,7 +68,7 @@ export async function sendShippingConfirmationSMS(
   awb: string,
   courier: string
 ): Promise<void> {
-  const message = `Your Nauvaraha order ${orderNumber} has been shipped via ${courier}. AWB: ${awb}. Track at nauvarah.com/track/${orderNumber}`;
+  const message = `Your Nauvaraha order ${orderNumber} has been shipped via ${courier}. AWB: ${awb}. Track at nauvaraha.com/track/${orderNumber}`;
   await sendSMS(phone, message);
 }
 

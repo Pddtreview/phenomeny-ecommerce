@@ -20,8 +20,13 @@ type ProductCardProps = {
 };
 
 function formatPrice(value: number | null) {
-  if (value === null) return "Price on request";
-  return `₹${value.toLocaleString("en-IN")}`;
+  if (value === null) return <>Price on request</>;
+  return (
+    <>
+      <span className="font-sans">₹</span>
+      {value.toLocaleString("en-IN")}
+    </>
+  );
 }
 
 export function ProductCard({

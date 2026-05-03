@@ -111,7 +111,7 @@ export default function TermsPage() {
             capacity, weather, or force majeure events.
           </li>
           <li>
-            Free shipping applies to orders above ₹999, where this offer is
+            Free shipping applies to orders above <span className="font-sans">₹</span>999, where this offer is
             active and displayed on the site.
           </li>
         </ul>

@@ -1,0 +1,324 @@
+Here is the handoff document based on the repository as it exists on disk (not on live Vercel metrics or secrets you have only in the dashboard).
+
+---
+
+# Phenomeny E‑commerce (Nauvarah / Nauvaraha) — Engineering handoff
+
+## 1. Tech stack
+
+| Area | Details |
+|------|---------|
+| **Framework** | **Next.js 16.1.6** with **App Router** (`app/`). `package.json` name: `phenomeny-ecommerce`. |
+| **React** | **19.2.3** (`react` / `react-dom`). |
+| **Styling** | **Tailwind CSS v4** (`tailwindcss` ^4, `@tailwindcss/postcss` ^4). `tailwind.config.ts` extends theme (colors, Inter). **`tw-animate-css`**, **`tailwind-merge`**, **`clsx`**, **`class-variance-authority`**. |
+| **UI primitives** | **Radix UI** (`radix-ui` ^1.4.3). Lightweight local UI under `components/ui/` (**button**, **input**, **card** only — not a full shadcn install tree). Package also lists **`shadcn` ^4.0.1** as a dependency. |
+| **Database** | **Supabase** (**PostgreSQL** behind it): **`@supabase/supabase-js` ^2.98.0**, **`@supabase/ssr` ^0.9.0**. There is **no full SQL schema** in-repo; only partial migrations under `supabase/migrations/` (see below). Tables referenced heavily in code include: **`products`**, **`product_variants`**, **`bundles`**, **`bundle_items`**, **`orders`**, **`order_items`**, **`customers`**, **`addresses`**, **`coupons`**, **`inventory_log`**, **`contact_submissions`**. |
+| **Auth** | **Supabase Auth** (email/OTP flows via custom API + `middleware.ts` using `createServerClient` + `supabase.auth.getSession()`). **Admin** routes `/admin/*` and `/api/admin/*` require a session; unauthenticated users go to **`/admin/login`**. No NextAuth. |
+| **Payments** | **PayU India** — server routes `app/api/payments/payu/initiate` and `app/api/payments/payu/webhook`, helpers in `lib/payu.ts`. Checkout builds a **POST form** to PayU `_payment`. |
+| **Email** | **Resend** (`resend` ^6.9.3) for transactional HTML; **`@react-email/components`** / **`react-email`** present; only **`emails/WeeklyPlReportEmail.tsx`** as a React Email template file — weekly report uses it. |
+| **SMS / OTP** | **MSG91** (`MSG91_AUTH_KEY`, OTP API in `app/api/otp/send`, Flow API in `lib/notifications.ts`). |
+| **File / image storage** | **Cloudinary** (`cloudinary` ^2.9.0) for admin uploads and media management. **`next/image`** `remotePatterns` in `next.config.ts`: `placehold.co`, `res.cloudinary.com`, project Supabase host. |
+| **Analytics** | **Google Analytics 4** + **Meta Pixel** via `components/Analytics.tsx` (`NEXT_PUBLIC_GA4_MEASUREMENT_ID`, `NEXT_PUBLIC_META_PIXEL_ID`). **`posthog-js` is in `package.json` but is not wired in application code** (no imports found). |
+| **Deployment** | Intended for **Vercel** (`vercel.json` with crons). **`vercel.json` has no custom `build` command** — only cron config. **No `engines` or `.nvmrc` in repo** — Node version follows **Vercel default** for the linked project (typically 20.x unless changed in the Vercel project settings). |
+| **Other notable libraries** | **Zustand** (`useCart`), **react-hook-form** + **@hookform/resolvers** + **zod** (v4), **axios**, **framer-motion**, **fuse.js** (search), **recharts** (admin charts), **@react-pdf/renderer** + **`lib/invoice-pdf.tsx`** (admin invoice PDF), **xlsx** (product import), **@anthropic-ai/sdk** (AI product description + marketing insights), **next-seo** / **next-sitemap** (`postbuild`: `next-sitemap`). |
+
+---
+
+## 2. What is built and working (from code structure)
+
+*“Production” cannot be claimed for the current branch as written: **`npm run build` fails** (see §6). The following is what the app is *designed* to implement.*
+
+### Storefront (`app/(store)/…` + `app/page.tsx`)
+
+| Route / area | Purpose |
+|--------------|---------|
+| **`/`** (`app/page.tsx`) | Marketing homepage with featured products from Supabase; includes header/footer inline (not only `(store)` layout). |
+| **`/products`** | Product listing. |
+| **`/products/[slug]`** | Product detail. |
+| **`/category/[slug]`** | Category listing. |
+| **`/bundles`**, **`/bundles/[slug]`** | Bundle listing and detail. |
+| **`/checkout`** | Address form, coupons, prepaid vs COD, Shiprocket pincode hint, PayU redirect for prepaid. |
+| **`/order-success/[id]`** | Order confirmation UI (server page). **Intended** PayU return target after `route.ts` POST handler. |
+| **`/track`**, **`/track/[order-number]`** | Order tracking UI. |
+| **`/about`**, **`/contact`**, **`/terms`**, **`/privacy-policy`**, **`/shipping-policy`**, **`/refund-policy`** | Static / policy content. |
+| **`/account`**, **`/account/dashboard`**, **`/account/orders`**, **`/account/addresses`** | Logged-in customer account area (OTP-based session from codebase patterns). |
+
+**`app/payment-failed/page.tsx`** — standalone failure page (outside `(store)` layout; no header/footer from store layout).
+
+**Cart** is **client-side** (`hooks/useCart.ts`, `CartDrawer`, etc.); there is **no** `app/(store)/cart/page` in the repo (cart is drawer-based).
+
+### Admin (`app/admin/…`)
+
+Protected by **`middleware.ts`** (Supabase session required).
+
+| Area | Route |
+|------|--------|
+| Login | `/admin/login` |
+| Dashboard | `/admin` |
+| Products | `/admin/products`, `/admin/products/new`, `/admin/products/[id]/edit` |
+| Bundles | `/admin/bundles`, `/admin/bundles/new`, `/admin/bundles/[id]/edit` |
+| Orders | `/admin/orders`, `/admin/orders/[id]` |
+| Customers | `/admin/customers`, `/admin/customers/[id]` |
+| Coupons | `/admin/coupons` |
+| Inventory | `/admin/inventory` |
+| Media (Cloudinary) | `/admin/media` |
+| Reports | `/admin/reports` |
+| Marketing insights | `/admin/insights` |
+| Enquiries | `/admin/enquiries` (contact form DB + UI) |
+
+### APIs (`app/api/`)
+
+**Account / auth**
+
+| Route | Role |
+|-------|------|
+| `POST /api/otp/send` | Sends OTP via MSG91 (or master OTP dev mode). |
+| `POST /api/otp/verify` | Verifies OTP; establishes session (Supabase). |
+| `GET /api/auth/me` | Current user / customer profile for account UI. |
+| `POST /api/auth/logout` | Clears session cookie. |
+| `GET/POST` etc. ` /api/account/addresses` | List addresses (pattern from file name). |
+| `POST /api/account/addresses/add` | Add address. |
+| `POST /api/account/addresses/delete` | Delete address. |
+| `POST /api/account/addresses/set-default` | Set default address. |
+
+**Store / orders**
+
+| Route | Role |
+|-------|------|
+| `POST /api/orders/create` | Creates customer, address, order, order lines, stock decrements, coupon usage; COD triggers Shiprocket + confirmation email fire-and-forget. |
+| `POST /api/orders/lookup` | Orders by phone for account. |
+| `POST /api/track` | Public tracking by order number or phone. |
+| `POST /api/coupons/validate` | Validates coupon against cart total. |
+| `POST /api/shipping/check-pincode` | Uses Shiprocket auth to resolve city/state from pincode. |
+
+**PayU**
+
+| Route | Role |
+|-------|------|
+| `POST /api/payments/payu/initiate` | Loads order + customer; returns PayU URL + form fields + **request hash**. |
+| `POST /api/payments/payu/webhook` | Validates response hash; on success updates order payment + status, stores `payu_transaction_id`, sends confirmation email. |
+
+**Shiprocket**
+
+| Route | Role |
+|-------|------|
+| `POST /api/shiprocket/create-order` | Creates Shiprocket order for an existing DB order. |
+| `POST /api/shiprocket/webhook` | Handles carrier webhooks (status / AWB updates — implementation in file). |
+
+**Contact**
+
+| Route | Role |
+|-------|------|
+| `POST /api/contact` | Validates payload, inserts **`contact_submissions`**, emails `hello@nauvaraha.com` via Resend when configured. |
+
+**Cron**
+
+| Route | Role |
+|-------|------|
+| `GET /api/cron/weekly-report` | **Vercel Cron** (see `vercel.json`): Bearer **`CRON_SECRET`**; builds weekly P&L report and emails via Resend (`WeeklyPlReportEmail`). |
+
+**Admin APIs** (all under `/api/admin/…`, session-guarded)
+
+| Route (pattern) | Role (high level) |
+|-----------------|-------------------|
+| `POST /api/admin/products/create` | Create product. |
+| `GET/PATCH/DELETE` … `products/[id]` | Product CRUD / fetch. |
+| `POST … products/[id]/update` | Update product fields. |
+| `POST … products/[id]/upload-image` | Upload image → Cloudinary + DB. |
+| `POST … products/[id]/delete-image` | Remove image from Cloudinary + DB. |
+| `POST … products/[id]/set-primary` | Set primary image. |
+| `POST … products/import` | Bulk import (XLSX). |
+| `GET … products/import-template` | Download template. |
+| `POST … products/validate-import` | Validate import file. |
+| `POST … products/generate-description` | Anthropic-powered description. |
+| `POST … bundles/create`, `PATCH … bundles/[id]`, `POST … bundles/[id]/upload-image`, `POST … bundles/toggle` | Bundle lifecycle. |
+| `POST … coupons/create`, `POST … coupons/toggle` | Coupons. |
+| `POST … inventory/update`, `POST … inventory/adjust` | Stock adjustments. |
+| `POST … orders/[id]/status` | Update order status. |
+| `POST … orders/[id]/note` | Order notes. |
+| `GET … orders/[id]/invoice` | **PDF stream** (React-PDF invoice). |
+| `POST … media/upload`, `GET … media/list`, `POST … media/delete` | Cloudinary media library. |
+| `GET … product-variants/search` | Variant search for admin UI. |
+| `POST … insights/analyze` | Marketing / insights AI. |
+
+### Background jobs / crons
+
+- **`vercel.json`**: single cron — **`GET /api/cron/weekly-report`** every **Monday 09:00** (UTC per Vercel convention unless project timezone is configured elsewhere). Handler expects **`Authorization: Bearer CRON_SECRET`**.
+
+### Transactional emails (implemented paths)
+
+| Trigger | Mechanism | Content |
+|---------|-----------|---------|
+| COD order created | `orders/create` → `sendOrderConfirmationEmail` (Resend) | Order confirmation HTML in `lib/notifications.ts`. |
+| PayU success | `payu/webhook` → `sendOrderConfirmationEmail` | Same helper. |
+| Order shipped | `sendShippingConfirmationEmail` in `lib/notifications.ts` | Called from order-status / Shiprocket flows (per codebase usage). |
+| Contact form | `contact` route | HTML enquiry to `hello@nauvaraha.com`. |
+| Weekly P&L | `cron/weekly-report` | React email `emails/WeeklyPlReportEmail.tsx`. |
+
+SMS helpers in **`lib/notifications.ts`** (MSG91 Flow): order confirmed, shipped, delivered, NDR — **wired when those code paths call them**.
+
+---
+
+## 3. What is remaining, half-built, or not started
+
+### TODO / FIXME / HACK
+
+**Grep over `*.{ts,tsx,js,jsx}`: no `TODO`, `FIXME`, or `HACK` comments found.**
+
+### Placeholders / inconsistencies
+
+1. **`README.md`** is still the default **create-next-app** text — no project-specific runbook, env list, or deployment notes.
+2. **`setup.ps1`** scaffolds folders such as **`app/(store)/blog/[slug]`**, **`app/(store)/cart`**, **`app/api/products`**, **`app/api/cart`**, **`app/api/chat`** — **those paths do not exist as implemented routes** in the current tree (script is a generator wishlist, not documentation of what shipped).
+3. **Brand / domain / email** strings conflict (see §5).
+4. **`configs/nauvarah.config.ts`** — `business.gstNumber`, `panNumber`, `bankName` are **empty strings** (placeholders for invoices / legal footers).
+5. **PostHog** dependency unused — either integrate or remove from `package.json`.
+
+### Features implied by config / code but incomplete or risky
+
+- **Prepaid + failed payment**: Order and **inventory deductions** still run on **`/api/orders/create`** before PayU; a failed or abandoned payment leaves a **pending** order with **stock already reduced** (no automatic rollback in the reviewed flow).
+- **`payment-failed/page.tsx`** copy says *“Your order has not been placed”* — **incorrect for prepaid**, where the order row typically already exists.
+- **GST / seller details** on PDF invoice depend on **`NEXT_PUBLIC_*`** envs in `lib/invoice-pdf.tsx`; if unset, invoice fields are blank.
+
+---
+
+## 4. Current issues / bugs
+
+### Build / deploy blocker
+
+- **`npm run build` fails** with Turbopack: **conflicting `route.ts` and `page.tsx` at the same segment**  
+  **`/order-success/[id]`**:  
+  `app/(store)/order-success/[id]/route.ts` **and** `app/(store)/order-success/[id]/page.tsx`.  
+  Next.js 16 does not allow both for the same path. **Until one is merged into the other (e.g. single Route Handler that redirects after POST, or different path), production builds will not succeed.**
+
+### PayU end-to-end
+
+**Cannot assert “working in production”** — build fails, and the following code-level risks exist:
+
+1. **Success path design**: PayU POSTs to **`surl`** → **`route.ts`** forwards `FormData` to **`/api/payments/payu/webhook`** → on OK redirects to **`/order-success/[id]`** (GET page). This is the right *idea* for PayU’s POST return.
+2. **Reverse hash verification** (`lib/payu.ts` `verifyPayUHash`): PayU’s documented pattern is  
+   `sha512(SALT|status||||||udf5|udf4|udf3|udf2|udf1|email|firstname|productinfo|amount|txnid|key)`  
+   (six pipes between **`status`** and **`udf5`** — i.e. **six** empty fields).  
+   The implementation uses **five** empty strings between `status` and `udf5`, which yields **one fewer** empty segment than the official formula. **Symptom if wrong: webhook returns HTTP 400 `"Invalid hash"`**, then **`order-success` `route.ts`** redirects to **`/payment-failed`** because `!webhookRes.ok`.
+3. **`lib/payu.ts` `generatePayUHash`** logs **full hash strings** (including material derived from secret salt) to **server logs** — security and noise issue in production.
+4. **`verifyPayUHash`** uses module-level **`PAYU_KEY`** / **`PAYU_SALT`** without the same **`.trim()`** used in request hash generation — trailing whitespace in env could cause **intermittent hash mismatches**.
+
+### Console / production / UX
+
+- **No access to production browser console or Vercel logs from this handoff** — cannot confirm live console errors.
+- **Middleware deprecation warning** at build time: Next 16 reports **`middleware` file convention is deprecated** in favor of **`proxy`** (framework message only).
+- **OTP route** (`app/api/otp/send/route.ts`) contains **`console.log`** calls including template id / phone flow — noisy and potentially sensitive in logs.
+
+### Broken links / images / forms
+
+- Not exhaustively crawled; **canonical / metadata URLs** point to **`https://www.nauvaraha.com`** in several pages while **`next-seo.config.ts`** uses **`https://nauvarah.com`** — **SEO / social duplication risk**, not necessarily a runtime 404 inside the app.
+- **Customer complaints**: **not stored in repo** — unknown.
+
+### Performance
+
+- No Lighthouse or Vercel analytics data in-repo — **cannot** label specific slow pages from code alone.
+
+---
+
+## 5. Environment and secrets
+
+### Every `process.env.*` reference (TypeScript / TSX / JS in repo)
+
+| Variable | File(s) | Purpose | Required? |
+|----------|-----------|---------|-------------|
+| `COD_ONLY_MODE` | `next.config.ts` (exposed to client), `app/(store)/checkout/page.tsx` | When `"true"`, hides prepaid / forces COD-style checkout. | Optional |
+| `NODE_ENV` | `app/api/auth/logout/route.ts`, `app/api/otp/verify/route.ts` | Cookie `secure` flag in production. | Automatic on Vercel |
+| `NEXT_PUBLIC_SUPABASE_URL` | `middleware.ts`, `lib/supabase.ts`, `lib/supabase-server.ts`, many `app/api/**` routes | Supabase project URL. | **Required** |
+| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | `middleware.ts`, `lib/supabase.ts`, `lib/supabase-server.ts`, multiple API routes as **fallback** when service role missing | Supabase anon key. | **Required** for middleware / browser |
+| `SUPABASE_SERVICE_ROLE_KEY` | `lib/supabase-server.ts` (throws if missing for service client), many API routes | Server-only admin / orders / webhooks. | **Required** for most mutations |
+| `NEXT_PUBLIC_SITE_URL` | `app/api/payments/payu/initiate/route.ts`, `app/api/orders/create/route.ts` | Absolute base for PayU `surl`/`furl` and internal `fetch` to Shiprocket. | **Strongly required** in production |
+| `PAYU_MERCHANT_KEY` | `lib/payu.ts`, `configs/nauvarah.config.ts`, `app/api/payments/payu/initiate/route.ts` | PayU merchant key. | **Required** for prepaid |
+| `PAYU_MERCHANT_SALT` | `lib/payu.ts` | PayU salt v1. | **Required** for prepaid |
+| `PAYU_MERCHANT_SALT2` | `lib/payu.ts` | Optional second salt (v2 / debugging in logs). | Optional |
+| `PAYU_BASE_URL` | `lib/payu.ts` | PayU host (default `https://secure.payu.in`). | Optional |
+| `RESEND_API_KEY` | `lib/notifications.ts`, `app/api/contact/route.ts`, `app/api/cron/weekly-report/route.ts` | Resend API. | Required for those emails |
+| `RESEND_FROM_EMAIL` | `lib/notifications.ts`, `app/api/contact/route.ts`, `app/api/cron/weekly-report/route.ts` | From address (must be verified domain in Resend). | **Required** for contact route; else 503. Others have defaults |
+| `MSG91_AUTH_KEY` | `app/api/otp/send/route.ts`, `app/api/otp/verify/route.ts`, `lib/notifications.ts` | MSG91 authentication. | Required for real OTP / SMS |
+| `MSG91_OTP_TEMPLATE_ID` | `app/api/otp/send/route.ts` | OTP template id. | Optional (defaults string `"default"`) |
+| `MSG91_FLOW_ID` | `lib/notifications.ts` | Flow SMS; if unset, SMS skipped with warning. | Optional |
+| `MSG91_SENDER_ID` | `lib/notifications.ts` | SMS sender id. | Optional (default `NAUVAR`) |
+| `MASTER_OTP_ENABLED` | `app/api/otp/send/route.ts`, `app/api/otp/verify/route.ts` | Dev bypass. | Optional |
+| `MASTER_OTP_CODE` | same | Dev OTP value. | Optional |
+| `ANTHROPIC_API_KEY` | `app/api/admin/products/generate-description/route.ts`, `app/api/admin/insights/analyze/route.ts` | Claude API. | Optional (features disabled without) |
+| `SHIPROCKET_EMAIL` | `lib/shiprocket.ts`, `app/api/shipping/check-pincode/route.ts`, `app/api/shiprocket/create-order/route.ts` | Shiprocket login. | Required for those features |
+| `SHIPROCKET_PASSWORD` | same | Shiprocket password. | Required |
+| `SHIPROCKET_PICKUP_LOCATION` | `app/api/shiprocket/create-order/route.ts` | Pickup location name. | Optional (`Primary`) |
+| `NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME` | Admin media + product image routes | Cloudinary cloud name. | Required for uploads |
+| `CLOUDINARY_API_KEY` | same | API key. | Required |
+| `CLOUDINARY_API_SECRET` | same | API secret. | Required |
+| `NEXT_PUBLIC_GA4_MEASUREMENT_ID` | `components/Analytics.tsx` | GA4. | Optional |
+| `NEXT_PUBLIC_META_PIXEL_ID` | `components/Analytics.tsx` | Meta Pixel. | Optional |
+| `CRON_SECRET` | `app/api/cron/weekly-report/route.ts` | Bearer token for cron invocations. | **Required** for weekly report route |
+| `WEEKLY_REPORT_EMAIL_KARAN` | `app/api/cron/weekly-report/route.ts` | Extra recipient. | Optional |
+| `NEXT_PUBLIC_BUSINESS_ADDRESS` | `lib/invoice-pdf.tsx` | Invoice footer. | Optional |
+| `NEXT_PUBLIC_GST_NUMBER` | `lib/invoice-pdf.tsx` | GST on invoice. | Optional |
+| `NEXT_PUBLIC_GSTIN` | `lib/invoice-pdf.tsx` | Seller GSTIN. | Optional |
+| `NEXT_PUBLIC_SUPPORT_PHONE` | `lib/invoice-pdf.tsx` | Support phone on invoice. | Optional |
+| `NEXT_PUBLIC_STATE_CODE` | `lib/invoice-pdf.tsx` | GST state code. | Optional |
+| `NEXT_PUBLIC_STATE_NAME` | `lib/invoice-pdf.tsx` | State name. | Optional |
+
+**Whether each is set on Vercel:** **cannot be determined from the codebase.** Verify in the Vercel project → Settings → Environment Variables. Local **` .env.local`** is gitignored and was not read for this document.
+
+### Brand name: “Nauvarah” vs “Nauvaraha”
+
+| Source | Spelling / domain |
+|--------|-------------------|
+| **`configs/nauvarah.config.ts`** | **“Nauvarah”**, `support@nauvarah.com`, **`https://nauvarah.com`**, social handles `@nauvarah` |
+| **`next-seo.config.ts`** | **“Nauvarah”**, canonical **`https://nauvarah.com`** |
+| **Many UI pages, emails, SMS, PayU `productinfo`, `app/layout.tsx` `metadataBase`, homepage metadata** | **“Nauvaraha”**, **`https://www.nauvaraha.com`**, **`hello@nauvaraha.com`** |
+
+**Conclusion:** The **intended brand in central config + SEO config is “Nauvarah”** (one **`h`** in the second syllable, domain **`nauvarah.com`**). **“Nauvaraha”** and **`nauvaraha.com`** are still embedded in a large portion of customer-facing pages and notifications — **treat as a known inconsistency**; pick one canonical spelling and domain, then search-replace and fix Resend domain alignment.
+
+**Production domain (from code only):** **`https://nauvarah.com`** / **`https://www.nauvaraha.com`** both appear — **confirm DNS and SSL on Vercel** for which hostname is primary.
+
+---
+
+## 6. Deployment
+
+| Item | Value |
+|------|--------|
+| **Live Vercel URL** | **Not in repository.** Infer from Vercel dashboard or custom domain above. |
+| **`vercel.json`** | **Only** `crons` entry for `/api/cron/weekly-report` — **no** custom install/build/output settings. |
+| **`npm run build`** | **Fails** (exit code **1**). |
+
+**Build output (relevant excerpt):**
+
+```text
+▲ Next.js 16.1.6 (Turbopack)
+⚠ The "middleware" file convention is deprecated. Please use "proxy" instead.
+
+> Build error occurred
+Error: Turbopack build failed with 1 errors:
+Conflicting route and page at /order-success/[id]: route at /(store)/order-success/[id]/route and page at /(store)/order-success/[id]/page
+```
+
+**`postbuild`** script runs **`next-sitemap`** — it does **not** run if `next build` fails.
+
+---
+
+## Supabase migrations in-repo (partial schema)
+
+| File | Contents |
+|------|----------|
+| `supabase/migrations/create_bundles.sql` | **`bundles`**, **`bundle_items`**, indexes, RLS policies. |
+| `supabase/migrations/contact_submissions.sql` | **`contact_submissions`** + RLS for authenticated read. |
+| `supabase/migrations/add_payu_transaction_id_to_orders.sql` | **`orders.payu_transaction_id`** column. |
+| `supabase/migrations/update_customer_stats_trigger.sql` | Trigger on **`orders`** insert to update **`customers`** stats. |
+
+---
+
+## Quick orientation map
+
+- **Store shell:** `app/(store)/layout.tsx` → `Header` + `StoreFooter`.
+- **Brand constants:** `configs/nauvarah.config.ts`.
+- **PayU return:** `app/(store)/order-success/[id]/route.ts` (POST) + `page.tsx` (GET) — **currently conflict**.
+- **Payments:** `lib/payu.ts`, `app/api/payments/payu/*`.
+- **Orders:** `app/api/orders/create/route.ts`, checkout `app/(store)/checkout/page.tsx`.
+
+---
+
+If you want a follow-up in-repo, the highest leverage fixes are: **resolve the `order-success` route/page conflict**, **align PayU reverse hash with official pipe count**, and **normalize brand + domain + `RESEND_FROM_EMAIL` / `NEXT_PUBLIC_SITE_URL` across PayU URLs and emails**.

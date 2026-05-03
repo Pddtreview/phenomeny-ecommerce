@@ -2,8 +2,15 @@
 
 import Script from 'next/script';
 
-const GA4_ID = process.env.NEXT_PUBLIC_GA4_MEASUREMENT_ID;
-const META_PIXEL_ID = process.env.NEXT_PUBLIC_META_PIXEL_ID;
+function readEnv(value: string | undefined): string | null {
+  const v = (value || '').trim();
+  if (!v) return null;
+  if (v === 'null' || v === 'undefined' || v === 'NULL') return null;
+  return v;
+}
+
+const GA4_ID = readEnv(process.env.NEXT_PUBLIC_GA4_MEASUREMENT_ID);
+const META_PIXEL_ID = readEnv(process.env.NEXT_PUBLIC_META_PIXEL_ID);
 
 export function Analytics() {
   const ga4Src = GA4_ID ? 'https://www.googletagmanager.com/gtag/js?id=' + GA4_ID : null;

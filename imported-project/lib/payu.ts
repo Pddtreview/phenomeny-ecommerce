@@ -1,13 +1,27 @@
 import crypto from "crypto";
 
-const PAYU_KEY = process.env.PAYU_MERCHANT_KEY!;
-const PAYU_SALT = process.env.PAYU_MERCHANT_SALT!;
-const PAYU_SALT2 = process.env.PAYU_MERCHANT_SALT2 || "";
-const PAYU_BASE_URL = process.env.PAYU_BASE_URL || "https://secure.payu.in";
+const PAYU_KEY = process.env.PAYU_MERCHANT_KEY ?? "";
+const PAYU_SALT = process.env.PAYU_MERCHANT_SALT ?? "";
+const PAYU_SALT2 = process.env.PAYU_MERCHANT_SALT2 ?? "";
+const PAYU_BASE_URL =
+  process.env.PAYU_BASE_URL || "https://secure.payu.in";
 
+const DEBUG_PAYU = process.env.PAYU_DEBUG === "1";
+
+const clean = (value: unknown) => String(value ?? "").trim();
+
+/**
+ * PayU India v1 request hash:
+ *   sha512(key|txnid|amount|productinfo|firstname|email|udf1|udf2|udf3|udf4|udf5||||||SALT)
+ *
+ * - amount must be sent in the form with the SAME formatting used here
+ *   (we format with toFixed(2) and the form must use the same string).
+ * - Any UDF (udf1..udf5) included in the form MUST also be included in the
+ *   hash with the exact same value.
+ */
 export function generatePayUHash(params: {
   txnid: string;
-  amount: string;
+  amount: string | number;
   productinfo: string;
   firstname: string;
   email: string;
@@ -16,62 +30,48 @@ export function generatePayUHash(params: {
   udf3?: string;
   udf4?: string;
   udf5?: string;
-}): string {
-  const key = (process.env.PAYU_MERCHANT_KEY || "").trim();
-  const salt = (process.env.PAYU_MERCHANT_SALT || "").trim();
-  const salt2 = (process.env.PAYU_MERCHANT_SALT2 || "").trim();
-  const clean = (value: unknown) => String(value ?? "").trim();
+}): { hash: string; amount: string; hashStringPreview: string } {
+  const key = clean(PAYU_KEY);
+  const salt = clean(PAYU_SALT);
   const amount = Number(clean(params.amount)).toFixed(2);
-  const udf1 = clean(params.udf1);
-  const udf2 = clean(params.udf2);
-  const udf3 = clean(params.udf3);
-  const udf4 = clean(params.udf4);
-  const udf5 = clean(params.udf5);
 
-  // PayU: sha512(key|txnid|amount|productinfo|firstname|email|udf1|udf2|udf3|udf4|udf5||||||salt)
-  const hashString =
-    key +
-    "|" +
-    clean(params.txnid) +
-    "|" +
-    amount +
-    "|" +
-    clean(params.productinfo) +
-    "|" +
-    clean(params.firstname) +
-    "|" +
-    clean(params.email) +
-    "|" +
-    udf1 +
-    "|" +
-    udf2 +
-    "|" +
-    udf3 +
-    "|" +
-    udf4 +
-    "|" +
-    udf5 +
-    "||||||" +
-    salt;
+  const hashString = [
+    key,
+    clean(params.txnid),
+    amount,
+    clean(params.productinfo),
+    clean(params.firstname),
+    clean(params.email),
+    clean(params.udf1),
+    clean(params.udf2),
+    clean(params.udf3),
+    clean(params.udf4),
+    clean(params.udf5),
+    "",
+    "",
+    "",
+    "",
+    "",
+    salt,
+  ].join("|");
+
   const hash = crypto.createHash("sha512").update(hashString).digest("hex");
 
-  console.log("EXACT HASH STRING LENGTH:", hashString.length);
-  console.log("EXACT HASH STRING:", hashString);
-  console.log("PAYU HASH (SALT1):", hash);
+  // Preview hides the salt so it can be safely logged for debugging.
+  const hashStringPreview = hashString.replace(salt, "[SALT]");
 
-  if (salt2) {
-    const hashStringSalt2 = hashString.slice(0, -salt.length) + salt2;
-    const hashSalt2 = crypto
-      .createHash("sha512")
-      .update(hashStringSalt2)
-      .digest("hex");
-    console.log("EXACT HASH STRING (SALT2):", hashStringSalt2);
-    console.log("PAYU HASH (SALT2):", hashSalt2);
+  if (DEBUG_PAYU) {
+    console.log("[payu] hash string (salt redacted):", hashStringPreview);
+    console.log("[payu] hash:", hash);
   }
 
-  return hash;
+  return { hash, amount, hashStringPreview };
 }
 
+/**
+ * PayU response hash (from webhook):
+ *   sha512(SALT|status||||||udf5|udf4|udf3|udf2|udf1|email|firstname|productinfo|amount|txnid|key)
+ */
 export function verifyPayUHash(params: {
   status: string;
   txnid: string;
@@ -86,29 +86,68 @@ export function verifyPayUHash(params: {
   udf5?: string;
   hash: string;
 }): boolean {
+  const salt = clean(PAYU_SALT);
+  const key = clean(PAYU_KEY);
+
   const hashString = [
-    PAYU_SALT,
-    params.status,
+    salt,
+    clean(params.status),
     "",
     "",
     "",
     "",
     "",
-    params.udf5 || "",
-    params.udf4 || "",
-    params.udf3 || "",
-    params.udf2 || "",
-    params.udf1 || "",
-    params.email,
-    params.firstname,
-    params.productinfo,
-    params.amount,
-    params.txnid,
-    PAYU_KEY,
+    clean(params.udf5),
+    clean(params.udf4),
+    clean(params.udf3),
+    clean(params.udf2),
+    clean(params.udf1),
+    clean(params.email),
+    clean(params.firstname),
+    clean(params.productinfo),
+    clean(params.amount),
+    clean(params.txnid),
+    key,
   ].join("|");
 
-  const expectedHash = crypto.createHash("sha512").update(hashString).digest("hex");
-  return expectedHash === params.hash;
+  const expected = crypto
+    .createHash("sha512")
+    .update(hashString)
+    .digest("hex");
+
+  if (expected === clean(params.hash)) return true;
+
+  // Also try SALT2 if configured (PayU rotates salts during migration windows).
+  if (PAYU_SALT2) {
+    const salt2 = clean(PAYU_SALT2);
+    const hashStringSalt2 = [
+      salt2,
+      clean(params.status),
+      "",
+      "",
+      "",
+      "",
+      "",
+      clean(params.udf5),
+      clean(params.udf4),
+      clean(params.udf3),
+      clean(params.udf2),
+      clean(params.udf1),
+      clean(params.email),
+      clean(params.firstname),
+      clean(params.productinfo),
+      clean(params.amount),
+      clean(params.txnid),
+      key,
+    ].join("|");
+    const expected2 = crypto
+      .createHash("sha512")
+      .update(hashStringSalt2)
+      .digest("hex");
+    return expected2 === clean(params.hash);
+  }
+
+  return false;
 }
 
 export { PAYU_BASE_URL, PAYU_KEY, PAYU_SALT, PAYU_SALT2 };

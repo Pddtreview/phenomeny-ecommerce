@@ -93,7 +93,7 @@ export function InventoryTable({ rows }: { rows: VariantRow[] }) {
                 className={cn(
                   "border-b border-zinc-100 last:border-0",
                   isZero && "bg-red-50",
-                  isLow && !isZero && "bg-amber-50"
+                  isLow && !isZero && "bg-pink-50"
                 )}
               >
                 <td className="px-4 py-3 font-medium text-zinc-900">
@@ -115,7 +115,7 @@ export function InventoryTable({ rows }: { rows: VariantRow[] }) {
                       </span>
                     )}
                     {!isZero && isLow && (
-                      <span className="rounded-full bg-amber-100 px-2 py-0.5 text-xs font-medium text-amber-800">
+                      <span className="rounded-full bg-pink-100 px-2 py-0.5 text-xs font-medium text-pink-800">
                         Low Stock
                       </span>
                     )}

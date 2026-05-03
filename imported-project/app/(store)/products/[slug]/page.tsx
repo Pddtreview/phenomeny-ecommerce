@@ -88,7 +88,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     product.description && product.description.length > 160
       ? product.description.slice(0, 157) + "..."
       : product.description ?? "";
-  const canonicalUrl = "https://nauvarah.com/products/" + product.slug;
+  const canonicalUrl = "https://nauvaraha.com/products/" + product.slug;
   const openGraphImages = primaryImageUrl
     ? [{ url: primaryImageUrl, width: 800, height: 800, alt: product.name }]
     : undefined;
@@ -142,7 +142,7 @@ export default async function ProductPage({
     image: primaryImageUrl ?? undefined,
     brand: {
       "@type": "Brand",
-      name: "Nauvarah",
+      name: "Nauvaraha",
     },
     offers: {
       "@type": "Offer",
@@ -151,7 +151,7 @@ export default async function ProductPage({
       availability,
       seller: {
         "@type": "Organization",
-        name: "Nauvarah",
+        name: "Nauvaraha",
       },
     },
   };

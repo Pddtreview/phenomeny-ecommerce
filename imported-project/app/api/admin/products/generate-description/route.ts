@@ -43,7 +43,7 @@ export async function POST(request: NextRequest) {
 
   const hsnPart = hsn ? ` HSN code: ${hsn}.` : "";
   const userContent =
-    `Write a product description for a Nauvarah spiritual wellness product. Product: ${name}. Category: ${category || "general"}.${hsnPart} ` +
+    `Write a product description for a Nauvaraha spiritual wellness product. Product: ${name}. Category: ${category || "general"}.${hsnPart} ` +
     `Write 3 sentences. Sentence 1: what the product is and its spiritual significance. Sentence 2: who should use it and why. ` +
     `Sentence 3: one specific placement or usage instruction. Tone: calm, knowing, premium. No fluff.`;
 

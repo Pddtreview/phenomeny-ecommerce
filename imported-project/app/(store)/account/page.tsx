@@ -166,7 +166,7 @@ export default function AccountPage() {
       <div className="mx-auto max-w-md">
         <div className="rounded-2xl border border-zinc-200 bg-white p-6">
           <p className="pill-gradient inline-flex px-3 py-1 text-xs font-semibold uppercase tracking-[0.2em]">
-            Nauvarah
+            Nauvaraha
           </p>
           <h1 className="mt-2 text-2xl font-bold text-zinc-900">
             Sign in to your account

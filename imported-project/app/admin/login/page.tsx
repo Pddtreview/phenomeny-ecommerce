@@ -118,7 +118,7 @@ export default function AdminLoginPage() {
         </CardContent>
         <CardFooter>
           <p className="w-full text-center text-xs text-zinc-500">
-            Access restricted to Nauvarah admins.
+            Access restricted to Nauvaraha admins.
           </p>
         </CardFooter>
       </Card>

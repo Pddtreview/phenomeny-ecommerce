@@ -79,7 +79,7 @@ export default function AdminLayout({
             className="text-lg font-semibold"
             style={{ color: GOLD }}
           >
-            Nauvarah Admin
+            Nauvaraha Admin
           </Link>
         </div>
         <div className="hidden items-center gap-3 md:flex">

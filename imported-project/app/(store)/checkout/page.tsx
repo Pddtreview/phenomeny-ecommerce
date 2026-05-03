@@ -576,7 +576,7 @@ export default function CheckoutPage() {
                 </span>
                 <p className="mt-1 text-xs text-zinc-500">UPI, Cards, Net Banking</p>
                 <span className="mt-1 inline-block text-xs font-medium text-[#1A1A1A]">
-                  Save ₹75 on prepaid orders
+                  Save <span className="font-sans">₹</span>75 on prepaid orders
                 </span>
               </button>
             )}

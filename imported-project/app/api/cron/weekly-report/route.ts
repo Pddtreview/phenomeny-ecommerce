@@ -78,7 +78,7 @@ export async function GET(request: NextRequest) {
     const report = await gatherWeeklyPlReport(supabase);
     const resend = new Resend(resendKey);
     const from =
-      process.env.RESEND_FROM_EMAIL || "Nauvarah <orders@nauvarah.com>";
+      process.env.RESEND_FROM_EMAIL || "Nauvaraha <orders@nauvaraha.com>";
     const range = subjectDateRange(
       report.periodStartIso,
       report.periodEndIso
@@ -87,7 +87,7 @@ export async function GET(request: NextRequest) {
     const { data, error } = await resend.emails.send({
       from,
       to,
-      subject: `Nauvarah weekly P&L — ${range}`,
+      subject: `Nauvaraha weekly P&L — ${range}`,
       react: createElement(WeeklyPlReportEmail, { report }),
     });
 

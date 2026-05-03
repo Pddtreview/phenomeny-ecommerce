@@ -222,7 +222,7 @@ export function InvoicePdf({ order }: InvoicePdfProps) {
         <View style={styles.header}>
           <View style={styles.headerRow}>
             <View style={styles.headerLeft}>
-              <Text style={styles.businessName}>Nauvarah</Text>
+              <Text style={styles.businessName}>Nauvaraha</Text>
               <Text style={{ marginTop: 4, fontSize: 10, fontWeight: 700 }}>
                 TAX INVOICE
               </Text>
@@ -450,7 +450,7 @@ export function InvoicePdf({ order }: InvoicePdfProps) {
             signature.
           </Text>
           <Text style={[styles.footerText, { marginTop: 8 }]}>
-            For Nauvarah
+            For Nauvaraha
           </Text>
           <Text style={[styles.footerText, { marginTop: 16 }]}>
             Authorised Signatory

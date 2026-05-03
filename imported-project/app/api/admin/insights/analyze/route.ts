@@ -4,7 +4,7 @@ import { gatherMarketingInsights } from "@/lib/marketing-insights";
 
 export const runtime = "nodejs";
 
-const SYSTEM_PROMPT = `You are a D2C e-commerce growth advisor for Nauvarah, an Indian spiritual wellness brand selling pyrite, crystals and vastu products. Analyse the data provided and give 5 specific, actionable insights the brand owner can act on this week. Be direct. No fluff. Focus on revenue, RTO reduction, repeat purchases and ad spend efficiency.`;
+const SYSTEM_PROMPT = `You are a D2C e-commerce growth advisor for Nauvaraha, an Indian spiritual wellness brand selling pyrite, crystals and vastu products. Analyse the data provided and give 5 specific, actionable insights the brand owner can act on this week. Be direct. No fluff. Focus on revenue, RTO reduction, repeat purchases and ad spend efficiency.`;
 
 export async function POST() {
   const apiKey = process.env.ANTHROPIC_API_KEY?.trim();

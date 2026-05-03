@@ -5,10 +5,33 @@ import {
   PAYU_BASE_URL,
   PAYU_KEY,
   PAYU_SALT,
-  PAYU_SALT2,
 } from "@/lib/payu";
 
 export const runtime = "nodejs";
+
+function getSiteUrl(request: NextRequest): string | null {
+  const fromEnv = (process.env.NEXT_PUBLIC_SITE_URL || "").trim();
+  if (fromEnv && /^https?:\/\//.test(fromEnv)) return fromEnv.replace(/\/$/, "");
+  // Fallback to the request's own origin (works for Replit dev domains and
+  // production behind any proxy). PayU requires HTTPS in live mode.
+  try {
+    const origin = new URL(request.url).origin;
+    if (origin.startsWith("https://") || origin.startsWith("http://localhost"))
+      return origin;
+  } catch {}
+  return null;
+}
+
+function sanitizeFirstName(raw: string | undefined | null): string {
+  const trimmed = (raw || "").trim();
+  if (!trimmed) return "Customer";
+  const first = trimmed.split(/\s+/)[0].replace(/[^A-Za-z]/g, "");
+  return first || "Customer";
+}
+
+function sanitizeProductInfo(raw: string): string {
+  return raw.replace(/[^A-Za-z0-9\s_-]/g, "").trim() || "Order";
+}
 
 export async function POST(request: NextRequest) {
   try {
@@ -19,6 +42,17 @@ export async function POST(request: NextRequest) {
             "PayU is not configured. Set PAYU_MERCHANT_KEY and PAYU_MERCHANT_SALT in the environment.",
         },
         { status: 503 }
+      );
+    }
+
+    const siteUrl = getSiteUrl(request);
+    if (!siteUrl) {
+      return NextResponse.json(
+        {
+          error:
+            "Site URL is not configured. Set NEXT_PUBLIC_SITE_URL to a fully qualified https URL.",
+        },
+        { status: 500 }
       );
     }
 
@@ -44,75 +78,49 @@ export async function POST(request: NextRequest) {
       .eq("id", order.customer_id)
       .single();
 
-    const customerName =
-      typeof customer?.name === "string" && customer.name.trim()
-        ? customer.name.trim().split(" ")[0].replace(/[^a-zA-Z]/g, "") || "Customer"
-        : "Customer";
-    const customerEmail =
+    const firstname = sanitizeFirstName(customer?.name as string | undefined);
+    const email =
       typeof customer?.email === "string" && customer.email.trim()
         ? customer.email.trim()
         : "customer@nauvaraha.com";
-    const customerPhone =
+    const phone =
       typeof customer?.phone === "string" && customer.phone.trim()
-        ? customer.phone.trim()
+        ? customer.phone.trim().replace(/\D/g, "").slice(-10)
         : "";
-    const amount = Number(order.total).toFixed(2);
-    const txnid = order.order_number;
-    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
 
-    const params = {
-      key: PAYU_KEY,
-      txnid,
-      amount,
-      productinfo: `Nauvaraha Order ${order.order_number}`.replace(
-        /[^a-zA-Z0-9\s_-]/g,
-        ""
-      ),
-      firstname: customerName,
-      email: customerEmail,
-      phone: customerPhone,
-      surl: `${siteUrl}/order-success/${orderId}`,
-      furl: `${siteUrl}/payment-failed`,
-      udf1: orderId,
-    };
-
-    const hash = generatePayUHash({
-      txnid: params.txnid,
-      amount: params.amount,
-      productinfo: params.productinfo,
-      firstname: params.firstname,
-      email: params.email,
-      udf1: params.udf1,
-    });
-    const { productinfo, firstname, email, udf1 } = params;
-
-    console.log(
-      "PayU Hash String (udf2–5 empty → 8 pipes before salt):",
-      `${PAYU_KEY}|${txnid}|${amount}|${productinfo}|${firstname}|${email}|${udf1}||||||||${PAYU_SALT}`
+    const productinfo = sanitizeProductInfo(
+      `Nauvaraha Order ${order.order_number}`
     );
-    if (PAYU_SALT2) {
-      console.log(
-        "PayU Hash String (SALT2):",
-        `${PAYU_KEY}|${txnid}|${amount}|${productinfo}|${firstname}|${email}|${udf1}||||||||${PAYU_SALT2}`
-      );
-    }
+    const txnid = String(order.order_number);
+    const udf1 = String(orderId);
 
-    console.log("PayU Params:", {
+    const { hash, amount } = generatePayUHash({
+      txnid,
+      amount: order.total as number,
+      productinfo,
+      firstname,
+      email,
+      udf1,
+    });
+
+    // The form fields must match the hash inputs exactly.
+    const params = {
       key: PAYU_KEY,
       txnid,
       amount,
       productinfo,
       firstname,
       email,
+      phone,
+      surl: `${siteUrl}/api/payments/payu/success`,
+      furl: `${siteUrl}/payment-failed`,
+      udf1,
       hash,
-    });
+    };
 
     return NextResponse.json({
       payuUrl: `${PAYU_BASE_URL}/_payment`,
-      params: {
-        ...params,
-        hash,
-      },
+      params,
     });
   } catch (error) {
     console.error("payu/initiate error:", error);

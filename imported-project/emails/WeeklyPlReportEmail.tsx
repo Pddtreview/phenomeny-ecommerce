@@ -66,7 +66,7 @@ export default function WeeklyPlReportEmail({ report }: Props) {
       </Preview>
       <Body style={main}>
         <Container style={container}>
-          <Heading style={h1}>Nauvarah — Weekly P&amp;L</Heading>
+          <Heading style={h1}>Nauvaraha — Weekly P&amp;L</Heading>
           <Text style={muted}>{rangeLabel} (rolling 7 days, IST dates)</Text>
 
           <Section style={metrics}>
