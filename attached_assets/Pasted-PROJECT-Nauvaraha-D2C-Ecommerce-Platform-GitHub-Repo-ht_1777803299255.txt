@@ -1,0 +1,183 @@
+PROJECT: Nauvaraha - D2C Ecommerce Platform
+GitHub Repo: https://github.com/Pddtreview/phenomeny-ecommerce
+Branch: main
+
+TECH STACK:
+- Next.js 14 with TypeScript
+- Tailwind CSS
+- Supabase (PostgreSQL database + auth)
+- Vercel (hosting, already deployed)
+- PayU (payment gateway - live mode)
+- Shiprocket (logistics)
+- MSG91 (OTP SMS)
+- Resend (transactional email - verified domain)
+- Cloudinary (image hosting)
+- Anthropic Claude API (AI features)
+
+ENVIRONMENT VARIABLES NEEDED:
+NEXT_PUBLIC_SUPABASE_URL=https://xaeydyysjcyorobhlmme.supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=[from Supabase]
+SUPABASE_SERVICE_ROLE_KEY=[from Supabase]
+PAYU_MERCHANT_KEY=o25REu
+PAYU_MERCHANT_SALT=[Salt1 from PayU]
+PAYU_MERCHANT_SALT2=[Salt2 from PayU]
+PAYU_BASE_URL=https://secure.payu.in
+SHIPROCKET_EMAIL=[set]
+SHIPROCKET_PASSWORD=[set]
+SHIPROCKET_PICKUP_LOCATION=[set]
+MSG91_AUTH_KEY=[set]
+MSG91_SENDER_ID=NVORAH
+MSG91_OTP_TEMPLATE_ID=[set]
+RESEND_API_KEY=[set]
+RESEND_FROM_EMAIL=orders@nauvaraha.com
+NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME=[set]
+CLOUDINARY_API_KEY=[set]
+CLOUDINARY_API_SECRET=[set]
+ANTHROPIC_API_KEY=[set]
+NEXT_PUBLIC_BRAND=nauvaraha
+NEXT_PUBLIC_SITE_URL=https://www.nauvaraha.com
+CRON_SECRET=[set]
+MASTER_OTP_ENABLED=false
+COD_ONLY_MODE=false
+NEXT_PUBLIC_GSTIN=03BGNPK9576K2ZO
+NEXT_PUBLIC_SUPPORT_PHONE=+919115490001
+NEXT_PUBLIC_STATE_CODE=03
+
+WHAT IS BUILT AND WORKING:
+Store pages:
+- Homepage with hero, featured products, 
+  trust bar, brand story, shop by intention,
+  2026 banner
+- Product listing /products with search 
+  and category filters
+- Product detail /products/[slug] with 
+  gallery, variants, add to cart
+- Category pages /category/[slug]
+- Bundle listing /bundles and detail
+- Checkout with COD and PayU prepaid
+- Order success /order-success/[id]
+- Order tracking /track/[order-number]
+- Account page with order history
+- Cart drawer with Zustand state
+- All legal pages: privacy policy, terms,
+  refund policy, shipping policy, contact
+
+Admin panel (at /admin):
+- Dashboard with metrics and charts
+- Orders list and detail with status updates
+- Products CRUD with image upload
+- Bundles CRUD
+- Coupons management
+- Inventory management
+- Customer database
+- Reports with Recharts
+- Marketing insights with Claude AI
+- Media library
+
+API routes built:
+- /api/orders/create
+- /api/otp/send and verify
+- /api/payments/payu/initiate
+- /api/payments/payu/webhook
+- /api/payments/payu/success
+- /api/shiprocket/create-order
+- /api/shiprocket/webhook
+- /api/coupons/validate
+- /api/shipping/check-pincode
+- /api/contact
+- All admin CRUD routes
+
+Database tables in Supabase:
+- products, product_variants
+- bundles, bundle_items
+- customers, addresses
+- orders, order_items
+- inventory_log, reviews
+- abandoned_carts, otp_verifications
+- contact_submissions
+- coupons
+
+CRITICAL BUGS TO FIX FIRST:
+1. PayU payment hash is failing
+   - Hash formula: sha512(key|txnid|amount|
+     productinfo|firstname|email|||||||||||salt)
+   - Using Salt1: R24fHgRKBort2Z7WwXneVFOBw7RM8zX
+   - PayU keeps rejecting with "incorrectly 
+     calculated hash parameter"
+   - This is the highest priority fix
+   - File: lib/payu.ts and 
+     app/api/payments/payu/initiate/route.ts
+
+2. Product names in Supabase are too long
+   - They have SEO descriptions added to names
+   - Need to be shortened to clean names:
+     NAU-001: Pyrite 7 Running Horses Vastu Frame
+     NAU-002: Natural Pyrite Wealth Bracelet
+     NAU-003: Karungali Protection Bracelet
+     NAU-004: Pyrite & Karungali Shield Bracelet
+     NAU-005: Pyrite Crystal Keychain
+     NAU-006: Pyrite Vastu Tortoise
+     NAU-007: Pyrite Sacred Pyramid Bracelet
+     NAU-008: Black Onyx Evil Eye Bracelet
+     NAU-009: Dhan Yog Wealth Bracelet
+     NAU-010: Dhan Yog Orgonite Pyramid
+     NAU-011: Selenite Crystal Charging Plate
+     NAU-012: Wealth Yantra Sacred Block
+
+3. Rupee symbol showing as ? in some places
+   - Cormorant Garamond font doesnt support ₹
+   - Fix: wrap ₹ in Inter font span everywhere
+
+4. Beige/cream colors still showing on some pages
+   - All backgrounds must be pure white #FFFFFF
+   - No #FDFAF5 or warm colors anywhere
+
+5. Meta Pixel showing invalid null ID error
+   - Add real Meta Pixel ID or disable it
+
+WHAT STILL NEEDS TO BE BUILT:
+1. PayU payment working end to end (CRITICAL)
+2. About Us page - Karan Chopra story
+3. FAQ page with JSON-LD schema
+4. Review submission form on product pages
+5. Abandoned cart recovery cron
+6. Win-back SMS cron (45 days inactive)
+7. Low stock alert email cron
+8. Admin password protection (currently open)
+9. Homepage hero needs real product photo
+   not just symbol/logo
+10. Mobile responsiveness check on all pages
+
+DESIGN SYSTEM:
+- Background: #FFFFFF pure white
+- Primary text: #1A1A1A
+- Accent: gradient orange-pink-purple
+  linear-gradient(135deg, #FF4500, #E91E8C, #7B2FBE)
+- Buttons: gradient pill, rounded-full
+- Font: Inter only (all weights 400-900)
+- No navy blue, no gold, no beige anywhere
+- Logo: golden Nauvaraha wordmark
+
+BRAND ASSETS ON CLOUDINARY:
+Golden logo: https://res.cloudinary.com/dwhpxdp18/image/upload/v1776068357/Nauvaraha_golden_logo_kmgjir.png
+White logo: https://res.cloudinary.com/dwhpxdp18/image/upload/v1776068357/Nauvaraha_White_LOGO_zghypj.png
+Symbol golden: https://res.cloudinary.com/dwhpxdp18/image/upload/v1776068357/Nauvaraha_logo_symble_golden_xvhcp8.png
+
+BUSINESS DETAILS:
+Brand: Nauvaraha
+Website: https://www.nauvaraha.com
+GSTIN: 03BGNPK9576K2ZO
+Address: House No 10, Street No 01, 
+Krishna Nagar, Jalandhar, Punjab 144008
+Phone: +91 9115490001
+Email: hello@nauvaraha.com
+Founder: Karan Chopra (Vedic Astrologer)
+
+START WITH:
+1. Clone repo from GitHub
+2. Install dependencies: npm install
+3. Set all environment variables
+4. Fix PayU hash issue first
+5. Then fix product names in Supabase
+6. Then fix remaining bugs
+7. Then build missing features
