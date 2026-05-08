@@ -87,10 +87,7 @@ export async function POST(request: NextRequest) {
       typeof customer?.phone === "string" && customer.phone.trim()
         ? customer.phone.trim().replace(/\D/g, "").slice(-10)
         : "";
-
-    const productinfo = sanitizeProductInfo(
-      `Nauvaraha Order ${order.order_number}`
-    );
+    const productinfo = sanitizeProductInfo(`Nauvaraha Order ${order.order_number}`);
     const txnid = String(order.order_number);
     const udf1 = String(orderId);
 

@@ -3,6 +3,7 @@ import { createClient } from "@supabase/supabase-js";
 import {
   sendDeliveryConfirmationSMS,
   sendShippingConfirmationSMS,
+  sendShippingConfirmationWhatsApp,
   sendNDRSMS,
 } from "@/lib/notifications";
 import { expandOrderItemToVariantQuantities } from "@/lib/bundle-stock";
@@ -73,11 +74,19 @@ export async function POST(request: NextRequest) {
 
     if (orderStatus === "shipped" && phone) {
       try {
+        const trackingUrl = `https://nauvarah.com/track/${order.order_number}`;
         await sendShippingConfirmationSMS(
           phone,
           order.order_number,
           order.awb_number || awb_code,
           order.courier_name || "Courier"
+        );
+        await sendShippingConfirmationWhatsApp(
+          phone,
+          order.order_number,
+          order.awb_number || awb_code,
+          order.courier_name || "Courier",
+          trackingUrl
         );
       } catch (e) {
         console.error("Shipping confirmation SMS error:", e);

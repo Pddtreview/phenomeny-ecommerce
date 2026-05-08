@@ -1,56 +1,14 @@
-const MSG91_FLOW_URL = "https://control.msg91.com/api/v5/flow";
+import { sendSMS as sendTwilioSMS, sendWhatsApp as sendTwilioWhatsApp } from "@/lib/twilio";
 
-function getAuthKey(): string {
-  const key = process.env.MSG91_AUTH_KEY;
-  if (!key) throw new Error("MSG91_AUTH_KEY is not set");
-  return key;
+export async function sendSMS(phone: string, message: string): Promise<void> {
+  await sendTwilioSMS(phone, message);
 }
 
-function getFlowId(): string {
-  return process.env.MSG91_FLOW_ID || "";
-}
-
-function toE164(phone: string): string {
-  const digits = phone.replace(/\D/g, "").slice(-10);
-  return `91${digits}`;
-}
-
-/**
- * Send SMS via MSG91 Flow API.
- * Requires MSG91_AUTH_KEY and MSG91_FLOW_ID. Flow should have variable VAR1 or "message" for the text.
- */
-export async function sendSMS(
+export async function sendWhatsAppMessage(
   phone: string,
   message: string
 ): Promise<void> {
-  const authkey = getAuthKey();
-  const flowId = getFlowId();
-  if (!flowId) {
-    console.warn("MSG91_FLOW_ID not set; skipping SMS");
-    return;
-  }
-  const res = await fetch(MSG91_FLOW_URL, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      authkey,
-    },
-    body: JSON.stringify({
-      flow_id: flowId,
-      sender: process.env.MSG91_SENDER_ID || "NAUVAR",
-      recipients: [
-        {
-          mobiles: toE164(phone),
-          VAR1: message,
-          message,
-        },
-      ],
-    }),
-  });
-  if (!res.ok) {
-    const text = await res.text();
-    throw new Error(`MSG91 flow failed: ${res.status} ${text}`);
-  }
+  await sendTwilioWhatsApp(phone, message);
 }
 
 export async function sendOrderConfirmationSMS(
@@ -62,6 +20,15 @@ export async function sendOrderConfirmationSMS(
   await sendSMS(phone, message);
 }
 
+export async function sendOrderConfirmationWhatsApp(
+  phone: string,
+  orderNumber: string,
+  total: number
+): Promise<void> {
+  const message = `Hi! Your Nauvarah order ${orderNumber} for Rs ${total.toLocaleString("en-IN")} is confirmed. Track: https://nauvarah.com/track/${orderNumber}`;
+  await sendWhatsAppMessage(phone, message);
+}
+
 export async function sendShippingConfirmationSMS(
   phone: string,
   orderNumber: string,
@@ -70,6 +37,18 @@ export async function sendShippingConfirmationSMS(
 ): Promise<void> {
   const message = `Your Nauvaraha order ${orderNumber} has been shipped via ${courier}. AWB: ${awb}. Track at nauvaraha.com/track/${orderNumber}`;
   await sendSMS(phone, message);
+}
+
+export async function sendShippingConfirmationWhatsApp(
+  phone: string,
+  orderNumber: string,
+  awb: string,
+  courier: string,
+  trackingUrl?: string
+): Promise<void> {
+  const trackLink = trackingUrl || `https://nauvarah.com/track/${orderNumber}`;
+  const message = `Your Nauvarah order ${orderNumber} has been shipped via ${courier}. AWB: ${awb}. Track here: ${trackLink}`;
+  await sendWhatsAppMessage(phone, message);
 }
 
 export async function sendDeliveryConfirmationSMS(

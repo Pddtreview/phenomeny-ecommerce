@@ -1,7 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createSupabaseServiceRoleClient } from "@/lib/supabase-server";
 import { expandOrderItemToVariantQuantities } from "@/lib/bundle-stock";
-import { sendOrderConfirmationEmail } from "@/lib/notifications";
+import {
+  sendOrderConfirmationEmail,
+  sendOrderConfirmationWhatsApp,
+} from "@/lib/notifications";
 
 type OrderItemInput = {
   variantId?: string;
@@ -331,6 +334,12 @@ export async function POST(request: NextRequest) {
           pincode: address.pincode,
         }
       ).catch((err) => console.error("order confirmation email:", err));
+
+      sendOrderConfirmationWhatsApp(
+        customer.phone,
+        orderNumber,
+        Number(total)
+      ).catch((err) => console.error("order confirmation WhatsApp:", err));
     }
 
     return NextResponse.json({

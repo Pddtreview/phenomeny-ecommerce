@@ -1,6 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createSupabaseServiceRoleClient } from "@/lib/supabase-server";
-import { sendOrderConfirmationEmail } from "@/lib/notifications";
+import {
+  sendOrderConfirmationEmail,
+  sendOrderConfirmationWhatsApp,
+} from "@/lib/notifications";
 import { verifyPayUHash } from "@/lib/payu";
 
 export const runtime = "nodejs";
@@ -101,6 +104,14 @@ export async function POST(request: NextRequest) {
             pincode: String(address.pincode || ""),
           }
         ).catch((err) => console.error("order confirmation email:", err));
+      }
+
+      if (customer?.phone) {
+        sendOrderConfirmationWhatsApp(
+          String(customer.phone),
+          order.order_number,
+          Number(order.total)
+        ).catch((err) => console.error("order confirmation WhatsApp:", err));
       }
     } else if (status === "failure") {
       await supabase
