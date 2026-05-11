@@ -1,4 +1,5 @@
 ﻿import type { Metadata } from "next";
+import Link from "next/link";
 import { Inter } from "next/font/google";
 
 const inter = Inter({
@@ -44,6 +45,18 @@ export default function RefundPolicyPage() {
             www.nauvaraha.com
           </a>
           . It should be read together with our Terms &amp; Conditions.
+        </p>
+
+        <p className="mt-4 text-sm text-[#666666]">
+          For cancelling an order before dispatch, refunds on cancellation, and
+          how to reach us quickly, see our{" "}
+          <Link
+            href="/cancellation-policy"
+            className="text-gradient-accent underline underline-offset-2 hover:no-underline"
+          >
+            Cancellation Policy
+          </Link>
+          .
         </p>
 
         <h2 className={heading}>1. Return Window</h2>

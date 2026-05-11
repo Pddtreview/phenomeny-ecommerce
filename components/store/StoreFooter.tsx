@@ -24,6 +24,14 @@ export function StoreFooter() {
           <p className="mt-6 text-base font-medium text-white/60">
             Align Your Energy. Attract Your Abundance.
           </p>
+          <div className="mt-6 space-y-1 text-center text-xs text-white/50">
+            <p>Nauvaraha</p>
+            <p>House No 10, Street No 01, Krishna Nagar</p>
+            <p>Jalandhar, Punjab - 144008, India</p>
+            <p>GSTIN: 03BGNPK9576K2ZO</p>
+            <p>Phone: +91 9115490001</p>
+            <p>Email: hello@nauvaraha.com</p>
+          </div>
         </div>
 
         <div className="mt-14 grid gap-12 text-center py-4 sm:grid-cols-3 sm:gap-10 sm:text-left">
@@ -74,6 +82,9 @@ export function StoreFooter() {
               </Link>
               <Link href="/refund-policy" className={linkClass}>
                 Refund Policy
+              </Link>
+              <Link href="/cancellation-policy" className={linkClass}>
+                Cancellation Policy
               </Link>
             </div>
           </div>

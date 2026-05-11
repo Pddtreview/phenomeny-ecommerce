@@ -75,7 +75,7 @@ export async function POST(request: NextRequest) {
       const [{ data: customer }, { data: address }] = await Promise.all([
         supabase
           .from("customers")
-          .select("email")
+          .select("email, phone")
           .eq("id", order.customer_id)
           .single(),
         supabase

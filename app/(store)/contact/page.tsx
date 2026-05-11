@@ -80,8 +80,7 @@ export default function ContactPage() {
             <address className="mt-4 not-italic text-sm sm:text-base">
               <p className="font-medium">Nauvaraha</p>
               <p className="mt-2">House No 10, Street No 01, Krishna Nagar</p>
-              <p>Jalandhar, Punjab - 144008</p>
-              <p>India</p>
+              <p>Jalandhar, Punjab - 144008, India</p>
               <p className="mt-3">
                 <span className="font-medium">GSTIN: </span>
                 03BGNPK9576K2ZO
