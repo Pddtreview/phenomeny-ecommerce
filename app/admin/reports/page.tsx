@@ -1,5 +1,6 @@
 import { createServerSupabaseClient } from "@/lib/supabase-server";
 import { DashboardCharts } from "@/components/admin/DashboardCharts";
+import { RupeeSymbol } from "@/components/ui/RupeeSymbol";
 
 function getMonthRange(monthOffset: number) {
   const d = new Date();
@@ -158,14 +159,14 @@ export default async function AdminReportsPage() {
         <div className="rounded-xl border border-zinc-200 bg-white p-5 shadow-sm">
           <p className="text-sm font-medium text-zinc-500">This Month Revenue (INR)</p>
           <p className="mt-2 text-2xl font-bold text-zinc-900">
-            <span className="font-inter rupee">₹</span>
+            <RupeeSymbol />
             {data.thisMonthRevenue.toLocaleString("en-IN")}
           </p>
         </div>
         <div className="rounded-xl border border-zinc-200 bg-white p-5 shadow-sm">
           <p className="text-sm font-medium text-zinc-500">Last Month Revenue (INR)</p>
           <p className="mt-2 text-2xl font-bold text-zinc-900">
-            <span className="font-inter rupee">₹</span>
+            <RupeeSymbol />
             {data.lastMonthRevenue.toLocaleString("en-IN")}
           </p>
         </div>

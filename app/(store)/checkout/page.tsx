@@ -8,6 +8,7 @@ import { z } from "zod";
 import { useCart } from "@/hooks/useCart";
 import nauvarahConfig from "@/configs/nauvarah.config";
 import { cn } from "@/lib/utils";
+import { RupeeSymbol } from "@/components/ui/RupeeSymbol";
 
 const SHOW_PREPAID_OPTION = process.env.COD_ONLY_MODE !== "true";
 
@@ -323,7 +324,7 @@ export default function CheckoutPage() {
                     {i.name} × {i.quantity}
                   </span>
                   <span className="font-medium text-zinc-900">
-                    <span className="font-inter rupee">₹</span>
+                    <RupeeSymbol />
                     {(i.price * i.quantity).toLocaleString("en-IN")}
                   </span>
                 </li>
@@ -333,7 +334,7 @@ export default function CheckoutPage() {
               <div className="flex justify-between">
                 <span className="text-zinc-600">Subtotal</span>
                 <span>
-                  <span className="font-inter rupee">₹</span>
+                  <RupeeSymbol />
                   {subtotal.toLocaleString("en-IN")}
                 </span>
               </div>
@@ -344,7 +345,7 @@ export default function CheckoutPage() {
                     ? "Free"
                     : (
                         <>
-                          <span className="font-inter rupee">₹</span>
+                          <RupeeSymbol />
                           {shippingCharge}
                         </>
                       )}
@@ -354,7 +355,7 @@ export default function CheckoutPage() {
                 <div className="flex justify-between">
                   <span className="text-zinc-600">COD charge</span>
                   <span>
-                    <span className="font-inter rupee">₹</span>
+                    <RupeeSymbol />
                     {COD_CHARGE}
                   </span>
                 </div>
@@ -363,7 +364,7 @@ export default function CheckoutPage() {
                 <div className="flex justify-between text-[#1A1A1A]">
                   <span>Prepaid discount</span>
                   <span>
-                    −<span className="font-inter rupee">₹</span>
+                    −<RupeeSymbol />
                     {PREPAID_DISCOUNT}
                   </span>
                 </div>
@@ -413,7 +414,7 @@ export default function CheckoutPage() {
                   <div className="mt-2 flex justify-between text-sm text-emerald-600">
                     <span>Coupon ({appliedCoupon.code})</span>
                     <span>
-                      −<span className="font-inter rupee">₹</span>
+                      −<RupeeSymbol />
                       {appliedCoupon.discountAmount.toLocaleString("en-IN")}
                     </span>
                   </div>
@@ -422,7 +423,7 @@ export default function CheckoutPage() {
               <div className="flex justify-between border-t border-zinc-100 pt-2 font-semibold">
                 <span>Total</span>
                 <span style={{ color: PRIMARY }}>
-                  <span className="font-inter rupee">₹</span>
+                  <RupeeSymbol />
                   {total.toLocaleString("en-IN")}
                 </span>
               </div>
@@ -572,11 +573,11 @@ export default function CheckoutPage() {
                   className="ml-2 rounded px-2 py-0.5 text-xs font-medium text-white"
                   style={{ backgroundColor: GOLD }}
                 >
-                  <span className="font-inter rupee">₹</span>75 off
+                  <RupeeSymbol />75 off
                 </span>
                 <p className="mt-1 text-xs text-zinc-500">UPI, Cards, Net Banking</p>
                 <span className="mt-1 inline-block text-xs font-medium text-[#1A1A1A]">
-                  Save <span className="font-sans">₹</span>75 on prepaid orders
+                  Save <RupeeSymbol />75 on prepaid orders
                 </span>
               </button>
             )}
@@ -594,7 +595,7 @@ export default function CheckoutPage() {
                 Cash on Delivery
               </span>
               <p className="mt-1 text-xs text-zinc-500">
-                <span className="font-inter rupee">₹</span>
+                <RupeeSymbol />
                 {COD_CHARGE} COD charge
               </p>
             </button>

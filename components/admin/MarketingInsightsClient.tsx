@@ -3,6 +3,7 @@
 import { useCallback, useMemo, useRef, useState } from "react";
 import type { ReactNode } from "react";
 import type { MarketingInsightsPayload } from "@/lib/marketing-insights";
+import { RupeeSymbol } from "@/components/ui/RupeeSymbol";
 
 const PRIMARY = "#1B3A6B";
 const GOLD = "#C8860A";
@@ -167,7 +168,7 @@ export function MarketingInsightsClient() {
                 label="Revenue"
                 value={
                   <>
-                    <span className="font-inter rupee">₹</span>
+                    <RupeeSymbol />
                     {metrics.revenue_inr.toLocaleString("en-IN")}
                   </>
                 }
@@ -177,7 +178,7 @@ export function MarketingInsightsClient() {
                 label="AOV"
                 value={
                   <>
-                    <span className="font-inter rupee">₹</span>
+                    <RupeeSymbol />
                     {metrics.aov_inr.toLocaleString("en-IN")}
                   </>
                 }

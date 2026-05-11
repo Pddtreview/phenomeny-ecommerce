@@ -1,5 +1,6 @@
 ﻿import type { Metadata } from "next";
 import { Inter } from "next/font/google";
+import { RupeeSymbol } from "@/components/ui/RupeeSymbol";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -81,10 +82,10 @@ export default function ShippingPolicyPage() {
 
         <h2 className={heading}>3. Shipping Charges</h2>
         <ul className="mt-3 list-disc space-y-2 pl-6">
-          <li>Free shipping on orders above <span className="font-sans">₹</span>999.</li>
-          <li>Flat <span className="font-sans">₹</span>79 shipping on orders below <span className="font-sans">₹</span>999.</li>
+          <li>Free shipping on orders above <RupeeSymbol />999.</li>
+          <li>Flat <RupeeSymbol />79 shipping on orders below <RupeeSymbol />999.</li>
           <li>
-            Cash on delivery (COD): an additional COD handling charge of <span className="font-sans">₹</span>49
+            Cash on delivery (COD): an additional COD handling charge of <RupeeSymbol />49
             applies where COD is available.
           </li>
           <li>No hidden charges beyond what is shown at checkout.</li>

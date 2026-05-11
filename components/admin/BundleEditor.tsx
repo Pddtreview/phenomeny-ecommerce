@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { RupeeSymbol } from "@/components/ui/RupeeSymbol";
 
 const PRIMARY = "#1B3A6B";
 
@@ -387,7 +388,7 @@ export function BundleEditor({ bundleId }: { bundleId?: string }) {
                       {v.product_name} — {v.name}
                     </span>
                     <span className="shrink-0 text-xs text-zinc-500">
-                      {v.sku} · <span className="font-inter rupee">₹</span>
+                      {v.sku} · <RupeeSymbol />
                       {v.price} · stock {v.stock_quantity}
                     </span>
                   </button>

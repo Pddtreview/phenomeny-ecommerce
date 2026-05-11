@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from "react";
 import Link from "next/link";
+import { RupeeSymbol } from "@/components/ui/RupeeSymbol";
 
 const PRIMARY = "#1B3A6B";
 
@@ -146,7 +147,7 @@ export function OrdersTableClient({ orders }: { orders: OrderRow[] }) {
                 <td className="px-4 py-3 text-zinc-900">{o.customer_name}</td>
                 <td className="px-4 py-3 text-zinc-600">{o.phone}</td>
                 <td className="px-4 py-3 font-medium text-zinc-900">
-                  <span className="font-inter rupee">₹</span>
+                  <RupeeSymbol />
                   {Number(o.total).toLocaleString("en-IN")}
                 </td>
                 <td className="px-4 py-3 text-zinc-600">

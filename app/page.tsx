@@ -3,6 +3,7 @@ import Link from "next/link";
 import { Header } from "@/components/store/Header";
 import { ProductCard } from "@/components/store/ProductCard";
 import { StoreFooter } from "@/components/store/StoreFooter";
+import { RupeeSymbol } from "@/components/ui/RupeeSymbol";
 import { createServerSupabaseClient } from "@/lib/supabase-server";
 
 type Product = {
@@ -141,9 +142,9 @@ export default async function Home() {
         <div className="whitespace-nowrap text-sm font-medium text-[#1A1A1A]">
           <div className="inline-block min-w-full animate-[marquee_20s_linear_infinite]">
             ✦ Energetically Charged &nbsp;&nbsp;✦ Lab Certified Crystals &nbsp;&nbsp;✦ Free Shipping
-            Above <span className="font-sans">₹</span>999 &nbsp;&nbsp;✦ 6-Day Easy Returns &nbsp;&nbsp;✦ Prescribed by Karan Chopra
+            Above <RupeeSymbol />999 &nbsp;&nbsp;✦ 6-Day Easy Returns &nbsp;&nbsp;✦ Prescribed by Karan Chopra
             &nbsp;&nbsp;✦ Energetically Charged &nbsp;&nbsp;✦ Lab Certified Crystals &nbsp;&nbsp;✦
-            Free Shipping Above <span className="font-sans">₹</span>999 &nbsp;&nbsp;✦ 6-Day Easy Returns &nbsp;&nbsp;✦ Prescribed by
+            Free Shipping Above <RupeeSymbol />999 &nbsp;&nbsp;✦ 6-Day Easy Returns &nbsp;&nbsp;✦ Prescribed by
             Karan Chopra &nbsp;&nbsp;
           </div>
         </div>

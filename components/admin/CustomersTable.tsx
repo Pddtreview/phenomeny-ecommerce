@@ -3,6 +3,7 @@
 import { useMemo, useState } from "react";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
+import { RupeeSymbol } from "@/components/ui/RupeeSymbol";
 
 type CustomerRow = {
   id: string;
@@ -86,7 +87,7 @@ export function CustomersTable({ customers }: { customers: CustomerRow[] }) {
                 </td>
                 <td className="px-4 py-3 text-zinc-900">{c.order_count}</td>
                 <td className="px-4 py-3 font-medium text-zinc-900">
-                  <span className="font-inter rupee">₹</span>
+                  <RupeeSymbol />
                   {Number(c.total_spent).toLocaleString("en-IN")}
                 </td>
                 <td className="px-4 py-3 text-zinc-600">

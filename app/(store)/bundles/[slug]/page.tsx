@@ -3,6 +3,7 @@ import Image from "next/image";
 import { notFound } from "next/navigation";
 import { createServerSupabaseClient } from "@/lib/supabase-server";
 import AddBundleToCart from "@/components/store/AddBundleToCart";
+import { RupeeSymbol } from "@/components/ui/RupeeSymbol";
 
 const PRIMARY = "#1A1A1A";
 const GOLD = "#E91E8C";
@@ -198,17 +199,17 @@ export default async function BundleDetailPage({
 
             <div className="mt-4 flex flex-wrap items-baseline gap-2">
               <span className="text-2xl font-bold" style={{ color: GOLD }}>
-                <span className="font-inter rupee">₹</span>
+                <RupeeSymbol />
                 {bundlePrice.toLocaleString("en-IN")}
               </span>
               {hasCompare && (
                 <>
                   <span className="text-sm text-zinc-400 line-through">
-                    <span className="font-inter rupee">₹</span>
+                    <RupeeSymbol />
                     {Number(bundle.compare_price).toLocaleString("en-IN")}
                   </span>
                   <span className="rounded-full bg-emerald-50 px-3 py-1 text-xs font-semibold text-emerald-700">
-                    Save <span className="font-inter rupee">₹</span>
+                    Save <RupeeSymbol />
                     {listSavings.toLocaleString("en-IN")}
                   </span>
                 </>
@@ -222,20 +223,20 @@ export default async function BundleDetailPage({
               <div className="mt-2 flex items-center justify-between text-sm">
                 <span className="text-zinc-600">Sum of items (if bought separately)</span>
                 <span className="font-semibold text-zinc-900">
-                  <span className="font-inter rupee">₹</span>
+                  <RupeeSymbol />
                   {individualValue.toLocaleString("en-IN")}
                 </span>
               </div>
               <div className="mt-1 flex items-center justify-between text-sm">
                 <span className="text-zinc-600">Bundle price</span>
                 <span className="font-semibold" style={{ color: GOLD }}>
-                  <span className="font-inter rupee">₹</span>
+                  <RupeeSymbol />
                   {bundlePrice.toLocaleString("en-IN")}
                 </span>
               </div>
               {savingsVsParts > 0 && (
                 <div className="mt-2 border-t border-zinc-100 pt-2 text-sm font-semibold text-emerald-700">
-                  You save <span className="font-inter rupee">₹</span>
+                  You save <RupeeSymbol />
                   {savingsVsParts.toLocaleString("en-IN")} vs buying
                   items separately
                 </div>
@@ -281,7 +282,7 @@ export default async function BundleDetailPage({
                       </Link>
                       <p className="mt-1 text-xs text-zinc-500">
                         Variant: {it.variantName} · Qty in bundle: {it.quantity}{" "}
-                        · <span className="font-inter rupee">₹</span>
+                        · <RupeeSymbol />
                         {it.unitPrice.toLocaleString("en-IN")} each
                       </p>
                     </div>
@@ -289,7 +290,7 @@ export default async function BundleDetailPage({
                       className="shrink-0 text-sm font-bold"
                       style={{ color: PRIMARY }}
                     >
-                      <span className="font-inter rupee">₹</span>
+                      <RupeeSymbol />
                       {it.lineSubtotal.toLocaleString("en-IN")}
                     </p>
                   </div>

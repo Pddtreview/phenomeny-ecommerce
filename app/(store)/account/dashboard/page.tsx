@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import { RupeeSymbol } from "@/components/ui/RupeeSymbol";
 
 const PRIMARY = "#1B3A6B";
 
@@ -164,7 +165,7 @@ export default function AccountDashboardPage() {
                       className="shrink-0 text-sm font-bold"
                       style={{ color: PRIMARY }}
                     >
-                      <span className="font-inter rupee">₹</span>
+                      <RupeeSymbol />
                       {Number(o.total).toLocaleString("en-IN")}
                     </p>
                   </a>

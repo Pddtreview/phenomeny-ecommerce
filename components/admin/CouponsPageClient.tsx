@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { CouponForm } from "./CouponForm";
 import { CouponToggle } from "./CouponToggle";
+import { RupeeSymbol } from "@/components/ui/RupeeSymbol";
 
 const PRIMARY = "#1B3A6B";
 
@@ -69,7 +70,7 @@ export function CouponsPageClient({ coupons }: { coupons: CouponRow[] }) {
                     ? `${c.value}%`
                     : (
                         <>
-                          <span className="font-inter rupee">₹</span>
+                          <RupeeSymbol />
                           {c.value}
                         </>
                       )}

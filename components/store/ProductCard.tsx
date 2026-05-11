@@ -5,6 +5,7 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 import { useCart } from "@/hooks/useCart";
 import { cn } from "@/lib/utils";
+import { RupeeSymbol } from "@/components/ui/RupeeSymbol";
 
 type ProductCardProps = {
   href: string;
@@ -23,7 +24,7 @@ function formatPrice(value: number | null) {
   if (value === null) return <>Price on request</>;
   return (
     <>
-      <span className="font-sans">₹</span>
+      <RupeeSymbol />
       {value.toLocaleString("en-IN")}
     </>
   );
@@ -99,11 +100,11 @@ export function ProductCard({
 
       <div className="px-4 pb-4 pt-2">
         <div className="mt-2 flex items-center justify-between gap-2">
-          <p className="text-lg font-bold text-[#1A1A1A]">
+          <p className="price text-lg font-bold text-[#1A1A1A]">
             {formatPrice(price)}
           </p>
           {typeof comparePrice === "number" && comparePrice > 0 ? (
-            <p className="text-sm text-[#999999] line-through">
+            <p className="price text-sm text-[#999999] line-through">
               {formatPrice(comparePrice)}
             </p>
           ) : null}

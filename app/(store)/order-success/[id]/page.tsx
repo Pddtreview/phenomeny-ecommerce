@@ -1,5 +1,6 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
+import { RupeeSymbol } from "@/components/ui/RupeeSymbol";
 import { createSupabaseServiceRoleClient } from "@/lib/supabase-server";
 
 const GOLD = "#E91E8C";
@@ -115,7 +116,7 @@ export default async function OrderSuccessPage({
                   {item.name} <span className="text-[#666666]">× {item.quantity}</span>
                 </div>
                 <div className="shrink-0 font-inter text-[#1A1A1A]">
-                  <span className="font-inter rupee">₹</span>
+                  <RupeeSymbol />
                   {Number(item.total_price).toLocaleString("en-IN")}
                 </div>
               </li>
@@ -126,14 +127,14 @@ export default async function OrderSuccessPage({
             <div className="flex justify-between text-[#666666]">
               <span>Subtotal</span>
               <span>
-                <span className="font-inter rupee">₹</span>
+                <RupeeSymbol />
                 {Number(order.subtotal || 0).toLocaleString("en-IN")}
               </span>
             </div>
             <div className="flex justify-between text-[#666666]">
               <span>Shipping</span>
               <span>
-                <span className="font-inter rupee">₹</span>
+                <RupeeSymbol />
                 {Number(order.shipping_charge || 0).toLocaleString("en-IN")}
               </span>
             </div>
@@ -141,7 +142,7 @@ export default async function OrderSuccessPage({
               <div className="flex justify-between text-[#666666]">
                 <span>COD Charge</span>
                 <span>
-                  <span className="font-inter rupee">₹</span>
+                  <RupeeSymbol />
                   {Number(order.cod_charge).toLocaleString("en-IN")}
                 </span>
               </div>
@@ -153,7 +154,7 @@ export default async function OrderSuccessPage({
             <div className="mt-2 flex justify-between border-t border-[#E8E8E8] pt-3 font-semibold text-[#1A1A1A]">
               <span>Total</span>
               <span>
-                <span className="font-inter rupee">₹</span>
+                <RupeeSymbol />
                 {Number(order.total).toLocaleString("en-IN")}
               </span>
             </div>

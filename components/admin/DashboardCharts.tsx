@@ -16,6 +16,7 @@ import {
   Bar,
 } from 'recharts';
 import type { PieLabelRenderProps, TooltipValueType } from 'recharts';
+import { RupeeSymbol } from '@/components/ui/RupeeSymbol';
 
 const PRIMARY = '#1B3A6B';
 const GOLD = '#C8860A';
@@ -189,7 +190,7 @@ export function DashboardCharts({
                   <td className="px-4 py-3 font-medium text-zinc-900">{row.rank}</td>
                   <td className="px-4 py-3 text-zinc-900">{row.product_name}</td>
                   <td className="px-4 py-3 font-medium text-zinc-900">
-                    <span className="font-inter rupee">₹</span>
+                    <RupeeSymbol />
                     {Number(row.revenue).toLocaleString('en-IN')}
                   </td>
                   <td className="px-4 py-3 text-zinc-600">{row.orders_count}</td>

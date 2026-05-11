@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
+import { RupeeSymbol } from "@/components/ui/RupeeSymbol";
 
 const PRIMARY = "#1B3A6B";
 
@@ -122,7 +123,7 @@ export function InventoryTable({ rows }: { rows: VariantRow[] }) {
                   </div>
                 </td>
                 <td className="px-4 py-3 text-zinc-700">
-                  <span className="font-inter rupee">₹</span>
+                  <RupeeSymbol />
                   {Number(row.price).toLocaleString("en-IN")}
                 </td>
                 <td className="px-4 py-3">

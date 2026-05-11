@@ -4,6 +4,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import Fuse from 'fuse.js';
+import { RupeeSymbol } from '@/components/ui/RupeeSymbol';
 
 const PRIMARY = '#1A1A1A';
 
@@ -204,7 +205,7 @@ export default function ProductsClient({ products }: Props) {
                   </p>
                   {price != null && price > 0 && (
                     <p className="mt-1 text-xs font-semibold" style={{ color: PRIMARY }}>
-                      <span className="font-inter rupee">₹</span>
+                      <RupeeSymbol />
                       {Number(price).toLocaleString('en-IN')}
                     </p>
                   )}
@@ -251,7 +252,7 @@ export default function ProductsClient({ products }: Props) {
                   </h3>
                   {price != null && price > 0 ? (
                     <p className="mt-2 text-lg font-bold" style={{ color: PRIMARY }}>
-                      <span className="font-inter rupee">₹</span>
+                      <RupeeSymbol />
                       {Number(price).toLocaleString('en-IN')}
                     </p>
                   ) : (

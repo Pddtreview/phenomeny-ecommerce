@@ -2,6 +2,7 @@
 
 import { FormEvent, useState } from "react";
 import Link from "next/link";
+import { RupeeSymbol } from "@/components/ui/RupeeSymbol";
 
 const PRIMARY = "#1B3A6B";
 const GOLD = "#C8860A";
@@ -114,7 +115,7 @@ function formatDateTime(value: string) {
 function formatCurrency(value: number) {
   return (
     <>
-      <span className="font-inter rupee">₹</span>
+      <RupeeSymbol />
       {Number(value || 0).toLocaleString("en-IN")}
     </>
   );

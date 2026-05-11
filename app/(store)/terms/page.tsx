@@ -1,5 +1,6 @@
 ﻿import type { Metadata } from "next";
 import { Inter } from "next/font/google";
+import { RupeeSymbol } from "@/components/ui/RupeeSymbol";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -111,7 +112,7 @@ export default function TermsPage() {
             capacity, weather, or force majeure events.
           </li>
           <li>
-            Free shipping applies to orders above <span className="font-sans">₹</span>999, where this offer is
+            Free shipping applies to orders above <RupeeSymbol />999, where this offer is
             active and displayed on the site.
           </li>
         </ul>

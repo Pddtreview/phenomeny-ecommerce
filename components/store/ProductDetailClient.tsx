@@ -2,6 +2,7 @@
 
 import { useState, useMemo } from "react";
 import { useCart } from "@/hooks/useCart";
+import { RupeeSymbol } from "@/components/ui/RupeeSymbol";
 
 const PRIMARY = "#1B3A6B";
 const GOLD = "#C8860A";
@@ -148,20 +149,20 @@ export default function ProductDetailClient({
 
         <div className="mt-6 space-y-4">
           {/* Price row */}
-          <div className="flex flex-wrap items-baseline gap-2">
+          <div className="price flex flex-wrap items-baseline gap-2">
             {selectedVariant ? (
               <>
                 <span
                   className="text-2xl font-bold"
                   style={{ color: PRIMARY }}
                 >
-                  <span className="font-inter rupee">₹</span>
+                  <RupeeSymbol />
                   {selectedVariant.price.toLocaleString("en-IN")}
                 </span>
                 {selectedVariant.compare_price != null &&
                   selectedVariant.compare_price > selectedVariant.price && (
-                    <span className="text-sm text-gray-400 line-through">
-                      <span className="font-inter rupee">₹</span>
+                    <span className="price text-sm text-gray-400 line-through">
+                      <RupeeSymbol />
                       {selectedVariant.compare_price.toLocaleString("en-IN")}
                     </span>
                   )}

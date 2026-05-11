@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useCart, getCartLineKey } from "@/hooks/useCart";
 import { cn } from "@/lib/utils";
+import { RupeeSymbol } from "@/components/ui/RupeeSymbol";
 
 const PRIMARY = "#1A1A1A";
 const GOLD = "#E91E8C";
@@ -110,7 +111,7 @@ export function CartDrawer({ open, onClose }: CartDrawerProps) {
                       className="mt-0.5 text-sm font-semibold"
                       style={{ color: PRIMARY }}
                     >
-                      <span className="font-inter rupee">₹</span>
+                      <RupeeSymbol />
                       {item.price.toLocaleString("en-IN")} × {item.quantity}
                     </p>
                     <div className="mt-2 flex items-center gap-2">
@@ -168,7 +169,7 @@ export function CartDrawer({ open, onClose }: CartDrawerProps) {
                 className="text-lg font-bold"
                 style={{ color: PRIMARY }}
               >
-                <span className="font-inter rupee">₹</span>
+                <RupeeSymbol />
                 {totalPrice().toLocaleString("en-IN")}
               </span>
             </div>

@@ -4,6 +4,7 @@ import { createServerSupabaseClient } from "@/lib/supabase-server";
 import { OrderStatusUpdate } from "@/components/admin/OrderStatusUpdate";
 import { CreateShipmentButton } from "@/components/admin/CreateShipmentButton";
 import { AdminOrderNotes } from "@/components/admin/AdminOrderNotes";
+import { RupeeSymbol } from "@/components/ui/RupeeSymbol";
 
 const PRIMARY = "#1B3A6B";
 const GOLD = "#C8860A";
@@ -117,14 +118,14 @@ export default async function AdminOrderDetailPage({
             <div className="flex justify-between">
               <span className="text-zinc-600">Subtotal</span>
               <span>
-                <span className="font-inter rupee">₹</span>
+                <RupeeSymbol />
                 {Number(order.subtotal).toLocaleString("en-IN")}
               </span>
             </div>
             <div className="flex justify-between">
               <span className="text-zinc-600">Discount (prepaid)</span>
               <span>
-                −<span className="font-inter rupee">₹</span>
+                −<RupeeSymbol />
                 {Number(order.discount ?? 0).toLocaleString("en-IN")}
               </span>
             </div>
@@ -134,7 +135,7 @@ export default async function AdminOrderDetailPage({
                   Coupon ({order.coupon_code})
                 </span>
                 <span>
-                  −<span className="font-inter rupee">₹</span>
+                  −<RupeeSymbol />
                   {Number(order.discount_amount ?? 0).toLocaleString("en-IN")}
                 </span>
               </div>
@@ -142,21 +143,21 @@ export default async function AdminOrderDetailPage({
             <div className="flex justify-between">
               <span className="text-zinc-600">Shipping</span>
               <span>
-                <span className="font-inter rupee">₹</span>
+                <RupeeSymbol />
                 {Number(order.shipping_charge ?? 0).toLocaleString("en-IN")}
               </span>
             </div>
             <div className="flex justify-between">
               <span className="text-zinc-600">COD charge</span>
               <span>
-                <span className="font-inter rupee">₹</span>
+                <RupeeSymbol />
                 {Number(order.cod_charge ?? 0).toLocaleString("en-IN")}
               </span>
             </div>
             <div className="flex justify-between border-t border-zinc-100 pt-2 font-semibold">
               <span>Total</span>
               <span style={{ color: PRIMARY }}>
-                <span className="font-inter rupee">₹</span>
+                <RupeeSymbol />
                 {Number(order.total).toLocaleString("en-IN")}
               </span>
             </div>
@@ -278,11 +279,11 @@ export default async function AdminOrderDetailPage({
                   <td className="py-2 text-zinc-600">{it.sku}</td>
                   <td className="py-2">{it.quantity}</td>
                   <td className="py-2">
-                    <span className="font-inter rupee">₹</span>
+                    <RupeeSymbol />
                     {Number(it.unit_price).toLocaleString("en-IN")}
                   </td>
                   <td className="py-2 font-medium">
-                    <span className="font-inter rupee">₹</span>
+                    <RupeeSymbol />
                     {Number(it.total_price).toLocaleString("en-IN")}
                   </td>
                 </tr>

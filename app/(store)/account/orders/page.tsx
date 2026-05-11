@@ -2,6 +2,7 @@
 
 import { useEffect, useState, useMemo } from "react";
 import { useRouter } from "next/navigation";
+import { RupeeSymbol } from "@/components/ui/RupeeSymbol";
 
 const PRIMARY = "#1B3A6B";
 
@@ -174,7 +175,7 @@ export default function AccountOrdersPage() {
                       {String(o.payment_status).replaceAll("_", " ")}
                     </td>
                     <td className="px-4 py-3 font-semibold text-zinc-900">
-                      <span className="font-inter rupee">₹</span>
+                      <RupeeSymbol />
                       {Number(o.total).toLocaleString("en-IN")}
                     </td>
                   </tr>

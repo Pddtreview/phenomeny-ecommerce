@@ -14,8 +14,16 @@ import type { WeeklyPlReport } from "@/lib/weekly-pl-report";
 
 const tz = "Asia/Kolkata";
 
-function formatInr(n: number): string {
-  return `₹${Math.round(n).toLocaleString("en-IN")}`;
+function inrDigits(n: number): string {
+  return Math.round(n).toLocaleString("en-IN");
+}
+
+function InrRupee() {
+  return (
+    <span style={{ fontFamily: "Inter, sans-serif" }} aria-hidden>
+      ₹
+    </span>
+  );
 }
 
 function formatRange(startIso: string, endIso: string): string {
@@ -53,7 +61,7 @@ export default function WeeklyPlReportEmail({ report }: Props) {
       ? topProducts
           .map(
             (p, i) =>
-              `${i + 1}. ${p.name} — ${formatInr(p.revenue)}`
+              `${i + 1}. ${p.name} — INR ${inrDigits(p.revenue)}`
           )
           .join("\n")
       : "—";
@@ -62,7 +70,7 @@ export default function WeeklyPlReportEmail({ report }: Props) {
     <Html>
       <Head />
       <Preview>
-        {`${formatInr(grossRevenueInr)} revenue · ${totalOrders} orders · ${rangeLabel}`}
+        {`INR ${inrDigits(grossRevenueInr)} revenue · ${totalOrders} orders · ${rangeLabel}`}
       </Preview>
       <Body style={main}>
         <Container style={container}>
@@ -73,7 +81,8 @@ export default function WeeklyPlReportEmail({ report }: Props) {
             <Text style={metricLine}>
               <strong>Gross revenue (paid)</strong>
               <br />
-              {formatInr(grossRevenueInr)}
+              <InrRupee />
+              {inrDigits(grossRevenueInr)}
             </Text>
             <Text style={metricLine}>
               <strong>Total orders</strong>
@@ -100,7 +109,8 @@ export default function WeeklyPlReportEmail({ report }: Props) {
             <Text style={metricLine}>
               <strong>Coupon discounts</strong>
               <br />
-              {formatInr(couponDiscountInr)}
+              <InrRupee />
+              {inrDigits(couponDiscountInr)}
             </Text>
           </Section>
 

@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { createServerSupabaseClient } from "@/lib/supabase-server";
+import { RupeeSymbol } from "@/components/ui/RupeeSymbol";
 
 type Product = {
   id: string;
@@ -141,7 +142,7 @@ export default async function CategoryPage({
                       <span className="font-bold text-[#1A1A1A]">
                         {hasPrice ? (
                           <>
-                            <span className="font-inter rupee">₹</span>
+                            <RupeeSymbol />
                             {formattedPrice}
                           </>
                         ) : (
@@ -150,7 +151,7 @@ export default async function CategoryPage({
                       </span>
                       {hasCompare && (
                         <span className="ml-2 text-xs text-gray-400 line-through">
-                          <span className="font-inter rupee">₹</span>
+                          <RupeeSymbol />
                           {product.compare_price!.toLocaleString("en-IN")}
                         </span>
                       )}

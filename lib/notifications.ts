@@ -95,7 +95,7 @@ export async function sendOrderConfirmationEmail(
         `<tr>
           <td style="padding:8px 0;color:#1A1A1A;font-size:14px;line-height:1.6;">${i.name}</td>
           <td style="padding:8px 0;color:#4A3F35;font-size:14px;line-height:1.6;text-align:center;">x${Number(i.quantity)}</td>
-          <td style="padding:8px 0;color:#4A3F35;font-size:14px;line-height:1.6;text-align:right;">₹${Number(i.total_price).toLocaleString("en-IN")}</td>
+          <td style="padding:8px 0;color:#4A3F35;font-size:14px;line-height:1.6;text-align:right;"><span style="font-family:Inter,sans-serif">₹</span>${Number(i.total_price).toLocaleString("en-IN")}</td>
         </tr>`
     )
     .join("\n");
@@ -143,7 +143,7 @@ export async function sendOrderConfirmationEmail(
             <p style="margin:0;font-size:14px;line-height:1.7;color:#4A3F35;">${addr}</p>
 
             <p style="margin:20px 0 0;font-size:16px;line-height:1.4;color:#1A1A1A;">
-              <strong>Total Amount: <span style="color:#C8860A;">₹${total.toLocaleString("en-IN")}</span></strong>
+              <strong>Total Amount: <span style="color:#C8860A;"><span style="font-family:Inter,sans-serif">₹</span>${total.toLocaleString("en-IN")}</span></strong>
             </p>
             <p style="margin:12px 0 0;font-size:14px;line-height:1.7;color:#4A3F35;">
               Expected delivery: <strong>4-7 business days</strong>

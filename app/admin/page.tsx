@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { createServerSupabaseClient } from "@/lib/supabase-server";
+import { RupeeSymbol } from "@/components/ui/RupeeSymbol";
 
 const PRIMARY = "#1B3A6B";
 
@@ -144,7 +145,7 @@ export default async function AdminDashboardPage() {
             >
               {card.isCurrency ? (
                 <>
-                  <span className="font-inter rupee">₹</span>
+                  <RupeeSymbol />
                   {card.value}
                 </>
               ) : (
@@ -189,7 +190,7 @@ export default async function AdminDashboardPage() {
                     </td>
                     <td className="px-4 py-3 text-zinc-900">{o.customer_name}</td>
                     <td className="px-4 py-3 font-medium text-zinc-900">
-                      <span className="font-inter rupee">₹</span>
+                      <RupeeSymbol />
                       {Number(o.total).toLocaleString("en-IN")}
                     </td>
                     <td className="px-4 py-3">
