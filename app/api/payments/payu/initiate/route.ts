@@ -1,19 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createSupabaseServiceRoleClient } from "@/lib/supabase-server";
-import {
-  generatePayUHash,
-  PAYU_BASE_URL,
-  PAYU_KEY,
-  PAYU_SALT,
-} from "@/lib/payu";
+import { generatePayUHash, PAYU_BASE_URL, PAYU_KEY } from "@/lib/payu";
 
 export const runtime = "nodejs";
 
 function getSiteUrl(request: NextRequest): string | null {
   const fromEnv = (process.env.NEXT_PUBLIC_SITE_URL || "").trim();
   if (fromEnv && /^https?:\/\//.test(fromEnv)) return fromEnv.replace(/\/$/, "");
-  // Fallback to the request's own origin (works for Replit dev domains and
-  // production behind any proxy). PayU requires HTTPS in live mode.
   try {
     const origin = new URL(request.url).origin;
     if (origin.startsWith("https://") || origin.startsWith("http://localhost"))
@@ -22,20 +15,9 @@ function getSiteUrl(request: NextRequest): string | null {
   return null;
 }
 
-function sanitizeFirstName(raw: string | undefined | null): string {
-  const trimmed = (raw || "").trim();
-  if (!trimmed) return "Customer";
-  const first = trimmed.split(/\s+/)[0].replace(/[^A-Za-z]/g, "");
-  return first || "Customer";
-}
-
-function sanitizeProductInfo(raw: string): string {
-  return raw.replace(/[^A-Za-z0-9\s_-]/g, "").trim() || "Order";
-}
-
 export async function POST(request: NextRequest) {
   try {
-    if (!PAYU_KEY?.trim() || !PAYU_SALT?.trim()) {
+    if (!PAYU_KEY?.trim() || !process.env.PAYU_MERCHANT_SALT?.trim()) {
       return NextResponse.json(
         {
           error:
@@ -78,7 +60,8 @@ export async function POST(request: NextRequest) {
       .eq("id", order.customer_id)
       .single();
 
-    const firstname = sanitizeFirstName(customer?.name as string | undefined);
+    const nameRaw = typeof customer?.name === "string" ? customer.name.trim() : "";
+    const firstname = nameRaw ? nameRaw.split(/\s+/)[0]! : "Customer";
     const email =
       typeof customer?.email === "string" && customer.email.trim()
         ? customer.email.trim()
@@ -87,20 +70,27 @@ export async function POST(request: NextRequest) {
       typeof customer?.phone === "string" && customer.phone.trim()
         ? customer.phone.trim().replace(/\D/g, "").slice(-10)
         : "";
-    const productinfo = sanitizeProductInfo(`Nauvaraha Order ${order.order_number}`);
+    const productinfo = "Nauvaraha Order " + order.order_number;
     const txnid = String(order.order_number);
-    const udf1 = String(orderId);
+    const amount = Number(order.total).toFixed(2);
 
-    const { hash, amount } = generatePayUHash({
+    const hash = generatePayUHash({
+      key: process.env.PAYU_MERCHANT_KEY!,
       txnid,
-      amount: order.total as number,
+      amount,
       productinfo,
       firstname,
       email,
-      udf1,
+      salt: process.env.PAYU_MERCHANT_SALT!,
     });
 
-    // The form fields must match the hash inputs exactly.
+    console.log("Generated hash:", hash);
+    console.log("Merchant key:", process.env.PAYU_MERCHANT_KEY);
+    console.log(
+      "Salt first 6 chars:",
+      process.env.PAYU_MERCHANT_SALT?.substring(0, 6)
+    );
+
     const params = {
       key: PAYU_KEY,
       txnid,
@@ -111,7 +101,6 @@ export async function POST(request: NextRequest) {
       phone,
       surl: `${siteUrl}/api/payments/payu/success`,
       furl: `${siteUrl}/payment-failed`,
-      udf1,
       hash,
     };
 

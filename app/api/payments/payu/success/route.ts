@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { createSupabaseServiceRoleClient } from "@/lib/supabase-server";
 
 export const runtime = "nodejs";
 
@@ -8,23 +9,34 @@ export const runtime = "nodejs";
  * updates the order) and then redirect the browser to the appropriate
  * customer-facing page.
  *
- * Lives at /api/payments/payu/success to avoid conflicting with the
- * /order-success/[id] page route in Next.js 16.
+ * Order UUID is resolved from `txnid` (order number); `udf1` is not used in the PayU request.
  */
 export async function POST(request: NextRequest) {
   const formData = await request.formData();
 
-  const orderId = String(formData.get("udf1") || "");
+  const txnid = String(formData.get("txnid") || "").trim();
   const status = String(formData.get("status") || "");
 
-  const origin = new URL(request.url).origin;
   const failedUrl = new URL("/payment-failed", request.url);
-  if (orderId) failedUrl.searchParams.set("orderId", orderId);
+
+  let orderId = "";
+  if (txnid) {
+    const supabase = createSupabaseServiceRoleClient();
+    const { data: row } = await supabase
+      .from("orders")
+      .select("id")
+      .eq("order_number", txnid)
+      .maybeSingle();
+    orderId = row?.id ? String(row.id) : "";
+  }
 
   if (!orderId) {
     return NextResponse.redirect(failedUrl, 303);
   }
 
+  failedUrl.searchParams.set("orderId", orderId);
+
+  const origin = new URL(request.url).origin;
   let webhookOk = false;
   try {
     const webhookRes = await fetch(`${origin}/api/payments/payu/webhook`, {

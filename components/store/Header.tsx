@@ -62,7 +62,7 @@ export function Header() {
           <Link
             href="/"
             onClick={handleLogoClick}
-            className="relative z-20 block shrink-0 cursor-pointer"
+            className="relative z-20 inline-flex origin-center shrink-0 cursor-pointer transition-transform duration-200 hover:scale-110 active:scale-110"
             aria-label="Nauvaraha home"
           >
             <Image
