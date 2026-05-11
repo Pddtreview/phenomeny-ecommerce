@@ -1,5 +1,5 @@
 module.exports = {
-  siteUrl: 'https://nauvarah.com',
+  siteUrl: 'https://www.nauvaraha.com',
   generateRobotsTxt: true,
   changefreq: 'daily',
   priority: 0.7,

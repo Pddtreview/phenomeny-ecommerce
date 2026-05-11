@@ -6,7 +6,7 @@ Disallow: /account
 Disallow: /api
 
 # Host
-Host: https://nauvarah.com
+Host: https://www.nauvaraha.com
 
 # Sitemaps
-Sitemap: https://nauvarah.com/sitemap.xml
+Sitemap: https://www.nauvaraha.com/sitemap.xml
