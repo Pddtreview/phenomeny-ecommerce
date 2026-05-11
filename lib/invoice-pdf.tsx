@@ -1,4 +1,19 @@
-import { Document, Page, Text, View, StyleSheet } from "@react-pdf/renderer";
+import { Document, Page, Text, View, StyleSheet, Image } from "@react-pdf/renderer";
+
+const INVOICE_LOGO_URL =
+  "https://res.cloudinary.com/dwhpxdp18/image/upload/v1776068357/Nauvaraha_golden_logo_kmgjir.png";
+
+/** Seller details for GST invoices (Punjab, state code 03). */
+export const INVOICE_SELLER = {
+  name: "Nauvaraha",
+  addressLine1: "House No 10, Street No 01,",
+  addressLine2: "Krishna Nagar, Jalandhar, Punjab 144008",
+  gstin: "03BGNPK9576K2ZO",
+  phone: "+91 9115490001",
+  email: "hello@nauvaraha.com",
+  stateName: "Punjab",
+  stateCode: "03",
+} as const;
 
 type InvoiceOrderItem = {
   id?: string | null;
@@ -52,8 +67,13 @@ const styles = StyleSheet.create({
     paddingBottom: 12,
     marginBottom: 12,
   },
+  logo: {
+    width: 200,
+    marginBottom: 10,
+    alignSelf: "flex-start",
+  },
   businessName: {
-    fontSize: 20,
+    fontSize: 14,
     fontWeight: 700,
   },
   headerRow: {
@@ -63,6 +83,7 @@ const styles = StyleSheet.create({
   },
   headerLeft: {
     flex: 2,
+    alignSelf: "flex-start",
   },
   headerRight: {
     flex: 1,
@@ -199,12 +220,22 @@ type InvoicePdfProps = {
 };
 
 export function InvoicePdf({ order }: InvoicePdfProps) {
-  const businessAddress = process.env.NEXT_PUBLIC_BUSINESS_ADDRESS || "";
-  const gstNumber = process.env.NEXT_PUBLIC_GST_NUMBER || "";
-  const supportPhone = process.env.NEXT_PUBLIC_SUPPORT_PHONE || "";
-   const sellerGstin = process.env.NEXT_PUBLIC_GSTIN || gstNumber || "";
-   const sellerStateCode = process.env.NEXT_PUBLIC_STATE_CODE || "";
-   const sellerStateName = process.env.NEXT_PUBLIC_STATE_NAME || "";
+  const gstNumber =
+    process.env.NEXT_PUBLIC_GST_NUMBER ||
+    process.env.NEXT_PUBLIC_GSTIN ||
+    INVOICE_SELLER.gstin;
+  const sellerGstin =
+    process.env.NEXT_PUBLIC_GSTIN ||
+    process.env.NEXT_PUBLIC_GST_NUMBER ||
+    INVOICE_SELLER.gstin;
+  const sellerStateCode =
+    process.env.NEXT_PUBLIC_STATE_CODE || INVOICE_SELLER.stateCode;
+  const sellerStateName =
+    process.env.NEXT_PUBLIC_STATE_NAME || INVOICE_SELLER.stateName;
+  const supportPhone =
+    process.env.NEXT_PUBLIC_SUPPORT_PHONE || INVOICE_SELLER.phone;
+  const supportEmail =
+    process.env.NEXT_PUBLIC_SUPPORT_EMAIL || INVOICE_SELLER.email;
 
   const subtotal = Number(order.subtotal || 0);
   const discount = Number(order.discount || 0);
@@ -220,27 +251,31 @@ export function InvoicePdf({ order }: InvoicePdfProps) {
     <Document>
       <Page size="A4" style={styles.page}>
         <View style={styles.header}>
+          <Image src={INVOICE_LOGO_URL} style={styles.logo} />
           <View style={styles.headerRow}>
             <View style={styles.headerLeft}>
-              <Text style={styles.businessName}>Nauvaraha</Text>
+              <Text style={styles.businessName}>{INVOICE_SELLER.name}</Text>
               <Text style={{ marginTop: 4, fontSize: 10, fontWeight: 700 }}>
                 TAX INVOICE
               </Text>
-              {businessAddress ? (
-                <Text style={{ marginTop: 6, fontSize: 9 }}>
-                  {businessAddress}
-                </Text>
-              ) : null}
-              {sellerGstin ? (
-                <Text style={{ marginTop: 2, fontSize: 9 }}>
-                  GSTIN: {sellerGstin}
-                </Text>
-              ) : null}
-              {supportPhone ? (
-                <Text style={{ marginTop: 2, fontSize: 9 }}>
-                  Phone: {supportPhone}
-                </Text>
-              ) : null}
+              <Text style={{ marginTop: 6, fontSize: 9 }}>
+                {INVOICE_SELLER.addressLine1}
+              </Text>
+              <Text style={{ marginTop: 2, fontSize: 9 }}>
+                {INVOICE_SELLER.addressLine2}
+              </Text>
+              <Text style={{ marginTop: 2, fontSize: 9 }}>
+                GSTIN: {sellerGstin}
+              </Text>
+              <Text style={{ marginTop: 2, fontSize: 9 }}>
+                Phone: {supportPhone}
+              </Text>
+              <Text style={{ marginTop: 2, fontSize: 9 }}>
+                Email: {supportEmail}
+              </Text>
+              <Text style={{ marginTop: 2, fontSize: 9 }}>
+                State: {sellerStateName} ({sellerStateCode})
+              </Text>
             </View>
           </View>
         </View>
@@ -260,15 +295,10 @@ export function InvoicePdf({ order }: InvoicePdfProps) {
                 <Text style={styles.value}>{sellerGstin}</Text>
               </>
             ) : null}
-            {sellerStateName ? (
-              <>
-                <Text style={[styles.label, { marginTop: 4 }]}>Seller state</Text>
-                <Text style={styles.value}>
-                  {sellerStateName}
-                  {sellerStateCode ? ` (${sellerStateCode})` : ""}
-                </Text>
-              </>
-            ) : null}
+            <Text style={[styles.label, { marginTop: 4 }]}>Seller state</Text>
+            <Text style={styles.value}>
+              {sellerStateName} ({sellerStateCode})
+            </Text>
           </View>
 
           <View style={styles.box}>
