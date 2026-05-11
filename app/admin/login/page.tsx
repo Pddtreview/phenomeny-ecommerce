@@ -1,30 +1,42 @@
-'use client'
+"use client";
 
-// To create admin user: go to Supabase Dashboard → Authentication → Users → Add User
-// Add your email and password there. That user can log in here.
+import { Suspense, useEffect, useState } from "react";
+import Image from "next/image";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { createClient } from "@/lib/supabase";
+import { isAdminUser } from "@/lib/admin-auth";
+import { Input } from "@/components/ui/input";
 
-import { useState } from "react"
-import { useRouter } from "next/navigation"
-import { useForm } from "react-hook-form"
-import { z } from "zod"
-import { zodResolver } from "@hookform/resolvers/zod"
-
-import { createClient } from "@/lib/supabase"
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import { Button } from "@/components/ui/button"
+const GOLDEN_LOGO =
+  "https://res.cloudinary.com/dwhpxdp18/image/upload/v1776068357/Nauvaraha_golden_logo_kmgjir.png";
 
 const schema = z.object({
   email: z.string().email("Enter a valid email"),
   password: z.string().min(6, "Password must be at least 6 characters"),
-})
+});
 
-type FormValues = z.infer<typeof schema>
+type FormValues = z.infer<typeof schema>;
 
-export default function AdminLoginPage() {
-  const router = useRouter()
-  const [formError, setFormError] = useState<string | null>(null)
-  const [loading, setLoading] = useState(false)
+function AdminLoginForm() {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const [formError, setFormError] = useState<string | null>(() => {
+    const err = searchParams.get("error");
+    if (err === "forbidden") {
+      return "You do not have admin access. Contact the site owner if you need help.";
+    }
+    return null;
+  });
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    if (searchParams.get("error") === "forbidden") {
+      void createClient().auth.signOut();
+    }
+  }, [searchParams]);
 
   const {
     register,
@@ -36,93 +48,145 @@ export default function AdminLoginPage() {
       email: "",
       password: "",
     },
-  })
+  });
 
   const onSubmit = async (values: FormValues) => {
-    setFormError(null)
-    setLoading(true)
+    setFormError(null);
+    setLoading(true);
     try {
-      const supabase = createClient()
+      const supabase = createClient();
       const { error } = await supabase.auth.signInWithPassword({
-        email: values.email,
+        email: values.email.trim(),
         password: values.password,
-      })
+      });
       if (error) {
-        setFormError("Invalid email or password")
-        return
+        setFormError("Invalid email or password.");
+        return;
       }
-      router.push("/admin")
-      router.refresh()
+
+      const {
+        data: { user },
+        error: userErr,
+      } = await supabase.auth.getUser();
+      if (userErr || !user || !isAdminUser(user)) {
+        await supabase.auth.signOut();
+        setFormError(
+          "This account is not authorized for admin access. Use an admin email or ask for the admin role in Supabase."
+        );
+        return;
+      }
+
+      const dest = searchParams.get("redirect");
+      const safe =
+        dest &&
+        dest.startsWith("/admin") &&
+        !dest.startsWith("/admin/login") &&
+        !dest.includes("..")
+          ? dest
+          : "/admin";
+      router.push(safe);
+      router.refresh();
     } catch {
-      setFormError("Invalid email or password")
+      setFormError("Something went wrong. Please try again.");
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-100 px-4">
-      <Card className="w-full max-w-sm">
-        <CardHeader>
-          <CardTitle>Admin login</CardTitle>
-          <CardDescription>Sign in with your admin email and password.</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <form
-            onSubmit={handleSubmit(onSubmit)}
-            className="space-y-4"
-          >
-            <div>
-              <label className="mb-1 block text-xs font-medium text-zinc-600">
-                Email
-              </label>
-              <Input
-                type="email"
-                autoComplete="email"
-                {...register("email")}
-              />
-              {errors.email && (
-                <p className="mt-1 text-xs text-red-600">
-                  {errors.email.message}
-                </p>
-              )}
-            </div>
-            <div>
-              <label className="mb-1 block text-xs font-medium text-zinc-600">
-                Password
-              </label>
-              <Input
-                type="password"
-                autoComplete="current-password"
-                {...register("password")}
-              />
-              {errors.password && (
-                <p className="mt-1 text-xs text-red-600">
-                  {errors.password.message}
-                </p>
-              )}
-            </div>
-            {formError && (
-              <p className="text-sm text-red-600">
-                {formError}
+    <div className="flex min-h-screen flex-col items-center justify-center bg-white px-4 py-12">
+      <div className="w-full max-w-[400px]">
+        <div className="mb-10 flex flex-col items-center text-center">
+          <Image
+            src={GOLDEN_LOGO}
+            alt="Nauvaraha"
+            width={200}
+            height={50}
+            className="h-auto w-[200px]"
+            priority
+          />
+          <h1 className="mt-8 text-2xl font-semibold tracking-tight text-[#1A1A1A]">
+            Admin sign in
+          </h1>
+          <p className="mt-2 text-sm text-[#666666]">
+            Supabase Auth — admin role or allowlisted email only.
+          </p>
+        </div>
+
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
+          <div>
+            <label
+              htmlFor="admin-email"
+              className="mb-1.5 block text-sm font-medium text-[#1A1A1A]"
+            >
+              Email
+            </label>
+            <Input
+              id="admin-email"
+              type="email"
+              autoComplete="email"
+              className="h-11 border-[#E8E8E8] bg-white"
+              {...register("email")}
+            />
+            {errors.email && (
+              <p className="mt-1 text-xs text-red-600">{errors.email.message}</p>
+            )}
+          </div>
+          <div>
+            <label
+              htmlFor="admin-password"
+              className="mb-1.5 block text-sm font-medium text-[#1A1A1A]"
+            >
+              Password
+            </label>
+            <Input
+              id="admin-password"
+              type="password"
+              autoComplete="current-password"
+              className="h-11 border-[#E8E8E8] bg-white"
+              {...register("password")}
+            />
+            {errors.password && (
+              <p className="mt-1 text-xs text-red-600">
+                {errors.password.message}
               </p>
             )}
-            <Button
-              type="submit"
-              className="w-full"
-              disabled={loading}
+          </div>
+
+          {formError && (
+            <p
+              className="rounded-lg border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-800"
+              role="alert"
             >
-              {loading ? "Signing in…" : "Sign in"}
-            </Button>
-          </form>
-        </CardContent>
-        <CardFooter>
-          <p className="w-full text-center text-xs text-zinc-500">
-            Access restricted to Nauvaraha admins.
-          </p>
-        </CardFooter>
-      </Card>
+              {formError}
+            </p>
+          )}
+
+          <button
+            type="submit"
+            disabled={loading}
+            className="btn-gradient h-11 w-full rounded-full text-sm font-semibold text-white shadow-sm transition-opacity hover:opacity-95 disabled:opacity-60"
+          >
+            {loading ? "Signing in…" : "Sign in"}
+          </button>
+        </form>
+
+        <p className="mt-8 text-center text-xs text-[#999999]">
+          Access restricted to Nauvaraha administrators.
+        </p>
+      </div>
     </div>
-  )
+  );
 }
 
+export default function AdminLoginPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="flex min-h-screen items-center justify-center bg-white" />
+      }
+    >
+      <AdminLoginForm />
+    </Suspense>
+  );
+}
