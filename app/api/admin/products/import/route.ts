@@ -1,8 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
 import * as XLSX from "xlsx";
 import { createClient } from "@supabase/supabase-js";
-
-const CATEGORIES = ["frames", "crystals", "vastu", "bundles"];
+import {
+  parseProductCategories,
+  serializeProductCategories,
+} from "@/lib/product-categories";
 
 function getSupabase() {
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL!;
@@ -84,7 +86,12 @@ export async function POST(request: NextRequest) {
       const r = rows[i];
       const name = toStr(r?.name);
       const slugInput = toStr(r?.slug);
-      const category = toStr(r?.category) || null;
+      const categoryRaw = toStr(r?.category);
+      const categories = parseProductCategories(categoryRaw);
+      const category =
+        categories.length > 0
+          ? serializeProductCategories(categories)
+          : null;
       const description = toStr(r?.description) || null;
       const hsn_code = toStr(r?.hsn_code) || null;
       const weight_grams = toNum(r?.weight_grams);

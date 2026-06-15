@@ -26,7 +26,7 @@ const HEADERS = [
 const EXAMPLE_ROW = {
   name: "Pyrite Wealth Frame",
   slug: "pyrite-wealth-frame",
-  category: "frames",
+  category: "frames,vastu",
   description: "A powerful pyrite frame...",
   hsn_code: "7323",
   weight_grams: "450",

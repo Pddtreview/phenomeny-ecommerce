@@ -4,14 +4,13 @@ import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { ProductDescriptionAiButton } from "@/components/admin/ProductDescriptionAiButton";
+import { ProductCategoryPicker } from "@/components/admin/ProductCategoryPicker";
+import {
+  formatProductCategoryLabels,
+  type DbCategory,
+} from "@/lib/product-categories";
 
 const PRIMARY = "#1B3A6B";
-const CATEGORIES = [
-  { value: "frames", label: "Frames" },
-  { value: "crystals", label: "Crystals" },
-  { value: "vastu", label: "Vastu" },
-  { value: "bundles", label: "Bundles" },
-];
 
 function slugify(text: string): string {
   return text
@@ -37,7 +36,7 @@ export default function AdminNewProductPage() {
 
   const [name, setName] = useState("");
   const [slug, setSlug] = useState("");
-  const [category, setCategory] = useState("frames");
+  const [categories, setCategories] = useState<DbCategory[]>(["frames"]);
   const [description, setDescription] = useState("");
   const [hsnCode, setHsnCode] = useState("");
   const [weightGrams, setWeightGrams] = useState("");
@@ -77,6 +76,10 @@ export default function AdminNewProductPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (categories.length === 0) {
+      setError("Select at least one category");
+      return;
+    }
     setError(null);
     setLoading(true);
     try {
@@ -90,7 +93,7 @@ export default function AdminNewProductPage() {
         body: JSON.stringify({
           name: name.trim(),
           slug: effectiveSlug,
-          category,
+          categories,
           description: description.trim() || undefined,
           hsn_code: hsnCode.trim() || undefined,
           weight_grams: weightGrams.trim() === "" ? undefined : Number(weightGrams),
@@ -186,21 +189,14 @@ export default function AdminNewProductPage() {
                 placeholder="product-name"
               />
             </div>
-            <div>
-              <label className="mb-1 block text-xs font-medium text-zinc-600">
-                Category
+            <div className="sm:col-span-2">
+              <label className="mb-2 block text-xs font-medium text-zinc-600">
+                Categories
               </label>
-              <select
-                value={category}
-                onChange={(e) => setCategory(e.target.value)}
-                className="w-full rounded-lg border border-zinc-200 px-3 py-2 text-sm"
-              >
-                {CATEGORIES.map((c) => (
-                  <option key={c.value} value={c.value}>
-                    {c.label}
-                  </option>
-                ))}
-              </select>
+              <ProductCategoryPicker
+                value={categories}
+                onChange={setCategories}
+              />
             </div>
             <div>
               <label className="mb-1 block text-xs font-medium text-zinc-600">
@@ -243,10 +239,9 @@ export default function AdminNewProductPage() {
                 </label>
                 <ProductDescriptionAiButton
                   name={name}
-                  categoryLabel={
-                    CATEGORIES.find((c) => c.value === category)?.label ??
-                    category
-                  }
+                  categoryLabel={formatProductCategoryLabels(
+                    categories.join(",")
+                  )}
                   hsnCode={hsnCode}
                   setDescription={setDescription}
                 />

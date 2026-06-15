@@ -1,8 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import * as XLSX from "xlsx";
 import { createClient } from "@supabase/supabase-js";
-
-const CATEGORIES = ["frames", "crystals", "vastu", "bundles"];
+import { parseProductCategories } from "@/lib/product-categories";
 
 function getSupabase() {
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL!;
@@ -63,7 +62,8 @@ export async function POST(request: NextRequest) {
       const name = toStr(r?.name);
       const sku = toStr(r?.sku);
       const price = toNum(r?.price);
-      const category = toStr(r?.category).toLowerCase();
+      const categoryRaw = toStr(r?.category).toLowerCase();
+      const categories = parseProductCategories(categoryRaw);
       const image_urls = toStr(r?.image_urls);
       const compare_price = toNum(r?.compare_price);
       const cost_price = toNum(r?.cost_price);
@@ -153,11 +153,12 @@ export async function POST(request: NextRequest) {
       } else {
         warnings.push({ row: rowNum, field: "image_urls", message: "Empty; consider adding image URLs" });
       }
-      if (category && !CATEGORIES.includes(category)) {
+      if (categoryRaw && categories.length === 0) {
         warnings.push({
           row: rowNum,
           field: "category",
-          message: "Should be one of: frames, crystals, vastu, bundles",
+          message:
+            "Use one or more of: frames, crystals, vastu, bundles (comma-separated)",
         });
       }
 

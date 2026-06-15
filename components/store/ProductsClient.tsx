@@ -5,6 +5,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import Fuse from 'fuse.js';
 import { RupeeSymbol } from '@/components/ui/RupeeSymbol';
+import { productHasDbCategory } from '@/lib/product-categories';
 
 const PRIMARY = '#1A1A1A';
 
@@ -53,19 +54,7 @@ const CATEGORIES: { key: CategoryKey; label: string }[] = [
 
 function matchesCategory(product: ProductsClientProduct, filter: CategoryKey): boolean {
   if (filter === 'all') return true;
-  const c = (product.category || '').toLowerCase();
-  switch (filter) {
-    case 'frames':
-      return c.includes('frame');
-    case 'crystals':
-      return c.includes('crystal');
-    case 'vastu':
-      return c.includes('vastu');
-    case 'bundles':
-      return c.includes('bundle');
-    default:
-      return true;
-  }
+  return productHasDbCategory(product.category, filter);
 }
 
 function getPrimaryImage(p: ProductsClientProduct): string | null {

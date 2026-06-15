@@ -2,6 +2,7 @@ import Link from "next/link";
 import { createServerSupabaseClient } from "@/lib/supabase-server";
 import DeleteProductButton from "@/components/admin/DeleteProductButton";
 import ImportProductsModal from "@/components/admin/ImportProductsModal";
+import { formatProductCategoryLabels } from "@/lib/product-categories";
 
 const PRIMARY = "#1B3A6B";
 
@@ -94,7 +95,7 @@ export default async function AdminProductsPage() {
                   </div>
                 </td>
                 <td className="px-4 py-3 text-zinc-600">
-                  {p.category ?? "—"}
+                  {formatProductCategoryLabels(p.category)}
                 </td>
                 <td className="px-4 py-3 text-zinc-600">{p.slug}</td>
                 <td className="px-4 py-3">

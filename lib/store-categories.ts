@@ -1,4 +1,9 @@
-export type DbCategory = "frames" | "crystals" | "vastu" | "bundles";
+import {
+  productHasDbCategory,
+  type DbCategory,
+} from "@/lib/product-categories";
+
+export type { DbCategory };
 
 export type StoreCategorySlug =
   | "crystals"
@@ -13,9 +18,22 @@ export type StoreCategory = {
   label: string;
   /** Product `category` values to include (case-insensitive). */
   dbCategories: DbCategory[];
+  /** Match product name or slug (case-insensitive). */
+  productMatchers?: string[];
   /** Optional name/description keywords (case-insensitive). */
   keywords?: string[];
 };
+
+/** Products that belong in the Vastu shop category. */
+export const VASTU_PRODUCT_MATCHERS = [
+  "wealth yantra sacred block",
+  "pyrite 7 running horses vastu frame",
+  "dhan yog orgonite pyramid",
+  "wealth-yantra-sacred-energy-block",
+  "wealth-yantra-energy-block",
+  "pyrite-7-running-horses-vastu",
+  "dhan-yog-orgonite",
+];
 
 /** URL slugs used in nav and marketing sections → how we match products in Supabase. */
 export const STORE_CATEGORIES: StoreCategory[] = [
@@ -39,11 +57,13 @@ export const STORE_CATEGORIES: StoreCategory[] = [
     slug: "vastu-decor",
     label: "Vastu Decor",
     dbCategories: ["vastu"],
+    productMatchers: VASTU_PRODUCT_MATCHERS,
   },
   {
     slug: "vastu",
     label: "Vastu Decor",
     dbCategories: ["vastu"],
+    productMatchers: VASTU_PRODUCT_MATCHERS,
   },
   {
     slug: "bundles",
@@ -59,6 +79,7 @@ export const STORE_NAV_LINKS = STORE_CATEGORIES.filter((c) =>
 type MatchableProduct = {
   category: string | null;
   name: string;
+  slug?: string | null;
   description?: string | null;
 };
 
@@ -74,27 +95,28 @@ export function formatCategoryTitle(slug: string): string {
 }
 
 function matchesDbCategory(productCategory: string, dbCategories: DbCategory[]): boolean {
-  const c = productCategory.toLowerCase();
-  return dbCategories.some((db) => {
-    switch (db) {
-      case "frames":
-        return c === "frames" || c.includes("frame");
-      case "crystals":
-        return c === "crystals" || c.includes("crystal");
-      case "vastu":
-        return c === "vastu" || c.includes("vastu");
-      case "bundles":
-        return c === "bundles" || c.includes("bundle");
-      default:
-        return c === db;
-    }
-  });
+  return dbCategories.some((db) => productHasDbCategory(productCategory, db));
+}
+
+function matchesProductList(
+  product: MatchableProduct,
+  matchers: string[]
+): boolean {
+  const haystack = `${product.name} ${product.slug ?? ""}`.toLowerCase();
+  return matchers.some((m) => haystack.includes(m.toLowerCase()));
 }
 
 export function productMatchesStoreCategory(
   product: MatchableProduct,
   category: StoreCategory
 ): boolean {
+  if (
+    category.productMatchers?.length &&
+    matchesProductList(product, category.productMatchers)
+  ) {
+    return true;
+  }
+
   const dbMatch = matchesDbCategory(product.category ?? "", category.dbCategories);
 
   if (!category.keywords?.length) {

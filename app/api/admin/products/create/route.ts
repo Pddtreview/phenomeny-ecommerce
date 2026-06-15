@@ -1,5 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
+import {
+  parseCategoriesFromBody,
+  serializeProductCategories,
+} from "@/lib/product-categories";
 
 function getSupabase() {
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL!;
@@ -26,9 +30,8 @@ export async function POST(request: NextRequest) {
     const name = typeof body?.name === "string" ? body.name.trim() : "";
     const slugInput =
       typeof body?.slug === "string" ? body.slug.trim() : "";
-    const category =
-      ["frames", "crystals", "vastu", "bundles"].includes(body?.category) ?
-        body.category : "frames";
+    const categories = parseCategoriesFromBody(body);
+    const category = serializeProductCategories(categories);
     const description =
       typeof body?.description === "string" ? body.description.trim() : "";
     const hsn_code =
