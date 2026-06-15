@@ -1,67 +1,6 @@
 import type { Metadata } from "next";
-import { createServerSupabaseClient } from "@/lib/supabase-server";
 import ProductsClient from "@/components/store/ProductsClient";
-
-type Product = {
-  id: string;
-  name: string;
-  slug: string;
-  description: string | null;
-  category: string | null;
-  price: number | null;
-  compare_price: number | null;
-  image_url: string | null;
-};
-
-async function getAllProducts(): Promise<Product[]> {
-  const supabase = await createServerSupabaseClient();
-
-  const { data: products, error } = await supabase
-    .from("products")
-    .select("id, name, slug, description, category")
-    .eq("is_active", true);
-
-  if (error || !products) {
-    console.error("Error fetching products:", error?.message);
-    return [];
-  }
-
-  const productIds = products.map((p) => p.id);
-  const { data: images } = await supabase
-    .from("product_images")
-    .select("product_id, cloudinary_url, is_primary")
-    .eq("is_primary", true)
-    .in("product_id", productIds);
-
-  const imageMap = new Map(
-    (images ?? []).map((img) => [img.product_id, img.cloudinary_url])
-  );
-
-  const productsWithVariants = await Promise.all(
-    products.map(async (product) => {
-      const { data: variant } = await supabase
-        .from("product_variants")
-        .select("price, compare_price")
-        .eq("product_id", product.id)
-        .eq("is_active", true)
-        .limit(1)
-        .single();
-
-      return {
-        id: product.id,
-        name: product.name,
-        slug: product.slug,
-        description: product.description ?? null,
-        category: (product as any).category ?? null,
-        price: variant?.price ?? null,
-        compare_price: variant?.compare_price ?? null,
-        image_url: imageMap.get(product.id) ?? null,
-      } as Product;
-    })
-  );
-
-  return productsWithVariants;
-}
+import { getAllStoreProducts } from "@/lib/store-products";
 
 export const metadata: Metadata = {
   title: "All Products",
@@ -71,7 +10,7 @@ export const metadata: Metadata = {
 };
 
 export default async function ProductsPage() {
-  const products = await getAllProducts();
+  const products = await getAllStoreProducts();
 
   return (
     <div className="min-h-screen bg-[#FFFFFF]">

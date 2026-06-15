@@ -84,9 +84,13 @@ function getDisplayPrice(p: ProductsClientProduct): number | null {
 
 type Props = {
   products: ProductsClientProduct[];
+  hideCategoryFilters?: boolean;
 };
 
-export default function ProductsClient({ products }: Props) {
+export default function ProductsClient({
+  products,
+  hideCategoryFilters = false,
+}: Props) {
   const [search, setSearch] = useState('');
   const [category, setCategory] = useState<CategoryKey>('all');
   const [recentItems, setRecentItems] = useState<RecentItem[]>([]);
@@ -151,22 +155,24 @@ export default function ProductsClient({ products }: Props) {
         />
       </div>
 
-      <div className="mt-4 flex flex-wrap gap-2">
-        {CATEGORIES.map(({ key, label }) => (
-          <button
-            key={key}
-            type="button"
-            onClick={() => setCategory(key)}
-            className={`rounded-full px-4 py-2 text-sm font-medium transition ${
-              category === key
-                ? 'text-white shadow-sm btn-gradient'
-                : 'border border-zinc-200 bg-white text-zinc-700 hover:bg-zinc-50'
-            }`}
-          >
-            {label}
-          </button>
-        ))}
-      </div>
+      {!hideCategoryFilters && (
+        <div className="mt-4 flex flex-wrap gap-2">
+          {CATEGORIES.map(({ key, label }) => (
+            <button
+              key={key}
+              type="button"
+              onClick={() => setCategory(key)}
+              className={`rounded-full px-4 py-2 text-sm font-medium transition ${
+                category === key
+                  ? 'text-white shadow-sm btn-gradient'
+                  : 'border border-zinc-200 bg-white text-zinc-700 hover:bg-zinc-50'
+              }`}
+            >
+              {label}
+            </button>
+          ))}
+        </div>
+      )}
 
       {recentItems.length > 0 && (
         <section className="mt-10">
