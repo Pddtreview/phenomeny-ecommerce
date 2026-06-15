@@ -44,6 +44,9 @@ export function StoreFooter() {
               <Link href="/bundles" className={linkClass}>
                 Bundles
               </Link>
+              <Link href="/category/crystals" className={linkClass}>
+                Crystals &amp; Frames
+              </Link>
               <Link href="/category/bracelets" className={linkClass}>
                 Bracelets
               </Link>

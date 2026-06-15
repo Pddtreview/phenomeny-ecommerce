@@ -11,10 +11,10 @@ import { cn } from "@/lib/utils";
 const GOLDEN_LOGO =
   "https://res.cloudinary.com/dwhpxdp18/image/upload/v1776068357/Nauvaraha_golden_logo_kmgjir.png";
 
+import { STORE_NAV_LINKS } from "@/lib/store-categories";
+
 const shopLinks = [
-  { href: "/category/bracelets", label: "Bracelets" },
-  { href: "/category/vastu-decor", label: "Vastu Decor" },
-  { href: "/category/crystals", label: "Crystals & Frames" },
+  ...STORE_NAV_LINKS,
   { href: "/products", label: "All Products" },
 ];
 
