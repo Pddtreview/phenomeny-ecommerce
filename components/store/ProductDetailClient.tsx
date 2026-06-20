@@ -3,9 +3,10 @@
 import { useState, useMemo } from "react";
 import { useCart } from "@/hooks/useCart";
 import { RupeeSymbol } from "@/components/ui/RupeeSymbol";
+import type { ProductRecommendationMetadata } from "@/lib/product-recommendation-metadata";
 
-const PRIMARY = "#1B3A6B";
-const GOLD = "#C8860A";
+const PRIMARY = "#FF7A00";
+const GOLD = "#FFC247";
 
 export type ProductVariant = {
   id: string;
@@ -28,6 +29,7 @@ type ProductDetailClientProps = {
   productCategory: string | null;
   variants: ProductVariant[];
   images: ProductImage[];
+  recommendationMeta?: ProductRecommendationMetadata | null;
 };
 
 export default function ProductDetailClient({
@@ -36,6 +38,7 @@ export default function ProductDetailClient({
   productCategory,
   variants,
   images,
+  recommendationMeta = null,
 }: ProductDetailClientProps) {
   const sortedImages = useMemo(() => {
     const primaryFirst = [...(images ?? [])].sort((a, b) =>
@@ -67,6 +70,16 @@ export default function ProductDetailClient({
   const isOutOfStock = stockQty === 0 && !comingSoon;
   const lowStock = !comingSoon && stockQty > 0 && stockQty <= 10;
   const highStock = !comingSoon && stockQty > 10;
+  const discountPercent =
+    selectedVariant &&
+    selectedVariant.compare_price &&
+    selectedVariant.compare_price > selectedVariant.price
+      ? Math.round(
+          ((selectedVariant.compare_price - selectedVariant.price) /
+            selectedVariant.compare_price) *
+            100
+        )
+      : null;
 
   const handleAddToCart = () => {
     if (!selectedVariant || isOutOfStock) return;
@@ -91,7 +104,7 @@ export default function ProductDetailClient({
       {/* Left column: image gallery */}
       <div className="flex flex-col gap-3">
         <div
-          className="flex h-64 items-center justify-center overflow-hidden rounded-xl bg-zinc-100 sm:h-80"
+          className="flex h-64 items-center justify-center overflow-hidden rounded-xl bg-[#FFF2E5] sm:h-80"
         >
           {selectedImageUrl ? (
             <img
@@ -117,7 +130,7 @@ export default function ProductDetailClient({
                 key={idx}
                 type="button"
                 onClick={() => setSelectedImageIndex(idx)}
-                className="h-16 w-16 shrink-0 overflow-hidden rounded-lg border-2 bg-zinc-100 transition"
+                className="h-16 w-16 shrink-0 overflow-hidden rounded-lg border-2 bg-[#FFF2E5] transition"
                 style={{
                   borderColor: selectedImageIndex === idx ? PRIMARY : "transparent",
                 }}
@@ -137,21 +150,45 @@ export default function ProductDetailClient({
       <div className="flex flex-col">
         {productCategory && (
           <span
-            className="mb-2 inline-block w-fit rounded-full px-3 py-1 text-xs font-medium text-white"
+            className="mb-2 inline-block w-fit rounded-full px-3 py-1 text-xs font-medium text-[#2A1B12]"
             style={{ backgroundColor: GOLD }}
           >
             {productCategory}
           </span>
         )}
-        <h1 className="text-2xl font-bold text-zinc-900 sm:text-3xl">
+        <h1 className="text-2xl font-bold text-[#2A1B12] sm:text-3xl">
           {productName}
         </h1>
+        <div className="mt-3 flex flex-wrap gap-2 text-[11px] font-semibold uppercase tracking-[0.08em]">
+          <span className="rounded-full bg-[#FFF2E8] px-3 py-1 text-[#D76618]">Karan Recommended</span>
+          <span className="rounded-full bg-[#EEF8EE] px-3 py-1 text-[#15803D]">Fast Dispatch</span>
+          <span className="rounded-full bg-[#FFF4D9] px-3 py-1 text-[#8A4D11]">Secure Checkout</span>
+        </div>
+        {recommendationMeta ? (
+          <div className="mt-4 space-y-2 rounded-xl border border-[#F0DEC8] bg-[#FFFDF9] p-3">
+            <p className="text-sm text-[#6D5447]">
+              <span className="font-semibold text-[#2A1B12]">For:</span> {recommendationMeta.primaryPurpose}
+            </p>
+            <p className="text-sm text-[#6D5447]">
+              <span className="font-semibold text-[#2A1B12]">Best For:</span> {recommendationMeta.bestFor}
+            </p>
+            <p className="text-sm text-[#6D5447]">
+              <span className="font-semibold text-[#2A1B12]">Recommended When:</span>{" "}
+              {recommendationMeta.recommendedWhen}
+            </p>
+          </div>
+        ) : null}
 
         <div className="mt-6 space-y-4">
           {/* Price row */}
           <div className="price flex flex-wrap items-baseline gap-2">
             {selectedVariant ? (
               <>
+                {discountPercent ? (
+                  <span className="rounded-full bg-[#E91E63] px-2 py-0.5 text-xs font-semibold uppercase tracking-[0.08em] text-white">
+                    {discountPercent}% OFF
+                  </span>
+                ) : null}
                 <span
                   className="text-2xl font-bold"
                   style={{ color: PRIMARY }}
@@ -177,7 +214,7 @@ export default function ProductDetailClient({
             {comingSoon ? (
               <span
                 className="inline-flex rounded-full px-3 py-1 font-medium"
-                style={{ backgroundColor: "#e8eef8", color: PRIMARY }}
+                style={{ backgroundColor: "#FFF2E5", color: "#2A1B12" }}
               >
                 Coming Soon
               </span>
@@ -191,7 +228,7 @@ export default function ProductDetailClient({
             ) : lowStock ? (
               <span
                 className="inline-flex rounded-full px-3 py-1 font-medium"
-                style={{ backgroundColor: "#fef3c7", color: "#b45309" }}
+                style={{ backgroundColor: "#FFF4D9", color: "#8A4D11" }}
               >
                 {"Only " + stockQty + " left"}
               </span>
@@ -208,7 +245,7 @@ export default function ProductDetailClient({
           {/* Variant selector */}
           {hasMultipleVariants && (
             <div>
-              <p className="mb-2 text-xs font-semibold uppercase tracking-wider text-zinc-500">
+              <p className="mb-2 text-xs font-semibold uppercase tracking-wider text-[#6D5447]">
                 Variant
               </p>
               <div className="flex flex-wrap gap-2">
@@ -219,8 +256,8 @@ export default function ProductDetailClient({
                     onClick={() => setSelectedVariantId(v.id)}
                     className={`rounded-lg border px-3 py-2 text-sm font-medium transition ${
                       selectedVariantId === v.id
-                        ? "border-[#1B3A6B] text-white"
-                        : "border-zinc-200 bg-white text-zinc-700 hover:border-zinc-300"
+                        ? "text-white"
+                        : "border-[#F0DEC8] bg-[#FFFDF9] text-[#6D5447] hover:border-[#FFC247]"
                     }`}
                     style={
                       selectedVariantId === v.id
@@ -240,8 +277,29 @@ export default function ProductDetailClient({
             type="button"
             onClick={handleAddToCart}
             disabled={isOutOfStock}
-            className="w-full rounded-lg py-3 text-sm font-semibold text-white transition disabled:cursor-not-allowed disabled:opacity-50"
+            className="interactive-lift w-full rounded-lg py-3 text-sm font-semibold text-white transition disabled:cursor-not-allowed disabled:opacity-50"
             style={{ backgroundColor: PRIMARY }}
+          >
+            {isOutOfStock ? "Out of Stock" : "Add to Cart"}
+          </button>
+        </div>
+      </div>
+      <div className="fixed inset-x-0 bottom-14 z-40 border-t border-[#F0DEC8] bg-[#FFF8F0]/95 p-3 backdrop-blur md:hidden">
+        <div className="mx-auto flex max-w-4xl items-center gap-2">
+          <div className="min-w-0 flex-1">
+            <p className="truncate text-sm font-semibold text-[#2A1B12]">{productName}</p>
+            {selectedVariant ? (
+              <p className="text-sm font-semibold text-[#FF7A00]">
+                <RupeeSymbol />
+                {selectedVariant.price.toLocaleString("en-IN")}
+              </p>
+            ) : null}
+          </div>
+          <button
+            type="button"
+            onClick={handleAddToCart}
+            disabled={isOutOfStock}
+            className="btn-gradient rounded-full px-5 py-2.5 text-sm font-semibold text-white disabled:cursor-not-allowed disabled:opacity-50"
           >
             {isOutOfStock ? "Out of Stock" : "Add to Cart"}
           </button>

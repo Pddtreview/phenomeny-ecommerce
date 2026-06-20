@@ -1,14 +1,17 @@
-﻿import type { Config } from "tailwindcss";
+import type { Config } from "tailwindcss";
 
 const config: Config = {
   theme: {
     extend: {
       colors: {
-        black: "#1A1A1A",
-        white: "#FFFFFF",
-        "gray-light": "#F5F5F5",
-        "gray-mid": "#E8E8E8",
-        "gray-text": "#666666",
+        black: "#2A1B12",
+        white: "#FFF8F0",
+        primary: "#FF7A00",
+        secondary: "#E91E63",
+        accent: "#FFC247",
+        "gray-light": "#FFF2E5",
+        "gray-mid": "#F0DEC8",
+        "gray-text": "#6D5447",
       },
       fontFamily: {
         inter: ["Inter", "sans-serif"],

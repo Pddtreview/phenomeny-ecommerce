@@ -4,7 +4,8 @@ import Image from "next/image";
 const GOLDEN_LOGO =
   "https://res.cloudinary.com/dwhpxdp18/image/upload/v1776068357/Nauvaraha_golden_logo_kmgjir.png";
 
-const linkClass = "text-sm text-white/50 transition-colors duration-200 hover:text-white";
+const linkClass =
+  "text-sm text-white/55 transition-colors duration-200 hover:text-white/85";
 
 const colTitle = "mb-4 text-sm font-semibold tracking-wider uppercase text-white";
 
@@ -21,20 +22,9 @@ export function StoreFooter() {
             quality={90}
             className="h-auto w-[160px]"
           />
-          <p className="mt-6 text-base font-medium text-white/60">
-            Align Your Energy. Attract Your Abundance.
-          </p>
-          <div className="mt-6 space-y-1 text-center text-xs text-white/50">
-            <p>Nauvaraha</p>
-            <p>House No 10, Street No 01, Krishna Nagar</p>
-            <p>Jalandhar, Punjab - 144008, India</p>
-            <p>GSTIN: 03BGNPK9576K2ZO</p>
-            <p>Phone: +91 9115490001</p>
-            <p>Email: hello@nauvaraha.com</p>
-          </div>
         </div>
 
-        <div className="mt-14 grid gap-12 text-center py-4 sm:grid-cols-3 sm:gap-10 sm:text-left">
+        <div className="mt-10 grid gap-12 py-4 text-center sm:grid-cols-3 sm:gap-10 sm:text-left">
           <div>
             <h3 className={colTitle}>Shop</h3>
             <div className="flex flex-col gap-3">

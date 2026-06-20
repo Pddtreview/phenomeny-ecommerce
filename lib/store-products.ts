@@ -8,6 +8,8 @@ export type StoreProduct = {
   category: string | null;
   price: number | null;
   compare_price: number | null;
+  variant_id: string | null;
+  variant_sku: string | null;
   image_url: string | null;
 };
 
@@ -40,7 +42,7 @@ export async function getAllStoreProducts(): Promise<StoreProduct[]> {
     products.map(async (product) => {
       const { data: variant } = await supabase
         .from("product_variants")
-        .select("price, compare_price")
+        .select("id, sku, price, compare_price")
         .eq("product_id", product.id)
         .eq("is_active", true)
         .limit(1)
@@ -54,6 +56,8 @@ export async function getAllStoreProducts(): Promise<StoreProduct[]> {
         category: product.category ?? null,
         price: variant?.price ?? null,
         compare_price: variant?.compare_price ?? null,
+        variant_id: variant?.id ?? null,
+        variant_sku: variant?.sku ?? null,
         image_url: imageMap.get(product.id) ?? null,
       } satisfies StoreProduct;
     })

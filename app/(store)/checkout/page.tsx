@@ -38,9 +38,7 @@ export default function CheckoutPage() {
   const router = useRouter();
   const { items, totalPrice, clearCart } = useCart();
   const [summaryOpen, setSummaryOpen] = useState(false);
-  const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>(
-    SHOW_PREPAID_OPTION ? "prepaid" : "cod"
-  );
+  const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>("cod");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [couponCodeInput, setCouponCodeInput] = useState("");
@@ -440,6 +438,19 @@ export default function CheckoutPage() {
           >
             <div>
               <label className="mb-1 block text-xs font-medium text-zinc-600">
+                Phone (10 digits)
+              </label>
+              <input
+                {...register("phone")}
+                maxLength={10}
+                className="w-full rounded-lg border border-zinc-200 px-3 py-2 text-sm"
+              />
+              {errors.phone && (
+                <p className="mt-1 text-xs text-red-600">{errors.phone.message}</p>
+              )}
+            </div>
+            <div>
+              <label className="mb-1 block text-xs font-medium text-zinc-600">
                 Name
               </label>
               <input
@@ -461,19 +472,6 @@ export default function CheckoutPage() {
               />
               {errors.email && (
                 <p className="mt-1 text-xs text-red-600">{errors.email.message}</p>
-              )}
-            </div>
-            <div>
-              <label className="mb-1 block text-xs font-medium text-zinc-600">
-                Phone (10 digits)
-              </label>
-              <input
-                {...register("phone")}
-                maxLength={10}
-                className="w-full rounded-lg border border-zinc-200 px-3 py-2 text-sm"
-              />
-              {errors.phone && (
-                <p className="mt-1 text-xs text-red-600">{errors.phone.message}</p>
               )}
             </div>
             <div>
@@ -628,6 +626,10 @@ export default function CheckoutPage() {
             </button>
           )}
         </div>
+
+        <p className="mt-3 text-center text-xs text-zinc-500">
+          🔒 Secure checkout · 📦 COD available · 🚚 3-5 day delivery
+        </p>
       </div>
     </div>
   );

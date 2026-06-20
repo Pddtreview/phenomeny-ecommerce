@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { useEffect, useState } from "react";
 import Image from "next/image";
@@ -7,16 +7,14 @@ import { usePathname } from "next/navigation";
 import { useCart } from "@/hooks/useCart";
 import { CartDrawer } from "@/components/store/CartDrawer";
 import { cn } from "@/lib/utils";
+import {
+  MEGA_MENU_CATEGORIES,
+  MEGA_MENU_COLLECTIONS,
+  MEGA_MENU_FEATURED,
+} from "@/lib/store-mega-menu";
 
 const GOLDEN_LOGO =
   "https://res.cloudinary.com/dwhpxdp18/image/upload/v1776068357/Nauvaraha_golden_logo_kmgjir.png";
-
-import { STORE_NAV_LINKS } from "@/lib/store-categories";
-
-const shopLinks = [
-  ...STORE_NAV_LINKS,
-  { href: "/products", label: "All Products" },
-];
 
 export function Header() {
   const pathname = usePathname();
@@ -40,8 +38,7 @@ export function Header() {
 
   useEffect(() => {
     const onScroll = () => {
-      const currentY = window.scrollY;
-      setScrolled(currentY > 8);
+      setScrolled(window.scrollY > 8);
     };
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
@@ -52,17 +49,17 @@ export function Header() {
     <>
       <header
         className={cn(
-          "sticky top-0 z-50 border-b border-[#F0F0F0] transition-all duration-300",
+          "sticky top-0 z-50 border-b border-[#F0DEC8] transition-all duration-300",
           scrolled
-            ? "bg-white/90 shadow-[0_8px_24px_rgba(0,0,0,0.05)] backdrop-blur-sm"
-            : "bg-[#FFFFFF]"
+            ? "bg-[#FFF8F0]/95 shadow-[0_10px_24px_rgba(42,27,18,0.08)] backdrop-blur-sm"
+            : "bg-[#FFF8F0]"
         )}
       >
         <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4 sm:h-[4.5rem] lg:px-8">
           <Link
             href="/"
             onClick={handleLogoClick}
-            className="relative z-20 inline-flex origin-center shrink-0 cursor-pointer transition-transform duration-200 hover:scale-110 active:scale-110"
+            className="relative z-20 inline-flex origin-center shrink-0"
             aria-label="Nauvaraha home"
           >
             <Image
@@ -84,7 +81,7 @@ export function Header() {
             >
               <button
                 type="button"
-                className="flex items-center gap-1 text-sm font-semibold text-[#1A1A1A] hover:opacity-70"
+                className="flex items-center gap-1 text-sm font-semibold text-[#2A1B12] hover:text-[#FF7A00]"
               >
                 Shop
                 <span className={cn("transition-transform duration-200", shopOpen && "rotate-180")}>
@@ -93,35 +90,77 @@ export function Header() {
               </button>
               <div
                 className={cn(
-                  "absolute left-0 top-full pt-4 transition-all duration-200",
+                  "absolute left-1/2 top-full z-50 -translate-x-1/2 pt-4 transition-all duration-200",
                   shopOpen
                     ? "pointer-events-auto translate-y-0 opacity-100"
                     : "pointer-events-none -translate-y-1 opacity-0"
                 )}
               >
-                <div className="min-w-[200px] rounded-2xl bg-white p-6 shadow-2xl">
-                  <div className="flex flex-col gap-1">
-                    {shopLinks.map((link) => (
-                      <Link
-                        key={link.href}
-                        href={link.href}
-                        className="rounded-lg px-3 py-2 text-sm font-medium text-[#1A1A1A] hover:bg-[#F5F5F5]"
-                      >
-                        {link.label}
-                      </Link>
-                    ))}
+                <div className="w-[min(1200px,calc(100vw-4rem))] rounded-3xl border border-[#F0DEC8] bg-[#FFFDF9] p-8 shadow-[0_28px_56px_rgba(42,27,18,0.16)]">
+                  <div className="grid items-start gap-8 md:grid-cols-[40%_25%_35%]">
+                    <div className="h-full px-2">
+                      <p className="mb-3 text-xs font-semibold uppercase tracking-[0.16em] text-[#8A6C5B]">
+                        Collections
+                      </p>
+                      <div className="space-y-2">
+                        {MEGA_MENU_COLLECTIONS.map((link) => (
+                          <Link
+                            key={link.label}
+                            href={link.href}
+                            className="block rounded-xl px-3 py-2 hover:bg-[#FFF2E5]"
+                          >
+                            <p className="text-sm font-semibold text-[#2A1B12]">{link.label}</p>
+                            <p className="mt-1 text-xs text-[#6D5447]">{link.description}</p>
+                          </Link>
+                        ))}
+                      </div>
+                    </div>
+                    <div className="h-full px-2">
+                      <p className="mb-3 text-xs font-semibold uppercase tracking-[0.16em] text-[#8A6C5B]">
+                        Categories
+                      </p>
+                      <div className="space-y-1">
+                        {MEGA_MENU_CATEGORIES.map((link) => (
+                          <Link
+                            key={link.label}
+                            href={link.href}
+                            className="link-underline block rounded-lg px-3 py-2 text-sm font-medium text-[#2A1B12] hover:bg-[#FFF2E5]"
+                          >
+                            {link.label}
+                          </Link>
+                        ))}
+                      </div>
+                    </div>
+                    <div className="h-full px-2">
+                      <p className="mb-3 text-xs font-semibold uppercase tracking-[0.16em] text-[#8A6C5B]">
+                        Featured
+                      </p>
+                      <div className="space-y-2">
+                        {MEGA_MENU_FEATURED.map((link) => (
+                          <Link
+                            key={link.label}
+                            href={link.href}
+                            className="block rounded-xl border border-[#F0DEC8] bg-[#FFF8F0] px-3 py-3 hover:border-[#FFC247]"
+                          >
+                            <p className="text-sm font-semibold text-[#2A1B12]">{link.label}</p>
+                            <p className="mt-1 text-xs text-[#6D5447]">{link.description}</p>
+                          </Link>
+                        ))}
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
             {[
               { href: "/bundles", label: "Bundles" },
-              { href: "/about", label: "About" },
+              { href: "/about-karan", label: "About Karan" },
+              { href: "/journal", label: "Journal" },
             ].map((link) => (
               <Link
                 key={link.href}
                 href={link.href}
-                className="text-sm font-semibold text-[#1A1A1A] hover:opacity-70"
+                className="link-underline text-sm font-semibold text-[#2A1B12] hover:text-[#FF7A00]"
               >
                 {link.label}
               </Link>
@@ -131,7 +170,7 @@ export function Header() {
           <div className="flex items-center gap-1 sm:gap-2">
             <Link
               href="/products"
-              className="flex h-11 w-11 items-center justify-center rounded-full text-[#1A1A1A] transition-opacity duration-200 hover:opacity-70"
+              className="interactive-lift flex h-11 w-11 items-center justify-center rounded-full text-[#2A1B12] hover:bg-[#FFF2E5]"
               aria-label="Search products"
             >
               <svg
@@ -153,7 +192,7 @@ export function Header() {
               type="button"
               onClick={() => setCartOpen(true)}
               suppressHydrationWarning
-              className="relative flex h-11 w-11 items-center justify-center rounded-full text-[#1A1A1A] transition-opacity duration-200 hover:opacity-70"
+              className="interactive-lift relative flex h-11 w-11 items-center justify-center rounded-full text-[#2A1B12] hover:bg-[#FFF2E5]"
               aria-label="Open cart"
             >
               <svg
@@ -172,18 +211,15 @@ export function Header() {
                 <path d="M16 10a4 4 0 0 1-8 0" />
               </svg>
               {mounted && totalItems > 0 && (
-                <span
-                  className="absolute -right-1 -top-1 flex h-5 min-w-5 items-center justify-center rounded-full bg-[#1A1A1A] px-1 text-[10px] font-semibold text-white"
-                >
+                <span className="absolute -right-1 -top-1 flex h-5 min-w-5 items-center justify-center rounded-full bg-[#2A1B12] px-1 text-[10px] font-semibold text-white">
                   {totalItems > 99 ? "99+" : totalItems}
                 </span>
               )}
             </button>
-
             <button
               type="button"
-              onClick={() => setMobileMenuOpen((o) => !o)}
-              className="flex h-11 w-11 items-center justify-center rounded-full text-[#1A1A1A] transition-opacity duration-200 hover:opacity-70 md:hidden"
+              onClick={() => setMobileMenuOpen((open) => !open)}
+              className="interactive-lift flex h-11 w-11 items-center justify-center rounded-full text-[#2A1B12] hover:bg-[#FFF2E5] md:hidden"
               aria-label={mobileMenuOpen ? "Close menu" : "Open menu"}
               aria-expanded={mobileMenuOpen}
             >
@@ -221,46 +257,68 @@ export function Header() {
 
         <div
           className={cn(
-            "fixed inset-0 top-16 z-40 bg-white transition-transform duration-300 md:hidden",
+            "fixed inset-0 top-16 z-40 overflow-y-auto bg-[#FFF8F0] transition-transform duration-300 md:hidden",
             mobileMenuOpen ? "translate-x-0" : "translate-x-full"
           )}
         >
-          <nav className="flex h-full flex-col justify-center gap-8 px-8" aria-label="Mobile">
-            <Link
-              href="/products"
-              onClick={() => setMobileMenuOpen(false)}
-              className="text-3xl font-extrabold tracking-[-0.03em] text-[#1A1A1A]"
-            >
-              Shop
-            </Link>
-            <Link
-              href="/bundles"
-              onClick={() => setMobileMenuOpen(false)}
-              className="text-3xl font-extrabold tracking-[-0.03em] text-[#1A1A1A]"
-            >
-              Bundles
-            </Link>
-            <Link
-              href="/about"
-              onClick={() => setMobileMenuOpen(false)}
-              className="text-3xl font-extrabold tracking-[-0.03em] text-[#1A1A1A]"
-            >
-              About
-            </Link>
-            {shopLinks.map((link) => (
-              <Link
-                key={link.href}
-                href={link.href}
-                onClick={() => setMobileMenuOpen(false)}
-                className="text-base font-medium text-[#666666] hover:text-[#1A1A1A]"
-              >
-                {link.label}
-              </Link>
-            ))}
+          <nav className="flex flex-col gap-6 px-6 py-8" aria-label="Mobile">
+            <div className="rounded-2xl border border-[#F0DEC8] bg-[#FFFDF9] p-4">
+              <p className="mb-3 text-xs font-semibold uppercase tracking-[0.16em] text-[#8A6C5B]">
+                Shop Collections
+              </p>
+              <div className="space-y-2">
+                {MEGA_MENU_COLLECTIONS.map((link) => (
+                  <Link
+                    key={link.label}
+                    href={link.href}
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="block rounded-xl px-3 py-2 hover:bg-[#FFF2E5]"
+                  >
+                    <p className="text-base font-semibold text-[#2A1B12]">{link.label}</p>
+                    <p className="mt-1 text-xs text-[#6D5447]">{link.description}</p>
+                  </Link>
+                ))}
+              </div>
+            </div>
+            <div className="rounded-2xl border border-[#F0DEC8] bg-[#FFFDF9] p-4">
+              <p className="mb-3 text-xs font-semibold uppercase tracking-[0.16em] text-[#8A6C5B]">
+                Categories
+              </p>
+              <div className="grid grid-cols-2 gap-2">
+                {MEGA_MENU_CATEGORIES.map((link) => (
+                  <Link
+                    key={link.label}
+                    href={link.href}
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="rounded-lg border border-[#F0DEC8] bg-[#FFF8F0] px-3 py-2 text-sm font-medium text-[#2A1B12]"
+                  >
+                    {link.label}
+                  </Link>
+                ))}
+              </div>
+            </div>
+            <div className="space-y-4">
+              {[
+                { href: "/products", label: "All Products" },
+                { href: "/bundles", label: "Bundles" },
+                { href: "/about-karan", label: "About Karan" },
+                { href: "/journal", label: "Journal" },
+                { href: "/consult", label: "Book a Consultation" },
+                { href: "/track-order", label: "Track My Order" },
+              ].map((link) => (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="block text-base font-semibold text-[#2A1B12]"
+                >
+                  {link.label}
+                </Link>
+              ))}
+            </div>
           </nav>
         </div>
       </header>
-
       <CartDrawer open={cartOpen} onClose={() => setCartOpen(false)} />
     </>
   );

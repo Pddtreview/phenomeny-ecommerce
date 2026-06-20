@@ -11,21 +11,21 @@ export const metadata: Metadata = {
   },
 };
 
-const sectionHeading = "mt-10 text-2xl font-bold text-[#1A1A1A] first:mt-0";
-const bodyText = "mt-4 text-base font-normal text-[#666666] sm:text-[1.05rem]";
+const sectionHeading = "mt-10 text-2xl font-bold text-[#2A1B12] first:mt-0";
+const bodyText = "mt-4 text-base font-normal text-[#6D5447] sm:text-[1.05rem]";
 
 export default function AboutPage() {
   return (
-    <div className="bg-[#FFFFFF] pb-16 pt-16">
+    <div className="bg-[#FFF8F0] pb-16 pt-16">
       <article className="mx-auto max-w-3xl px-4 font-inter leading-relaxed">
-        <h1 className="text-5xl font-black tracking-tight text-[#1A1A1A]">
+        <h1 className="text-5xl font-black tracking-tight text-[#2A1B12]">
           About Nauvaraha
         </h1>
-        <p className="mt-4 text-xl font-normal text-[#666666]">
+        <p className="mt-4 text-xl font-normal text-[#6D5447]">
           Ancient Wisdom. Modern Intention.
         </p>
 
-        <p className="mt-6 text-base font-normal text-[#666666] sm:text-[1.05rem]">
+        <p className="mt-6 text-base font-normal text-[#6D5447] sm:text-[1.05rem]">
           Established in 2013 in Jalandhar, Punjab, Nauvaraha is a premier
           destination for authentic spiritual tools and Vedic remedies. We
           believe that spiritual growth should be supported by genuine,
@@ -34,10 +34,10 @@ export default function AboutPage() {
         </p>
 
         <section
-          className="mt-10 rounded-2xl border border-[#EEEEEE] bg-white p-6 sm:p-8"
+          className="mt-10 rounded-2xl border border-[#F0DEC8] bg-[#FFFDF9] p-6 sm:p-8"
           aria-labelledby="story-heading"
         >
-          <h2 id="story-heading" className="text-2xl font-bold text-[#1A1A1A]">
+          <h2 id="story-heading" className="text-2xl font-bold text-[#2A1B12]">
             The Nauvaraha Story
           </h2>
           <p className={bodyText}>
@@ -51,22 +51,22 @@ export default function AboutPage() {
         </section>
 
         <h2 className={sectionHeading}>Our Commitment to Quality</h2>
-        <p className="mt-3 text-base font-normal text-[#666666]">
+        <p className="mt-3 text-base font-normal text-[#6D5447]">
           At Nauvaraha, we specialise in:
         </p>
-        <ul className="mt-4 list-disc space-y-3 pl-6 text-base font-normal text-[#666666] sm:text-[1.05rem]">
+        <ul className="mt-4 list-disc space-y-3 pl-6 text-base font-normal text-[#6D5447] sm:text-[1.05rem]">
           <li>
-            <span className="font-medium text-[#1A1A1A]">
+            <span className="font-medium text-[#2A1B12]">
               Authentic Gemstones &amp; Crystals:
             </span>{" "}
             Sourced for their purity and vibrational quality.
           </li>
           <li>
-            <span className="font-medium text-[#1A1A1A]">Vedic Remedies:</span>{" "}
+            <span className="font-medium text-[#2A1B12]">Vedic Remedies:</span>{" "}
             Tools prescribed to align with your astrological profile.
           </li>
           <li>
-            <span className="font-medium text-[#1A1A1A]">
+            <span className="font-medium text-[#2A1B12]">
               Spiritual Guidance:
             </span>{" "}
             Expert consultations in crystal healing and Vastu to help you find
@@ -75,28 +75,28 @@ export default function AboutPage() {
         </ul>
 
         <h2 className={sectionHeading}>Why Choose Us?</h2>
-        <ul className="mt-4 list-disc space-y-3 pl-6 text-base font-normal text-[#666666] sm:text-[1.05rem]">
+        <ul className="mt-4 list-disc space-y-3 pl-6 text-base font-normal text-[#6D5447] sm:text-[1.05rem]">
           <li>
-            <span className="font-medium text-[#1A1A1A]">Expert Curation:</span>{" "}
+            <span className="font-medium text-[#2A1B12]">Expert Curation:</span>{" "}
             Products are handpicked and verified by a practicing astrologer.
           </li>
           <li>
-            <span className="font-medium text-[#1A1A1A]">Transparency:</span>{" "}
+            <span className="font-medium text-[#2A1B12]">Transparency:</span>{" "}
             Based in Jalandhar, we operate with full transparency, including a
             registered GSTIN and a dedicated support team.
           </li>
           <li>
-            <span className="font-medium text-[#1A1A1A]">Customer-Centric:</span>{" "}
+            <span className="font-medium text-[#2A1B12]">Customer-Centric:</span>{" "}
             We provide comprehensive support, from order tracking to detailed
             consultations, ensuring your journey with us is seamless.
           </li>
         </ul>
 
         <section
-          className="mt-10 rounded-2xl border border-[#EEEEEE] bg-white p-6 sm:p-8"
+          className="mt-10 rounded-2xl border border-[#F0DEC8] bg-[#FFFDF9] p-6 sm:p-8"
           aria-labelledby="connect-heading"
         >
-          <h2 id="connect-heading" className="text-2xl font-bold text-[#1A1A1A]">
+          <h2 id="connect-heading" className="text-2xl font-bold text-[#2A1B12]">
             Connect With Us
           </h2>
           <p className={bodyText}>
@@ -108,7 +108,7 @@ export default function AboutPage() {
           <p className="mt-6">
             <Link
               href="/contact"
-              className="inline-flex rounded-full bg-[linear-gradient(135deg,#FF4500,#E91E8C)] px-6 py-2.5 text-sm font-semibold text-white transition-opacity hover:opacity-90"
+              className="interactive-lift inline-flex rounded-full bg-[linear-gradient(135deg,#FF7A00,#E91E63)] px-6 py-2.5 text-sm font-semibold text-white transition-opacity hover:opacity-90"
             >
               Get in touch
             </Link>

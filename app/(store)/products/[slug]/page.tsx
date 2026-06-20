@@ -4,9 +4,10 @@ import Link from "next/link";
 import { createServerSupabaseClient } from "@/lib/supabase-server";
 import ProductDetailClient from "@/components/store/ProductDetailClient";
 import SaveRecentlyViewed from "@/components/store/SaveRecentlyViewed";
+import { getAllStoreProducts } from "@/lib/store-products";
+import { getProductRecommendationMetadata } from "@/lib/product-recommendation-metadata";
 
-const PRIMARY = "#1A1A1A";
-const GOLD = "#E91E8C";
+const GOLD = "#E91E63";
 
 type ProductVariantRow = {
   id: string;
@@ -156,9 +157,16 @@ export default async function ProductPage({
     },
   };
   const productSchemaJson = JSON.stringify(productSchema);
+  const whatsappHref = `https://wa.me/919115490001?text=${encodeURIComponent(
+    `Hi Karan, I need help deciding if ${product.name} is right for me.`
+  )}`;
+  const relatedProducts = (await getAllStoreProducts())
+    .filter((item) => item.slug !== product.slug && item.category === product.category)
+    .slice(0, 3);
+  const recommendationMeta = getProductRecommendationMetadata(product);
 
   return (
-    <div className="min-h-screen bg-[#FFFFFF]">
+    <div className="min-h-screen bg-[#FFF8F0]">
       <SaveRecentlyViewed
         id={product.id}
         slug={product.slug}
@@ -174,7 +182,7 @@ export default async function ProductPage({
         {/* Back link */}
         <Link
           href="/products"
-          className="inline-flex items-center gap-1 text-sm font-medium text-zinc-600 hover:text-zinc-900"
+          className="inline-flex items-center gap-1 text-sm font-medium text-[#6D5447] hover:text-[#2A1B12]"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -197,26 +205,88 @@ export default async function ProductPage({
             productCategory={product.category ?? null}
             variants={variantPayload}
             images={productImages}
+            recommendationMeta={recommendationMeta}
           />
         </div>
 
+        <section className="mt-6 rounded-xl border border-[#F0DEC8] bg-[#FFFDF9] p-4">
+          <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[#6D5447]">
+            Karan&apos;s Note
+          </p>
+          <p className="mt-2 text-sm text-[#2A1B12]">
+            “I prescribe this when I see repeated energy stagnation in chart and space.
+            Use this consistently for 21 days with clear intention.”
+          </p>
+          <p className="mt-2 text-xs text-[#6D5447]">— Karan Chopra</p>
+        </section>
+
+        {recommendationMeta && (
+          <section className="mt-6 rounded-2xl border border-[#F0DEC8] bg-[#FFFDF9] p-5">
+            <h2 className="text-lg font-semibold text-[#2A1B12]">Why Karan Recommends This</h2>
+            <p className="mt-2 text-sm text-[#6D5447]">{recommendationMeta.whyKaranRecommends}</p>
+            <div className="mt-4 grid gap-3 sm:grid-cols-2">
+              <div className="rounded-xl border border-[#F2E3D4] bg-[#FFF8F0] p-3">
+                <p className="text-[11px] font-semibold uppercase tracking-[0.08em] text-[#8A6C5B]">Primary Purpose</p>
+                <p className="mt-1 text-sm font-medium text-[#2A1B12]">{recommendationMeta.primaryPurpose}</p>
+              </div>
+              <div className="rounded-xl border border-[#F2E3D4] bg-[#FFF8F0] p-3">
+                <p className="text-[11px] font-semibold uppercase tracking-[0.08em] text-[#8A6C5B]">Best For</p>
+                <p className="mt-1 text-sm font-medium text-[#2A1B12]">{recommendationMeta.bestFor}</p>
+              </div>
+              <div className="rounded-xl border border-[#F2E3D4] bg-[#FFF8F0] p-3 sm:col-span-2">
+                <p className="text-[11px] font-semibold uppercase tracking-[0.08em] text-[#8A6C5B]">Recommended When</p>
+                <p className="mt-1 text-sm font-medium text-[#2A1B12]">{recommendationMeta.recommendedWhen}</p>
+              </div>
+            </div>
+            {recommendationMeta.placementGuide ? (
+              <div className="mt-4 rounded-xl border border-[#F2E3D4] bg-[#FFF8F0] p-3">
+                <h3 className="text-sm font-semibold text-[#2A1B12]">Placement Guide</h3>
+                <p className="mt-1 text-sm text-[#6D5447]">{recommendationMeta.placementGuide}</p>
+              </div>
+            ) : null}
+            {recommendationMeta.usageGuide ? (
+              <div className="mt-3 rounded-xl border border-[#F2E3D4] bg-[#FFF8F0] p-3">
+                <h3 className="text-sm font-semibold text-[#2A1B12]">Usage Guide</h3>
+                <p className="mt-1 text-sm text-[#6D5447]">{recommendationMeta.usageGuide}</p>
+              </div>
+            ) : null}
+          </section>
+        )}
+
+        <section className="mt-4 flex flex-wrap items-center gap-2 text-xs">
+          <span className="rounded-full bg-[#FFF4D9] px-3 py-1 font-medium text-[#8A4D11]">
+            Limited stock
+          </span>
+          <span className="rounded-full bg-[#EEF8EE] px-3 py-1 font-medium text-[#15803D]">
+            Fast dispatch available
+          </span>
+          <a
+            href={whatsappHref}
+            target="_blank"
+            rel="noreferrer"
+            className="rounded-full bg-[#25D366] px-3 py-1 font-medium text-white"
+          >
+            Ask Karan on WhatsApp
+          </a>
+        </section>
+
         {/* Description */}
         {product.description && (
-          <section className="mt-10 border-t border-zinc-200 pt-8">
-            <h2 className="text-lg font-semibold text-zinc-900">Description</h2>
-            <div className="mt-3 prose prose-sm max-w-none text-zinc-600 prose-p:leading-relaxed">
+          <section className="mt-10 border-t border-[#F0DEC8] pt-8">
+            <h2 className="text-lg font-semibold text-[#2A1B12]">Description</h2>
+            <div className="mt-3 prose prose-sm max-w-none text-[#6D5447] prose-p:leading-relaxed">
               <p className="whitespace-pre-wrap">{product.description}</p>
             </div>
           </section>
         )}
 
         {/* Reviews */}
-        <section className="mt-10 border-t border-zinc-200 pt-8">
-          <h2 className="text-lg font-semibold text-zinc-900">
+        <section className="mt-10 border-t border-[#F0DEC8] pt-8">
+          <h2 className="text-lg font-semibold text-[#2A1B12]">
             Reviews {reviews.length > 0 && `(${reviews.length})`}
           </h2>
           {reviews.length === 0 ? (
-            <p className="mt-3 text-sm text-zinc-500">
+            <p className="mt-3 text-sm text-[#6D5447]">
               No reviews yet. Be the first to share your experience.
             </p>
           ) : (
@@ -224,7 +294,7 @@ export default async function ProductPage({
               {reviews.map((review) => (
                 <li
                   key={review.id}
-                  className="rounded-lg border border-zinc-100 bg-white p-4"
+                  className="rounded-lg border border-[#F0DEC8] bg-[#FFFDF9] p-4"
                 >
                   <div className="flex items-center gap-2">
                     <div className="flex gap-0.5" aria-label={`${review.rating} stars`}>
@@ -241,19 +311,61 @@ export default async function ProductPage({
                       ))}
                     </div>
                     {review.verified_purchase && (
-                      <span className="rounded bg-zinc-100 px-2 py-0.5 text-xs font-medium text-zinc-600">
+                      <span className="rounded bg-[#FFF2E5] px-2 py-0.5 text-xs font-medium text-[#6D5447]">
                         Verified Purchase
                       </span>
                     )}
                   </div>
                   {review.body && (
-                    <p className="mt-2 text-sm text-zinc-600">{review.body}</p>
+                    <p className="mt-2 text-sm text-[#6D5447]">{review.body}</p>
                   )}
                 </li>
               ))}
             </ul>
           )}
         </section>
+
+        {relatedProducts.length > 0 && (
+          <section className="mt-10 border-t border-[#F0DEC8] pt-8">
+            <h2 className="text-lg font-semibold text-[#2A1B12]">Related Recommendations</h2>
+            <div className="mt-4 grid gap-4 sm:grid-cols-3">
+              {relatedProducts.map((item) => {
+                const meta = getProductRecommendationMetadata(item);
+                return (
+                  <Link
+                    key={item.id}
+                    href={`/products/${item.slug}`}
+                    className="card-hover rounded-2xl border border-[#F0DEC8] bg-[#FFFDF9] p-3"
+                  >
+                    <div className="aspect-[4/3] overflow-hidden rounded-xl bg-[#FFF2E5]">
+                      {item.image_url ? (
+                        // eslint-disable-next-line @next/next/no-img-element
+                        <img src={item.image_url} alt={item.name} className="h-full w-full object-cover" />
+                      ) : null}
+                    </div>
+                    <div className="mt-3 flex flex-wrap gap-1">
+                      <span className="rounded-full bg-[#FFF2E8] px-2 py-0.5 text-[10px] font-semibold uppercase tracking-[0.06em] text-[#D76618]">
+                        Karan Recommended
+                      </span>
+                    </div>
+                    <p className="mt-2 line-clamp-2 text-sm font-semibold text-[#2A1B12]">{item.name}</p>
+                    {meta ? (
+                      <>
+                        <p className="mt-1 line-clamp-1 text-xs text-[#6D5447]">
+                          <span className="font-semibold text-[#2A1B12]">For:</span> {meta.primaryPurpose}
+                        </p>
+                        <p className="mt-1 line-clamp-2 text-xs text-[#6D5447]">
+                          <span className="font-semibold text-[#2A1B12]">Recommended When:</span>{" "}
+                          {meta.recommendedWhen}
+                        </p>
+                      </>
+                    ) : null}
+                  </Link>
+                );
+              })}
+            </div>
+          </section>
+        )}
       </div>
     </div>
   );
