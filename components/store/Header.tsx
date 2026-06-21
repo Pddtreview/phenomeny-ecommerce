@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -23,11 +23,35 @@ export function Header() {
   const [cartOpen, setCartOpen] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [shopOpen, setShopOpen] = useState(false);
+  const [menuOffsetX, setMenuOffsetX] = useState(0);
+  const shopTriggerRef = useRef<HTMLDivElement>(null);
+  const shopMenuRef = useRef<HTMLDivElement>(null);
   const totalItems = useCart((s) => s.totalItems());
 
   useEffect(() => {
     setMounted(true);
   }, []);
+
+  useEffect(() => {
+    if (!shopOpen) return;
+    const recompute = () => {
+      const trigger = shopTriggerRef.current;
+      const menu = shopMenuRef.current;
+      if (!trigger || !menu) return;
+      const gutter = 16;
+      const viewportWidth = document.documentElement.clientWidth;
+      const menuWidth = menu.offsetWidth;
+      const triggerRect = trigger.getBoundingClientRect();
+      const triggerCenter = triggerRect.left + triggerRect.width / 2;
+      const naturalLeft = triggerCenter - menuWidth / 2;
+      const maxLeft = viewportWidth - gutter - menuWidth;
+      const clampedLeft = Math.max(gutter, Math.min(naturalLeft, maxLeft));
+      setMenuOffsetX(clampedLeft - naturalLeft);
+    };
+    recompute();
+    window.addEventListener("resize", recompute);
+    return () => window.removeEventListener("resize", recompute);
+  }, [shopOpen]);
 
   const handleLogoClick = () => {
     setMobileMenuOpen(false);
@@ -75,6 +99,7 @@ export function Header() {
 
           <nav className="hidden items-center gap-10 md:flex" aria-label="Main">
             <div
+              ref={shopTriggerRef}
               className="relative"
               onMouseEnter={() => setShopOpen(true)}
               onMouseLeave={() => setShopOpen(false)}
@@ -90,13 +115,19 @@ export function Header() {
               </button>
               <div
                 className={cn(
-                  "absolute left-1/2 top-full z-50 -translate-x-1/2 pt-4 transition-all duration-200",
-                  shopOpen
-                    ? "pointer-events-auto translate-y-0 opacity-100"
-                    : "pointer-events-none -translate-y-1 opacity-0"
+                  "absolute left-1/2 top-full z-50 pt-4 transition-[opacity,transform] duration-200",
+                  shopOpen ? "pointer-events-auto opacity-100" : "pointer-events-none opacity-0"
                 )}
+                style={{
+                  transform: `translateX(calc(-50% + ${menuOffsetX}px)) translateY(${
+                    shopOpen ? "0" : "-0.25rem"
+                  })`,
+                }}
               >
-                <div className="w-[min(1200px,calc(100vw-4rem))] rounded-3xl border border-[#F0DEC8] bg-[#FFFDF9] p-8 shadow-[0_28px_56px_rgba(42,27,18,0.16)]">
+                <div
+                  ref={shopMenuRef}
+                  className="w-[min(1200px,calc(100vw-2rem))] rounded-3xl border border-[#F0DEC8] bg-[#FFFDF9] p-8 shadow-[0_28px_56px_rgba(42,27,18,0.16)]"
+                >
                   <div className="grid items-start gap-8 md:grid-cols-[40%_25%_35%]">
                     <div className="h-full px-2">
                       <p className="mb-3 text-xs font-semibold uppercase tracking-[0.16em] text-[#8A6C5B]">
