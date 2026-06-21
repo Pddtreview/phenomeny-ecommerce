@@ -401,14 +401,13 @@ export async function HomepageV6() {
             </div>
 
             <div className="order-1 md:order-2">
-              <div className="relative min-h-[220px] overflow-hidden rounded-[26px] bg-[radial-gradient(circle_at_50%_28%,#FFF6EA_0%,#FBE7D3_58%,#F5D8BE_100%)] sm:min-h-[260px] md:min-h-[340px] lg:min-h-[300px]">
-                <div className="absolute inset-0 bg-[radial-gradient(circle_at_52%_88%,rgba(42,27,18,0.14)_0%,rgba(42,27,18,0)_46%)]" />
+              <div className="relative min-h-[300px] overflow-hidden rounded-[26px] sm:min-h-[320px] md:min-h-[340px] lg:min-h-[300px]">
                 <Image
                   src={HOMEPAGE_IMAGES.karanHero}
                   alt="Karan Chopra"
                   fill
                   priority
-                  className="object-contain object-bottom transition-transform duration-700 hover:scale-[1.02]"
+                  className="object-cover object-top transition-transform duration-700 hover:scale-[1.02]"
                 />
               </div>
             </div>
