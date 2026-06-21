@@ -362,15 +362,15 @@ export async function HomepageV6() {
       <div className="pointer-events-none absolute -left-32 top-20 h-72 w-72 rounded-full bg-[#FF7A00]/10 blur-3xl" />
       <div className="pointer-events-none absolute -right-24 top-[32rem] h-96 w-96 rounded-full bg-[#E91E63]/10 blur-3xl" />
 
-      <div className="mx-auto flex w-full max-w-[1560px] flex-col gap-14 px-5 pb-24 pt-8 sm:px-8 md:gap-20 md:pt-12 lg:px-12 xl:px-16 2xl:px-20">
+      <div className="mx-auto flex w-full max-w-[1560px] flex-col gap-14 px-5 pb-24 pt-8 sm:px-8 md:gap-20 md:pt-12 lg:gap-12 lg:pb-16 lg:pt-8 lg:px-12 xl:px-16 2xl:px-20">
         {/* Hero */}
-        <section className="relative overflow-hidden rounded-[36px] border border-[#F1DFCE] bg-[linear-gradient(120deg,#FFF9F2_0%,#FFF3E8_55%,#FFEFEA_100%)] p-5 shadow-[0_30px_70px_rgba(42,27,18,0.08)] md:p-10">
-          <div className="grid items-center gap-8 md:grid-cols-[0.95fr_1.05fr]">
+        <section className="relative overflow-hidden rounded-[36px] border border-[#F1DFCE] bg-[linear-gradient(120deg,#FFF9F2_0%,#FFF3E8_55%,#FFEFEA_100%)] p-5 shadow-[0_30px_70px_rgba(42,27,18,0.08)] md:p-10 lg:p-7">
+          <div className="grid items-center gap-8 md:grid-cols-[0.95fr_1.05fr] lg:gap-6">
             <div className="order-2 md:order-1">
               <span className="inline-flex w-fit rounded-full border border-[#FFD6BA] bg-white/70 px-4 py-1.5 text-[11px] font-semibold uppercase tracking-[0.18em] text-[#AA4A1A] backdrop-blur">
                 Karan Chopra&apos;s Guidance
               </span>
-              <h1 className="mt-5 text-[clamp(1.7rem,4.8vw,3.9rem)] font-semibold leading-[0.98] tracking-[-0.035em]">
+              <h1 className="mt-5 text-[clamp(1.7rem,4.8vw,3.9rem)] font-semibold leading-[0.98] tracking-[-0.035em] lg:mt-4">
                 I Don&apos;t Sell
                 <br />
                 Random Products.
@@ -379,12 +379,12 @@ export async function HomepageV6() {
                   I Prescribe.
                 </span>
               </h1>
-              <p className="mt-5 max-w-xl text-sm leading-relaxed text-[#5D3F2F] md:text-base">
+              <p className="mt-5 max-w-xl text-sm leading-relaxed text-[#5D3F2F] md:text-base lg:mt-4">
                 I&apos;ve guided 1,000+ clients through wealth, protection, and
                 relationship-focused remedies. Start with your intention and
                 I&apos;ll show you what to use.
               </p>
-              <div className="mt-7 flex flex-col gap-3 sm:flex-row">
+              <div className="mt-7 flex flex-col gap-3 sm:flex-row lg:mt-5">
                 <Link
                   href="/quiz"
                   className="inline-flex min-h-12 items-center justify-center rounded-full bg-gradient-to-r from-[#FF7A00] to-[#E91E63] px-7 text-sm font-semibold text-white shadow-[0_18px_35px_rgba(233,30,99,0.28)] transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_24px_46px_rgba(233,30,99,0.32)]"
@@ -401,7 +401,7 @@ export async function HomepageV6() {
             </div>
 
             <div className="order-1 md:order-2">
-              <div className="relative min-h-[370px] overflow-hidden rounded-[30px] border border-white/50 bg-[radial-gradient(circle_at_50%_24%,#FFF3DE_0%,#FDD6B4_56%,#F7B583_100%)] shadow-[0_28px_48px_rgba(42,27,18,0.16)] md:min-h-[560px]">
+              <div className="relative min-h-[370px] overflow-hidden rounded-[30px] border border-white/50 bg-[radial-gradient(circle_at_50%_24%,#FFF3DE_0%,#FDD6B4_56%,#F7B583_100%)] shadow-[0_28px_48px_rgba(42,27,18,0.16)] md:min-h-[560px] lg:min-h-[440px]">
                 <div className="absolute inset-0 bg-[radial-gradient(circle_at_52%_84%,rgba(42,27,18,0.18)_0%,rgba(42,27,18,0)_44%)]" />
                 <Image
                   src={HOMEPAGE_IMAGES.karanChopra}
@@ -431,22 +431,22 @@ export async function HomepageV6() {
         </section>
 
         {/* Pathways */}
-        <section className="rounded-[34px] border border-[#F1DFCE] bg-white/55 p-6 shadow-[0_20px_50px_rgba(42,27,18,0.07)] backdrop-blur-sm md:p-10">
+        <section className="rounded-[34px] border border-[#F1DFCE] bg-white/55 p-6 shadow-[0_20px_50px_rgba(42,27,18,0.07)] backdrop-blur-sm md:p-10 lg:p-7">
           <h2 className="text-center text-[clamp(1.85rem,3.85vw,3.4rem)] font-semibold tracking-[-0.03em]">
             What&apos;s Bothering You?
           </h2>
-          <p className="mx-auto mt-4 max-w-3xl text-center text-[0.95rem] leading-relaxed text-[#6A4A39]">
+          <p className="mx-auto mt-4 max-w-3xl text-center text-[0.95rem] leading-relaxed text-[#6A4A39] lg:mt-3">
             Most people come to me when something in life isn&apos;t going the way they hoped.
             Tell me which situation feels closest to yours.
           </p>
-          <div className="mt-8 grid gap-5 md:grid-cols-2 xl:grid-cols-4">
+          <div className="mt-8 grid gap-5 md:grid-cols-2 xl:grid-cols-4 lg:mt-6">
             {pathwayCards.map((card) => (
               <Link
                 key={card.title}
                 href="/quiz"
                 className="group flex h-full cursor-pointer flex-col overflow-hidden rounded-[26px] border border-[#F1E0D3] bg-white/80 shadow-[0_14px_30px_rgba(42,27,18,0.06)] backdrop-blur-sm transition-all duration-300 hover:-translate-y-1.5 hover:border-[#E8C9AE] hover:shadow-[0_24px_44px_rgba(217,107,42,0.16)]"
               >
-                <div className="relative aspect-[16/10] h-[180px] w-full overflow-hidden rounded-t-[26px] sm:h-[190px] md:h-[200px] xl:h-[220px]">
+                <div className="relative aspect-[16/10] h-[180px] w-full overflow-hidden rounded-t-[26px] sm:h-[190px] md:h-[200px] lg:h-[160px] xl:h-[170px]">
                   <Image
                     src={card.imageUrl}
                     alt={card.title}
@@ -455,19 +455,19 @@ export async function HomepageV6() {
                     className="object-cover transition-transform duration-500 ease-out group-hover:scale-[1.04]"
                   />
                 </div>
-                <div className="flex flex-1 flex-col p-6">
+                <div className="flex flex-1 flex-col p-6 lg:p-5">
                   <h3 className="text-[clamp(1.35rem,1.9vw,1.7rem)] font-semibold leading-tight tracking-[-0.02em]">
                     {card.title}
                   </h3>
-                  <p className="mt-4 flex-1 text-[0.95rem] leading-relaxed text-[#6A4A39]">{card.subtitle}</p>
+                  <p className="mt-4 flex-1 text-[0.95rem] leading-relaxed text-[#6A4A39] lg:mt-2 lg:line-clamp-3">{card.subtitle}</p>
                   {card.examples && (
-                    <ul className="mt-3 space-y-1.5 text-sm leading-relaxed text-[#6A4A39]">
+                    <ul className="mt-3 space-y-1.5 text-sm leading-relaxed text-[#6A4A39] lg:mt-2 lg:space-y-1">
                       {card.examples.map((example) => (
-                        <li key={example}>• {example}</li>
+                        <li key={example} className="lg:line-clamp-1">• {example}</li>
                       ))}
                     </ul>
                   )}
-                  <p className="mt-6 inline-flex rounded-full border border-[#F2D8C2] bg-[#FFF3E8] px-4 py-2 text-xs font-semibold uppercase tracking-[0.1em] text-[#D76618] transition-colors duration-300 group-hover:bg-[#FFEAD9]">
+                  <p className="mt-6 inline-flex rounded-full border border-[#F2D8C2] bg-[#FFF3E8] px-4 py-2 text-xs font-semibold uppercase tracking-[0.1em] text-[#D76618] transition-colors duration-300 group-hover:bg-[#FFEAD9] lg:mt-4">
                     {card.cta} →
                   </p>
                 </div>
@@ -477,9 +477,9 @@ export async function HomepageV6() {
         </section>
 
         {/* Meet Karan */}
-        <section className="overflow-hidden rounded-[34px] border border-[#F1DFCE] bg-white p-6 shadow-[0_20px_55px_rgba(42,27,18,0.08)] md:p-10">
-          <div className="grid items-stretch gap-7 md:grid-cols-[0.9fr_1.1fr]">
-            <div className="relative min-h-[420px] overflow-hidden rounded-[28px] border border-[#F4D9C2] bg-[linear-gradient(145deg,#FFF0DF_0%,#FFE7D8_100%)] shadow-[0_30px_70px_rgba(217,107,42,0.22)] md:order-2 md:min-h-[560px]">
+        <section className="overflow-hidden rounded-[34px] border border-[#F1DFCE] bg-white p-6 shadow-[0_20px_55px_rgba(42,27,18,0.08)] md:p-10 lg:p-7">
+          <div className="grid items-stretch gap-7 md:grid-cols-[0.9fr_1.1fr] lg:gap-6">
+            <div className="relative min-h-[420px] overflow-hidden rounded-[28px] border border-[#F4D9C2] bg-[linear-gradient(145deg,#FFF0DF_0%,#FFE7D8_100%)] shadow-[0_30px_70px_rgba(217,107,42,0.22)] md:order-2 md:min-h-[560px] lg:min-h-[460px]">
               <Image
                 src={HOMEPAGE_IMAGES.karanChopra}
                 alt="Karan Chopra portrait"
@@ -495,7 +495,7 @@ export async function HomepageV6() {
               <h2 className="mt-3 text-[clamp(1.78rem,3.75vw,3.25rem)] font-semibold leading-[1.03] tracking-[-0.03em]">
                 Let&apos;s Start With Your Current Situation
               </h2>
-              <p className="mt-5 max-w-2xl text-[clamp(0.92rem,1.1vw,1.05rem)] leading-relaxed text-[#5D3F30]">
+              <p className="mt-5 max-w-2xl text-[clamp(0.92rem,1.1vw,1.05rem)] leading-relaxed text-[#5D3F30] lg:mt-4">
                 In over a decade of practice, I&apos;ve sat with more than a thousand
                 people — and the same problem rarely has the same cause.
                 <br />
@@ -507,7 +507,7 @@ export async function HomepageV6() {
                 <br />
                 That&apos;s why I don&apos;t start with a remedy. I start with your situation.
               </p>
-              <div className="mt-7 flex flex-col gap-3 sm:flex-row">
+              <div className="mt-7 flex flex-col gap-3 sm:flex-row lg:mt-5">
                 <Link
                   href="/about-karan"
                   className="inline-flex min-h-12 items-center justify-center rounded-full bg-[#FF7A00] px-7 text-sm font-semibold text-white shadow-[0_14px_30px_rgba(255,122,0,0.25)] transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_22px_40px_rgba(255,122,0,0.32)]"
@@ -521,7 +521,7 @@ export async function HomepageV6() {
                   Talk To Me
                 </Link>
               </div>
-              <div className="mt-5 flex flex-wrap gap-2 text-xs font-semibold text-[#6D4B3B]">
+              <div className="mt-5 flex flex-wrap gap-2 text-xs font-semibold text-[#6D4B3B] lg:mt-4">
                 <span className="rounded-full bg-[#FFF3E8] px-3 py-1.5">1000+ Clients Guided</span>
                 <span className="rounded-full bg-[#FFF3E8] px-3 py-1.5">15+ Years of Practice</span>
                 <span className="rounded-full bg-[#FFF3E8] px-3 py-1.5">Personal Consultations</span>
@@ -531,7 +531,7 @@ export async function HomepageV6() {
         </section>
 
         {/* Recommended by Karan */}
-        <section className="rounded-[34px] border border-[#F1DFCE] bg-[#FFFDFB] p-6 shadow-[0_20px_55px_rgba(42,27,18,0.08)] md:p-10">
+        <section className="rounded-[34px] border border-[#F1DFCE] bg-[#FFFDFB] p-6 shadow-[0_20px_55px_rgba(42,27,18,0.08)] md:p-10 lg:p-7">
           <div className="flex flex-col justify-between gap-4 md:flex-row md:items-end">
             <div>
               <h2 className="text-[clamp(1.85rem,3.85vw,3.3rem)] font-semibold tracking-[-0.03em]">
@@ -549,13 +549,13 @@ export async function HomepageV6() {
             </Link>
           </div>
 
-          <div className="mt-8 space-y-8">
+          <div className="mt-8 space-y-8 lg:mt-6 lg:space-y-5">
             {recommendationCards.map((group, groupIndex) => (
               <article
                 key={group.problem}
-                className="rounded-[28px] border border-[#F2E2D5] bg-white/70 p-5 shadow-[0_12px_34px_rgba(42,27,18,0.06)] backdrop-blur-sm md:p-6"
+                className="rounded-[28px] border border-[#F2E2D5] bg-white/70 p-5 shadow-[0_12px_34px_rgba(42,27,18,0.06)] backdrop-blur-sm md:p-6 lg:p-5"
               >
-                <div className="mb-5 flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+                <div className="mb-5 flex flex-col gap-3 md:flex-row md:items-center md:justify-between lg:mb-4">
                   <div>
                     <h3 className="text-[clamp(1.22rem,1.95vw,1.78rem)] font-semibold leading-tight tracking-[-0.02em] text-[#2A1B12]">
                       {group.problem}
@@ -590,7 +590,7 @@ export async function HomepageV6() {
                           : "border-[#F3E4D8] bg-white"
                       }`}
                     >
-                      <div className="relative aspect-[4/3] overflow-hidden">
+                      <div className="relative aspect-[4/3] overflow-hidden lg:aspect-[16/10]">
                         <Image
                           src={product.imageUrl}
                           alt={product.name}
@@ -606,7 +606,7 @@ export async function HomepageV6() {
                         )}
                       </div>
 
-                      <div className="space-y-3 p-4">
+                      <div className="space-y-3 p-4 lg:space-y-2">
                         <h4 className="text-[clamp(0.95rem,1.2vw,1.1rem)] font-semibold leading-snug text-[#3B2A1F]">
                           {product.name}
                         </h4>
@@ -626,7 +626,7 @@ export async function HomepageV6() {
                     </article>
                   ))}
                 </div>
-                <div className="mt-5">
+                <div className="mt-5 lg:mt-4">
                   <Link
                     href="/recommendations"
                     className="inline-flex min-h-10 items-center rounded-full border border-[#F2D8C3] bg-white px-4 text-xs font-semibold uppercase tracking-[0.08em] text-[#B95A2A] transition-all duration-300 hover:-translate-y-0.5"
@@ -640,7 +640,7 @@ export async function HomepageV6() {
         </section>
 
         {/* Client stories */}
-        <section className="rounded-[34px] border border-[#F1DFCE] bg-white/70 p-6 shadow-[0_20px_55px_rgba(42,27,18,0.08)] backdrop-blur-sm md:p-10">
+        <section className="rounded-[34px] border border-[#F1DFCE] bg-white/70 p-6 shadow-[0_20px_55px_rgba(42,27,18,0.08)] backdrop-blur-sm md:p-10 lg:p-7">
           <h2 className="text-[clamp(1.85rem,3.65vw,3.05rem)] font-semibold tracking-[-0.03em]">
             Stories From People I&apos;ve Guided
           </h2>
@@ -656,7 +656,7 @@ export async function HomepageV6() {
         </section>
 
         {/* Consultation CTA */}
-        <section className="relative overflow-hidden rounded-[34px] bg-gradient-to-r from-[#FF7A00] to-[#E91E63] p-7 text-white shadow-[0_26px_52px_rgba(233,30,99,0.3)] md:p-10">
+        <section className="relative overflow-hidden rounded-[34px] bg-gradient-to-r from-[#FF7A00] to-[#E91E63] p-7 text-white shadow-[0_26px_52px_rgba(233,30,99,0.3)] md:p-10 lg:p-7">
           <div className="absolute -right-10 -top-10 h-40 w-40 rounded-full bg-white/20 blur-2xl" />
           <div className="relative flex flex-col items-start justify-between gap-6 md:flex-row md:items-center">
             <div>
@@ -678,12 +678,12 @@ export async function HomepageV6() {
         </section>
 
         {/* Daily wisdom */}
-        <section className="rounded-[34px] border border-[#F1DFCE] bg-white/70 p-6 shadow-[0_20px_55px_rgba(42,27,18,0.08)] backdrop-blur-sm md:p-10">
+        <section className="rounded-[34px] border border-[#F1DFCE] bg-white/70 p-6 shadow-[0_20px_55px_rgba(42,27,18,0.08)] backdrop-blur-sm md:p-10 lg:p-7">
           <h2 className="text-[clamp(1.85rem,3.65vw,3.05rem)] font-semibold tracking-[-0.03em]">Daily Wisdom</h2>
           <p className="mt-3 text-[0.95rem] text-[#664838]">
             Latest insights, videos, articles, and guidance from Karan.
           </p>
-          <div className="mt-7 grid gap-4 md:grid-cols-3">
+          <div className="mt-7 grid gap-4 md:grid-cols-3 lg:mt-6">
             {wisdomCards.map((card) => (
               <article
                 key={card.title}
