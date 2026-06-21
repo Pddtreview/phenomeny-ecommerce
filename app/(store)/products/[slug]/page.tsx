@@ -198,7 +198,7 @@ export default async function ProductPage({
           Back to products
         </Link>
 
-        <div className="mt-6 grid gap-8 sm:grid-cols-2">
+        <div className="mt-6 grid gap-8 sm:grid-cols-[3fr_7fr]">
           <ProductDetailClient
             productId={product.id}
             productName={product.name}
