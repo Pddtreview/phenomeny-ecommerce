@@ -168,21 +168,21 @@ export function Header() {
                       </p>
                       <Link
                         href={MEGA_MENU_FEATURED_PRODUCT.href}
-                        className="group flex gap-3 overflow-hidden rounded-xl border border-[#F0DEC8] bg-[#FFF8F0] p-3 transition-all duration-200 hover:border-[#E8A84C] hover:bg-[#FFF3E4]"
+                        className="group block overflow-hidden rounded-xl border border-[#F0DEC8] bg-[#FFF8F0] transition-all duration-200 hover:border-[#E8A84C] hover:shadow-md"
                       >
-                        <div className="relative h-[88px] w-[88px] shrink-0 overflow-hidden rounded-lg bg-[#FFECD6]">
+                        <div className="relative h-[108px] w-full overflow-hidden bg-[#FFECD6]">
                           <Image
                             src={MEGA_MENU_FEATURED_PRODUCT.image}
                             alt={MEGA_MENU_FEATURED_PRODUCT.title}
                             fill
-                            className="object-cover object-center transition-transform duration-300 group-hover:scale-[1.05]"
+                            className="object-cover object-center transition-transform duration-300 group-hover:scale-[1.04]"
                           />
                         </div>
-                        <div className="flex min-w-0 flex-col justify-center">
-                          <p className="text-[10px] font-semibold uppercase tracking-[0.12em] text-[#C08030]">
+                        <div className="px-3 py-2.5">
+                          <p className="truncate text-[10px] font-semibold uppercase tracking-[0.12em] text-[#C08030]">
                             {MEGA_MENU_FEATURED_PRODUCT.subtitle}
                           </p>
-                          <p className="mt-0.5 text-[13px] font-semibold leading-snug text-[#2A1B12]">
+                          <p className="mt-0.5 line-clamp-1 text-[12.5px] font-semibold text-[#2A1B12]">
                             {MEGA_MENU_FEATURED_PRODUCT.title}
                           </p>
                           <p className="mt-1 line-clamp-2 text-[11px] leading-relaxed text-[#6D5447]">
