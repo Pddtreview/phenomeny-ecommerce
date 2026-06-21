@@ -127,7 +127,7 @@ export function Header() {
               >
                 <div
                   ref={shopMenuRef}
-                  className="w-[min(1200px,calc(100vw-2rem))] rounded-3xl border border-[#F0DEC8] bg-[#FFFDF9] p-8 shadow-[0_28px_56px_rgba(42,27,18,0.16)]"
+                  className="w-[min(1200px,calc(100vw-2rem))] rounded-3xl border border-[#F0DEC8] bg-[#FFFDF9] px-8 py-10 shadow-[0_28px_56px_rgba(42,27,18,0.16)]"
                 >
                   <div className="grid items-start gap-8 md:grid-cols-[40%_25%_35%]">
                     <div className="h-full px-2">
