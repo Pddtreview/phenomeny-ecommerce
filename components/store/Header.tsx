@@ -127,11 +127,11 @@ export function Header() {
               >
                 <div
                   ref={shopMenuRef}
-                  className="w-[min(1200px,calc(100vw-2rem))] rounded-3xl border border-[#F0DEC8] bg-[#FFFDF9] p-8 shadow-[0_28px_56px_rgba(42,27,18,0.16)]"
+                  className="w-[min(1200px,calc(100vw-2rem))] rounded-3xl border border-white/60 bg-white/88 px-8 py-12 shadow-[0_32px_80px_rgba(255,122,0,0.10),0_8px_32px_rgba(42,27,18,0.10)] backdrop-blur-2xl"
                 >
-                  <div className="grid items-start gap-8 md:grid-cols-[40%_25%_35%]">
+                  <div className="grid items-start gap-8 md:grid-cols-[2fr_1fr_1.4fr]">
                     <div className="h-full px-2">
-                      <p className="mb-3 text-xs font-semibold uppercase tracking-[0.16em] text-[#8A6C5B]">
+                      <p className="mb-4 text-xs font-semibold uppercase tracking-[0.16em] text-[#8A6C5B]">
                         Collections
                       </p>
                       <div className="space-y-1">
@@ -139,7 +139,7 @@ export function Header() {
                           <Link
                             key={link.label}
                             href={link.href}
-                            className="block rounded-xl px-3 py-3 hover:bg-[#FFF2E5]"
+                            className="block rounded-xl px-3 py-3.5 hover:bg-[#FFF2E5]/80"
                           >
                             <p className="text-[15px] font-semibold text-[#2A1B12]">{link.label}</p>
                             <p className="mt-1 text-[13px] text-[#6D5447]">{link.description}</p>
@@ -148,7 +148,7 @@ export function Header() {
                       </div>
                     </div>
                     <div className="h-full px-2">
-                      <p className="mb-3 text-xs font-semibold uppercase tracking-[0.16em] text-[#8A6C5B]">
+                      <p className="mb-4 text-xs font-semibold uppercase tracking-[0.16em] text-[#8A6C5B]">
                         Categories
                       </p>
                       <div className="space-y-0.5">
@@ -156,7 +156,7 @@ export function Header() {
                           <Link
                             key={link.label}
                             href={link.href}
-                            className="link-underline block rounded-lg px-3 py-2.5 text-[15px] font-medium text-[#2A1B12] hover:bg-[#FFF2E5]"
+                            className="link-underline block rounded-lg px-3 py-3 text-[15px] font-medium text-[#2A1B12] hover:bg-[#FFF2E5]/80"
                           >
                             {link.label}
                           </Link>
@@ -164,14 +164,14 @@ export function Header() {
                       </div>
                     </div>
                     <div className="px-2">
-                      <p className="mb-3 text-xs font-semibold uppercase tracking-[0.16em] text-[#8A6C5B]">
+                      <p className="mb-4 text-xs font-semibold uppercase tracking-[0.16em] text-[#8A6C5B]">
                         Featured
                       </p>
                       <Link
                         href={MEGA_MENU_FEATURED_PRODUCT.href}
-                        className="group block overflow-hidden rounded-2xl border border-[#E8C99A] bg-[#FFFBF5] shadow-sm transition-[border-color,box-shadow] duration-200 hover:border-[#C08030] hover:shadow-md"
+                        className="group block overflow-hidden rounded-2xl border border-[#FFD4A0]/70 bg-white/70 shadow-sm backdrop-blur-sm transition-[border-color,box-shadow] duration-200 hover:border-[#FF7A00]/60 hover:shadow-[0_8px_24px_rgba(255,122,0,0.18)]"
                       >
-                        <div className="relative h-[190px] w-full overflow-hidden">
+                        <div className="relative h-[220px] w-full overflow-hidden">
                           <Image
                             src={MEGA_MENU_FEATURED_PRODUCT.image}
                             alt={MEGA_MENU_FEATURED_PRODUCT.title}
@@ -181,7 +181,7 @@ export function Header() {
                           />
                         </div>
                         <div className="px-4 py-3.5">
-                          <p className="text-[11px] font-semibold uppercase tracking-widest text-[#C08030]">
+                          <p className="text-[11px] font-semibold uppercase tracking-widest text-[#FF7A00]">
                             {MEGA_MENU_FEATURED_PRODUCT.subtitle}
                           </p>
                           <p className="mt-1 text-sm font-bold leading-snug text-[#2A1B12]">
@@ -190,7 +190,7 @@ export function Header() {
                           <p className="mt-1.5 line-clamp-2 text-xs leading-relaxed text-[#6D5447]">
                             {MEGA_MENU_FEATURED_PRODUCT.description}
                           </p>
-                          <span className="mt-3 inline-flex items-center gap-1.5 rounded-lg bg-[#C08030] px-4 py-1.5 text-xs font-semibold text-white transition-colors duration-150 group-hover:bg-[#A86A24]">
+                          <span className="mt-3 inline-flex cursor-pointer items-center gap-1.5 rounded-lg bg-[#FF7A00] px-4 py-1.5 text-xs font-semibold text-white transition-colors duration-150 group-hover:bg-[#E06600]">
                             {MEGA_MENU_FEATURED_PRODUCT.cta}
                             <span aria-hidden="true">→</span>
                           </span>
