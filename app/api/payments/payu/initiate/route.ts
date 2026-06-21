@@ -100,7 +100,7 @@ export async function POST(request: NextRequest) {
       email,
       phone,
       surl: `${siteUrl}/api/payments/payu/success`,
-      furl: `${siteUrl}/payment-failed`,
+      furl: `${siteUrl}/api/payments/payu/failure`,
       hash,
     };
 

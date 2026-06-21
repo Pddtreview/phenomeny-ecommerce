@@ -17,7 +17,7 @@ export async function POST(request: NextRequest) {
   const txnid = String(formData.get("txnid") || "").trim();
   const status = String(formData.get("status") || "");
 
-  const failedUrl = new URL("/payment-failed", request.url);
+  const checkoutUrl = new URL("/checkout?payment_failed=1", request.url);
 
   let orderId = "";
   if (txnid) {
@@ -31,10 +31,8 @@ export async function POST(request: NextRequest) {
   }
 
   if (!orderId) {
-    return NextResponse.redirect(failedUrl, 303);
+    return NextResponse.redirect(checkoutUrl, 303);
   }
-
-  failedUrl.searchParams.set("orderId", orderId);
 
   const origin = new URL(request.url).origin;
   let webhookOk = false;
@@ -55,7 +53,7 @@ export async function POST(request: NextRequest) {
     );
   }
 
-  return NextResponse.redirect(failedUrl, 303);
+  return NextResponse.redirect(checkoutUrl, 303);
 }
 
 export async function GET(request: NextRequest) {
