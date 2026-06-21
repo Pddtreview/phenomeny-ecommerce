@@ -401,13 +401,13 @@ export async function HomepageV6() {
             </div>
 
             <div className="order-1 md:order-2">
-              <div className="relative min-h-[300px] overflow-hidden rounded-[26px] sm:min-h-[320px] md:min-h-[340px] lg:min-h-[300px]">
+              <div className="relative w-full overflow-hidden rounded-[26px] aspect-[13/10] min-h-[260px]">
                 <Image
                   src={HOMEPAGE_IMAGES.karanHero}
                   alt="Karan Chopra"
                   fill
                   priority
-                  className="object-cover object-top transition-transform duration-700 hover:scale-[1.02]"
+                  className="object-cover object-center transition-transform duration-700 hover:scale-[1.02]"
                 />
               </div>
             </div>
