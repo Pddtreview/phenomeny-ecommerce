@@ -168,27 +168,27 @@ export function Header() {
                       </p>
                       <Link
                         href={MEGA_MENU_FEATURED_PRODUCT.href}
-                        className="group block overflow-hidden rounded-2xl border border-[#F0DEC8] bg-gradient-to-b from-[#FFF8F0] to-[#FFECD6] transition-all duration-200 hover:border-[#E8A84C] hover:shadow-[0_8px_24px_rgba(42,27,18,0.12)]"
+                        className="group flex gap-3 overflow-hidden rounded-xl border border-[#F0DEC8] bg-[#FFF8F0] p-3 transition-all duration-200 hover:border-[#E8A84C] hover:bg-[#FFF3E4]"
                       >
-                        <div className="relative h-[148px] w-full overflow-hidden bg-[#FFF3E0]">
+                        <div className="relative h-[88px] w-[88px] shrink-0 overflow-hidden rounded-lg bg-[#FFECD6]">
                           <Image
                             src={MEGA_MENU_FEATURED_PRODUCT.image}
                             alt={MEGA_MENU_FEATURED_PRODUCT.title}
                             fill
-                            className="object-cover object-center transition-transform duration-300 group-hover:scale-[1.04]"
+                            className="object-cover object-center transition-transform duration-300 group-hover:scale-[1.05]"
                           />
                         </div>
-                        <div className="px-4 py-3">
-                          <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-[#C08030]">
+                        <div className="flex min-w-0 flex-col justify-center">
+                          <p className="text-[10px] font-semibold uppercase tracking-[0.12em] text-[#C08030]">
                             {MEGA_MENU_FEATURED_PRODUCT.subtitle}
                           </p>
-                          <p className="mt-1 text-sm font-semibold leading-snug text-[#2A1B12]">
+                          <p className="mt-0.5 text-[13px] font-semibold leading-snug text-[#2A1B12]">
                             {MEGA_MENU_FEATURED_PRODUCT.title}
                           </p>
-                          <p className="mt-1.5 text-xs leading-relaxed text-[#6D5447]">
+                          <p className="mt-1 line-clamp-2 text-[11px] leading-relaxed text-[#6D5447]">
                             {MEGA_MENU_FEATURED_PRODUCT.description}
                           </p>
-                          <div className="mt-3 inline-flex items-center gap-1 text-xs font-semibold text-[#C08030] transition-gap duration-200 group-hover:gap-2">
+                          <div className="mt-2 inline-flex items-center gap-1 text-[11px] font-semibold text-[#C08030]">
                             {MEGA_MENU_FEATURED_PRODUCT.cta}
                             <span aria-hidden="true">→</span>
                           </div>
