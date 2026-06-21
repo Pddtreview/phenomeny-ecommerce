@@ -159,7 +159,7 @@ function IconFrame({
   );
 }
 
-function IntentionIcon({ type }: { type: CardItem["icon"] }) {
+function IntentionIcon({ type }: { type: "wealth" | "shield" | "love" | "focus" }) {
   if (type === "wealth") {
     return (
       <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth={ICON_STROKE}>
