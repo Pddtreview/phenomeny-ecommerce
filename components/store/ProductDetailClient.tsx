@@ -48,6 +48,7 @@ export default function ProductDetailClient({
   }, [images]);
 
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
+  const [lightboxOpen, setLightboxOpen] = useState(false);
   const selectedImageUrl =
     sortedImages.length > 0
       ? sortedImages[selectedImageIndex]?.cloudinary_url ?? sortedImages[0].cloudinary_url
@@ -101,20 +102,51 @@ export default function ProductDetailClient({
 
   return (
     <>
+      {/* Lightbox overlay */}
+      {lightboxOpen && selectedImageUrl && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm"
+          onClick={() => setLightboxOpen(false)}
+        >
+          <button
+            type="button"
+            onClick={() => setLightboxOpen(false)}
+            className="absolute right-4 top-4 flex h-10 w-10 items-center justify-center rounded-full bg-white/20 text-white transition hover:bg-white/40"
+            aria-label="Close"
+          >
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+              <path d="M4 4l12 12M16 4L4 16" />
+            </svg>
+          </button>
+          <img
+            src={selectedImageUrl}
+            alt={productName}
+            className="max-h-[90vh] max-w-[90vw] rounded-xl object-contain shadow-2xl"
+            onClick={(e) => e.stopPropagation()}
+          />
+        </div>
+      )}
+
       {/* Left column: image gallery */}
       <div className="flex flex-col gap-3">
-        <div
-          className="flex h-64 items-center justify-center overflow-hidden rounded-xl bg-[#FFF2E5] sm:h-80"
-        >
+        <div className="group relative cursor-zoom-in overflow-hidden rounded-xl bg-[#FFF8F0]" onClick={() => selectedImageUrl && setLightboxOpen(true)}>
           {selectedImageUrl ? (
-            <img
-              src={selectedImageUrl}
-              alt={productName}
-              className="h-full w-full object-cover"
-            />
+            <>
+              <img
+                src={selectedImageUrl}
+                alt={productName}
+                className="h-auto w-full object-contain"
+              />
+              <div className="absolute right-3 top-3 flex items-center gap-1 rounded-full bg-white/80 px-2 py-1 text-[11px] font-medium text-[#6D5447] opacity-0 shadow transition-opacity duration-200 group-hover:opacity-100">
+                <svg width="12" height="12" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="2">
+                  <circle cx="9" cy="9" r="6" /><path d="M15 15l3 3" />
+                </svg>
+                View full
+              </div>
+            </>
           ) : (
             <div
-              className="flex h-full w-full items-center justify-center rounded-xl px-4 text-center"
+              className="flex h-72 w-full items-center justify-center rounded-xl px-4 text-center"
               style={{ backgroundColor: PRIMARY }}
             >
               <p className="text-sm font-medium" style={{ color: GOLD }}>
