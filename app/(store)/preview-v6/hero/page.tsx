@@ -7,16 +7,16 @@ export const metadata: Metadata = {
 };
 
 const trustBadges = [
-  "1000+ Clients Guided",
-  "10+ Years Practice",
-  "Pan India",
+  "10,000+ Clients Guided",
+  "15+ Years Practice",
+  "India, USA, Australia & Canada Clients",
   "Personal Consultations",
 ];
 
 const metrics = [
-  { label: "Clients Guided", value: "1000+" },
-  { label: "Years Practice", value: "10+" },
-  { label: "Client Reach", value: "Pan India" },
+  { label: "Clients Guided", value: "10,000+" },
+  { label: "Years Practice", value: "15+" },
+  { label: "Client Reach", value: "India, USA, Australia & Canada" },
 ];
 
 export default function PreviewV6HeroPage() {

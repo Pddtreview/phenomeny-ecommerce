@@ -7,9 +7,9 @@ export const metadata: Metadata = {
 };
 
 const trustChips = [
-  "1000+ Clients Guided",
-  "10+ Years Practice",
-  "Pan India",
+  "10,000+ Clients Guided",
+  "15+ Years Practice",
+  "India, USA, Australia & Canada Clients",
   "Personal Consultations",
 ];
 

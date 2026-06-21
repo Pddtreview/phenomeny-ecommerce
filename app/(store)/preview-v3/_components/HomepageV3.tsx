@@ -173,7 +173,7 @@ export default async function HomepageV3({ mode }: { mode: PreviewMode }) {
         <section className="px-4 py-10 sm:px-6">
           <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
             {[
-              { value: "1000+", label: "Clients Guided" },
+              { value: "10,000+", label: "Clients Guided" },
               { value: "10+", label: "Years of Practice" },
               { value: "4.9★", label: "Client Satisfaction" },
               { value: "India", label: "Serving Clients Across The Country" },

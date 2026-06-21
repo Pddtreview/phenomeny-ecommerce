@@ -7,9 +7,9 @@ export const metadata: Metadata = {
 };
 
 const trustMetrics = [
-  { value: "1000+", label: "Clients Guided" },
-  { value: "10+", label: "Years Practice" },
-  { value: "Pan India", label: "Client Base" },
+  { value: "10,000+", label: "Clients Guided" },
+  { value: "15+", label: "Years Practice" },
+  { value: "India, USA, Australia & Canada", label: "Client Base" },
   { value: "Personal", label: "Consultations" },
 ];
 
@@ -29,7 +29,7 @@ export default function PreviewV4HeroPage() {
             <div className="flex flex-col justify-between">
               <div>
                 <p className="inline-flex rounded-full border border-[#DCCAA8] bg-[#F8EFD9] px-4 py-1 text-[11px] font-semibold uppercase tracking-[0.2em] text-[#6A5640]">
-                  Trusted by 1,000+ clients
+                  Trusted by 10,000+ clients
                 </p>
 
                 <h1 className="mt-5 text-[clamp(2rem,5.8vw,5rem)] font-black leading-[0.95] tracking-[-0.03em] text-[#2F2620]">

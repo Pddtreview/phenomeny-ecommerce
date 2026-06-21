@@ -127,7 +127,7 @@ export default async function HomePreviewPage() {
               </span>
             </h1>
             <p className="mt-4 max-w-xl text-sm text-white/80 sm:text-base">
-              I&apos;ve guided 1,000+ clients through wealth, protection, and vastu
+              I&apos;ve guided 10,000+ clients through wealth, protection, and vastu
               remedies. Start with your intention, and I&apos;ll show you what to use.
             </p>
             <div className="mt-7 flex flex-col gap-3 sm:flex-row">
@@ -187,7 +187,7 @@ export default async function HomePreviewPage() {
       <section className="mx-auto max-w-6xl px-4 py-6 sm:px-6">
         <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
           {[
-            { label: "Clients Guided", value: "1,000+" },
+            { label: "Clients Guided", value: "10,000+" },
             { label: "Years of Practice", value: "15+" },
             { label: "Avg. Product Rating", value: "4.8/5" },
             { label: "Support Response", value: "< 24 hours" },

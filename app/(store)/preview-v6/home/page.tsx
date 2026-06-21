@@ -362,15 +362,15 @@ export async function HomepageV6() {
       <div className="pointer-events-none absolute -left-32 top-20 h-72 w-72 rounded-full bg-[#FF7A00]/10 blur-3xl" />
       <div className="pointer-events-none absolute -right-24 top-[32rem] h-96 w-96 rounded-full bg-[#E91E63]/10 blur-3xl" />
 
-      <div className="mx-auto flex w-full max-w-[1560px] flex-col gap-14 px-5 pb-24 pt-8 sm:px-8 md:gap-20 md:pt-12 lg:gap-12 lg:pb-16 lg:pt-8 lg:px-12 xl:px-16 2xl:px-20">
+      <div className="mx-auto flex w-full max-w-[1560px] flex-col gap-14 px-5 pb-24 pt-4 sm:px-8 md:gap-20 md:pt-6 lg:gap-12 lg:pb-16 lg:pt-5 lg:px-12 xl:px-16 2xl:px-20">
         {/* Hero */}
-        <section className="relative overflow-hidden rounded-[36px] border border-[#F1DFCE] bg-[linear-gradient(120deg,#FFF9F2_0%,#FFF3E8_55%,#FFEFEA_100%)] p-5 shadow-[0_30px_70px_rgba(42,27,18,0.08)] md:p-10 lg:p-7">
-          <div className="grid items-center gap-8 md:grid-cols-[0.95fr_1.05fr] lg:gap-6">
+        <section className="relative overflow-hidden rounded-[36px] border border-[#F1DFCE] bg-[linear-gradient(120deg,#FFF9F2_0%,#FFF3E8_55%,#FFEFEA_100%)] p-4 shadow-[0_30px_70px_rgba(42,27,18,0.08)] md:p-7 lg:p-6">
+          <div className="grid items-center gap-7 md:grid-cols-[55fr_45fr] lg:gap-8">
             <div className="order-2 md:order-1">
               <span className="inline-flex w-fit rounded-full border border-[#FFD6BA] bg-white/70 px-4 py-1.5 text-[11px] font-semibold uppercase tracking-[0.18em] text-[#AA4A1A] backdrop-blur">
                 Karan Chopra&apos;s Guidance
               </span>
-              <h1 className="mt-5 text-[clamp(1.7rem,4.8vw,3.9rem)] font-semibold leading-[0.98] tracking-[-0.035em] lg:mt-4">
+              <h1 className="mt-4 text-[clamp(1.7rem,4.6vw,3.6rem)] font-semibold leading-[0.98] tracking-[-0.035em]">
                 I Don&apos;t Sell
                 <br />
                 Random Products.
@@ -379,12 +379,12 @@ export async function HomepageV6() {
                   I Prescribe.
                 </span>
               </h1>
-              <p className="mt-5 max-w-xl text-sm leading-relaxed text-[#5D3F2F] md:text-base lg:mt-4">
-                I&apos;ve guided 1,000+ clients through wealth, protection, and
+              <p className="mt-4 max-w-xl text-sm leading-relaxed text-[#5D3F2F] md:text-base">
+                I&apos;ve guided 10,000+ clients through wealth, protection, and
                 relationship-focused remedies. Start with your intention and
                 I&apos;ll show you what to use.
               </p>
-              <div className="mt-7 flex flex-col gap-3 sm:flex-row lg:mt-5">
+              <div className="mt-6 flex flex-col gap-3 sm:flex-row">
                 <Link
                   href="/quiz"
                   className="inline-flex min-h-12 items-center justify-center rounded-full bg-gradient-to-r from-[#FF7A00] to-[#E91E63] px-7 text-sm font-semibold text-white shadow-[0_18px_35px_rgba(233,30,99,0.28)] transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_24px_46px_rgba(233,30,99,0.32)]"
@@ -401,8 +401,8 @@ export async function HomepageV6() {
             </div>
 
             <div className="order-1 md:order-2">
-              <div className="relative min-h-[370px] overflow-hidden rounded-[30px] border border-white/50 bg-[radial-gradient(circle_at_50%_24%,#FFF3DE_0%,#FDD6B4_56%,#F7B583_100%)] shadow-[0_28px_48px_rgba(42,27,18,0.16)] md:min-h-[560px] lg:min-h-[440px]">
-                <div className="absolute inset-0 bg-[radial-gradient(circle_at_52%_84%,rgba(42,27,18,0.18)_0%,rgba(42,27,18,0)_44%)]" />
+              <div className="relative min-h-[260px] overflow-hidden rounded-[26px] bg-[radial-gradient(circle_at_50%_28%,#FFF6EA_0%,#FBE7D3_58%,#F5D8BE_100%)] sm:min-h-[300px] md:min-h-[420px] lg:min-h-[360px]">
+                <div className="absolute inset-0 bg-[radial-gradient(circle_at_52%_88%,rgba(42,27,18,0.14)_0%,rgba(42,27,18,0)_46%)]" />
                 <Image
                   src={HOMEPAGE_IMAGES.karanChopra}
                   alt="Karan Chopra"
@@ -411,22 +411,23 @@ export async function HomepageV6() {
                   className="object-contain object-bottom transition-transform duration-700 hover:scale-[1.02]"
                 />
               </div>
-              <div className="mt-4 grid grid-cols-2 gap-3 md:grid-cols-4">
-                {[
-                  "1,000+ Clients Guided",
-                  "15+ Years Practice",
-                  "Pan India Client Base",
-                  "Personal Consultations",
-                ].map((item) => (
-                  <div
-                    key={item}
-                    className="rounded-2xl border border-[#F1DFCE] bg-white/70 px-3 py-2 text-center text-[11px] font-semibold text-[#664838] backdrop-blur-sm"
-                  >
-                    {item}
-                  </div>
-                ))}
-              </div>
             </div>
+          </div>
+
+          <div className="mt-5 grid grid-cols-2 gap-3 sm:grid-cols-4 lg:mt-4">
+            {[
+              "10,000+ Clients Guided",
+              "15+ Years Practice",
+              "India, USA, Australia & Canada Clients",
+              "Personal Consultations",
+            ].map((item) => (
+              <div
+                key={item}
+                className="flex items-center justify-center rounded-2xl border border-[#F1DFCE] bg-white/70 px-3 py-2 text-center text-[11px] font-semibold text-[#664838] backdrop-blur-sm"
+              >
+                {item}
+              </div>
+            ))}
           </div>
         </section>
 
@@ -522,7 +523,7 @@ export async function HomepageV6() {
                 </Link>
               </div>
               <div className="mt-5 flex flex-wrap gap-2 text-xs font-semibold text-[#6D4B3B] lg:mt-4">
-                <span className="rounded-full bg-[#FFF3E8] px-3 py-1.5">1000+ Clients Guided</span>
+                <span className="rounded-full bg-[#FFF3E8] px-3 py-1.5">10,000+ Clients Guided</span>
                 <span className="rounded-full bg-[#FFF3E8] px-3 py-1.5">15+ Years of Practice</span>
                 <span className="rounded-full bg-[#FFF3E8] px-3 py-1.5">Personal Consultations</span>
               </div>
