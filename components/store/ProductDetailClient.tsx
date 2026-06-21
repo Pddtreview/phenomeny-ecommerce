@@ -129,13 +129,13 @@ export default function ProductDetailClient({
 
       {/* Left column: image gallery */}
       <div className="flex flex-col gap-3">
-        <div className="group relative cursor-zoom-in overflow-hidden rounded-xl bg-[#FFF8F0]" onClick={() => selectedImageUrl && setLightboxOpen(true)}>
+        <div className="group relative aspect-square cursor-zoom-in overflow-hidden rounded-xl bg-[#FFF8F0]" onClick={() => selectedImageUrl && setLightboxOpen(true)}>
           {selectedImageUrl ? (
             <>
               <img
                 src={selectedImageUrl}
                 alt={productName}
-                className="h-auto w-full object-contain"
+                className="h-full w-full object-contain"
               />
               <div className="absolute right-3 top-3 flex items-center gap-1 rounded-full bg-white/80 px-2 py-1 text-[11px] font-medium text-[#6D5447] opacity-0 shadow transition-opacity duration-200 group-hover:opacity-100">
                 <svg width="12" height="12" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="2">
