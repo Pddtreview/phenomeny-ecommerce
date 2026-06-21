@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useMemo } from "react";
+import { useRouter } from "next/navigation";
 import { useCart } from "@/hooks/useCart";
 import { RupeeSymbol } from "@/components/ui/RupeeSymbol";
 import type { ProductRecommendationMetadata } from "@/lib/product-recommendation-metadata";
@@ -57,7 +58,9 @@ export default function ProductDetailClient({
   const [selectedVariantId, setSelectedVariantId] = useState<string | null>(
     variants[0]?.id ?? null
   );
+  const router = useRouter();
   const addItem = useCart((s) => s.addItem);
+  const clearCart = useCart((s) => s.clearCart);
 
   const selectedVariant =
     variants.find((v) => v.id === selectedVariantId) ?? variants[0];
@@ -82,22 +85,36 @@ export default function ProductDetailClient({
         )
       : null;
 
-  const handleAddToCart = () => {
-    if (!selectedVariant || isOutOfStock) return;
+  const cartItem = () => {
+    if (!selectedVariant) return null;
     const image =
       Array.isArray(selectedVariant.image_urls) &&
       selectedVariant.image_urls[0]
         ? selectedVariant.image_urls[0]
         : null;
-    addItem({
+    return {
       variantId: selectedVariant.id,
       productId,
       name: productName,
       sku: selectedVariant.sku,
       price: selectedVariant.price,
       image,
-      itemType: "variant",
-    });
+      itemType: "variant" as const,
+    };
+  };
+
+  const handleAddToCart = () => {
+    const item = cartItem();
+    if (!item || isOutOfStock) return;
+    addItem(item);
+  };
+
+  const handleBuyNow = () => {
+    const item = cartItem();
+    if (!item || isOutOfStock) return;
+    clearCart();
+    addItem(item);
+    router.push("/checkout");
   };
 
   return (
@@ -304,16 +321,27 @@ export default function ProductDetailClient({
             </div>
           )}
 
-          {/* Add to Cart */}
-          <button
-            type="button"
-            onClick={handleAddToCart}
-            disabled={isOutOfStock}
-            className="interactive-lift w-full rounded-lg py-3 text-sm font-semibold text-white transition disabled:cursor-not-allowed disabled:opacity-50"
-            style={{ backgroundColor: PRIMARY }}
-          >
-            {isOutOfStock ? "Out of Stock" : "Add to Cart"}
-          </button>
+          {/* Add to Cart + Buy Now */}
+          <div className="flex gap-3">
+            <button
+              type="button"
+              onClick={handleAddToCart}
+              disabled={isOutOfStock}
+              className="flex-1 rounded-lg border-2 py-3 text-sm font-semibold transition disabled:cursor-not-allowed disabled:opacity-50"
+              style={{ borderColor: PRIMARY, color: PRIMARY, backgroundColor: "transparent" }}
+            >
+              {isOutOfStock ? "Out of Stock" : "Add to Cart"}
+            </button>
+            <button
+              type="button"
+              onClick={handleBuyNow}
+              disabled={isOutOfStock}
+              className="interactive-lift flex-1 rounded-lg py-3 text-sm font-semibold text-white transition disabled:cursor-not-allowed disabled:opacity-50"
+              style={{ backgroundColor: PRIMARY }}
+            >
+              Buy Now
+            </button>
+          </div>
         </div>
       </div>
       <div className="fixed inset-x-0 bottom-14 z-40 border-t border-[#F0DEC8] bg-[#FFF8F0]/95 p-3 backdrop-blur md:hidden">
@@ -331,9 +359,17 @@ export default function ProductDetailClient({
             type="button"
             onClick={handleAddToCart}
             disabled={isOutOfStock}
-            className="btn-gradient rounded-full px-5 py-2.5 text-sm font-semibold text-white disabled:cursor-not-allowed disabled:opacity-50"
+            className="rounded-full border-2 border-[#FF7A00] px-4 py-2 text-sm font-semibold text-[#FF7A00] disabled:cursor-not-allowed disabled:opacity-50"
           >
-            {isOutOfStock ? "Out of Stock" : "Add to Cart"}
+            Add to Cart
+          </button>
+          <button
+            type="button"
+            onClick={handleBuyNow}
+            disabled={isOutOfStock}
+            className="btn-gradient rounded-full px-4 py-2 text-sm font-semibold text-white disabled:cursor-not-allowed disabled:opacity-50"
+          >
+            Buy Now
           </button>
         </div>
       </div>

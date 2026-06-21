@@ -179,26 +179,28 @@ export default async function ProductPage({
         dangerouslySetInnerHTML={{ __html: productSchemaJson }}
       />
       <div className="mx-auto max-w-[1280px] px-4 py-6 lg:px-8">
-        {/* Back link */}
-        <Link
-          href="/products"
-          className="inline-flex items-center gap-1 text-sm font-medium text-[#6D5447] hover:text-[#2A1B12]"
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="16"
-            height="16"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
+        {/* Back link — right-aligned */}
+        <div className="flex justify-end">
+          <Link
+            href="/products"
+            className="inline-flex items-center gap-1 text-sm font-medium text-[#6D5447] hover:text-[#2A1B12]"
           >
-            <path d="m15 18-6-6 6-6" />
-          </svg>
-          Back to products
-        </Link>
+            Back to products
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+            >
+              <path d="m9 18 6-6-6-6" />
+            </svg>
+          </Link>
+        </div>
 
-        <div className="mt-6 grid gap-8 sm:grid-cols-[3fr_7fr]">
+        <div className="mt-4 grid gap-8 sm:grid-cols-2">
           <ProductDetailClient
             productId={product.id}
             productName={product.name}
