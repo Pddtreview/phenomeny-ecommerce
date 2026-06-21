@@ -482,10 +482,10 @@ export async function HomepageV6() {
           <div className="grid items-stretch gap-7 md:grid-cols-[0.9fr_1.1fr] lg:gap-6">
             <div className="relative min-h-[420px] overflow-hidden rounded-[28px] border border-[#F4D9C2] bg-[linear-gradient(145deg,#FFF0DF_0%,#FFE7D8_100%)] shadow-[0_30px_70px_rgba(217,107,42,0.22)] md:order-2 md:min-h-[560px] lg:min-h-[460px]">
               <Image
-                src={HOMEPAGE_IMAGES.karanChopra}
-                alt="Karan Chopra portrait"
+                src={HOMEPAGE_IMAGES.karanConsulting}
+                alt="Karan Chopra reviewing a kundli chart"
                 fill
-                className="object-contain object-bottom"
+                className="object-cover object-top"
               />
               <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-[#2A1B12]/35 to-transparent p-5">
                 <p className="text-sm font-semibold tracking-[0.08em] text-white">KARAN CHOPRA</p>

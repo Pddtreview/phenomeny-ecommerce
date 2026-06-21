@@ -1,6 +1,7 @@
 export const HOMEPAGE_IMAGES = {
   karanChopra:
     "https://res.cloudinary.com/dwhpxdp18/image/upload/v1782030202/nauvarah/homepage/karan-chopra.webp",
+  karanConsulting: "/images/karan-consulting.webp",
   roseQuartzLoveBracelet:
     "https://res.cloudinary.com/dwhpxdp18/image/upload/v1781976959/nauvarah/homepage/rose-quartz-love-bracelet.webp",
   relationshipHarmonyBracelet:
