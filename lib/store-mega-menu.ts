@@ -52,3 +52,14 @@ export const MEGA_MENU_FEATURED: MegaMenuLink[] = [
     description: "Frequently prescribed tools for common situations.",
   },
 ];
+
+export const MEGA_MENU_FEATURED_PRODUCT = {
+  href: "/products/pyrite-7-running-horses-vastu-wall-frame",
+  image:
+    "https://res.cloudinary.com/dwhpxdp18/image/upload/v1776237677/nauvarah/products/279980ba-3c18-4548-a975-c42ae46e4b4e/ael6kw9d2afeqksa9pc2.webp",
+  title: "Pyrite 7 Running Horses Vastu Frame",
+  subtitle: "Wealth, Momentum & Career Growth",
+  description:
+    "Designed to attract growth, opportunity, and positive financial momentum.",
+  cta: "Discover The Remedy",
+} as const;
