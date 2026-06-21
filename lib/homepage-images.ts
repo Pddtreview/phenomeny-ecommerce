@@ -1,6 +1,6 @@
 export const HOMEPAGE_IMAGES = {
   karanChopra:
-    "https://res.cloudinary.com/dwhpxdp18/image/upload/v1781976958/nauvarah/homepage/karan-chopra.png",
+    "https://res.cloudinary.com/dwhpxdp18/image/upload/v1782030202/nauvarah/homepage/karan-chopra.webp",
   roseQuartzLoveBracelet:
     "https://res.cloudinary.com/dwhpxdp18/image/upload/v1781976959/nauvarah/homepage/rose-quartz-love-bracelet.webp",
   relationshipHarmonyBracelet:
@@ -8,11 +8,11 @@ export const HOMEPAGE_IMAGES = {
   coupleHarmonyBracelet:
     "https://res.cloudinary.com/dwhpxdp18/image/upload/v1781976961/nauvarah/homepage/couple-harmony-bracelet.webp",
   pathwayMoneyCareer:
-    "https://res.cloudinary.com/dwhpxdp18/image/upload/v1781977809/nauvarah/homepage/pathway-money-career.jpg",
+    "https://res.cloudinary.com/dwhpxdp18/image/upload/v1782030203/nauvarah/homepage/pathway-money-career.webp",
   pathwayMarriageRelationships:
-    "https://res.cloudinary.com/dwhpxdp18/image/upload/v1781977811/nauvarah/homepage/pathway-marriage-relationships.jpg",
+    "https://res.cloudinary.com/dwhpxdp18/image/upload/v1782030204/nauvarah/homepage/pathway-marriage-relationships.webp",
   pathwayRepeatedSetbacks:
-    "https://res.cloudinary.com/dwhpxdp18/image/upload/v1781977812/nauvarah/homepage/pathway-repeated-setbacks.jpg",
+    "https://res.cloudinary.com/dwhpxdp18/image/upload/v1782030206/nauvarah/homepage/pathway-repeated-setbacks.webp",
   pathwayLifeDecisions:
-    "https://res.cloudinary.com/dwhpxdp18/image/upload/v1781977813/nauvarah/homepage/pathway-life-decisions.jpg",
+    "https://res.cloudinary.com/dwhpxdp18/image/upload/v1782030208/nauvarah/homepage/pathway-life-decisions.png",
 } as const;

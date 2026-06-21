@@ -182,7 +182,7 @@ export default function ProductsClient({
   };
 
   return (
-    <div className="mx-auto max-w-6xl px-4 pb-12">
+    <div className="mx-auto max-w-[1560px] px-4 pb-12 lg:px-8">
       <div className="mt-8">
         <label htmlFor="products-search" className="sr-only">
           Search products
@@ -220,7 +220,7 @@ export default function ProductsClient({
           <p className="mb-4 text-sm text-[#6D5447]">
           {displayed.length} product{displayed.length === 1 ? '' : 's'}
         </p>
-        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
           {displayed.map((p) => {
             const img = getPrimaryImage(p);
             const price = getDisplayPrice(p);
@@ -266,20 +266,26 @@ export default function ProductsClient({
                       {discount}% OFF
                     </span>
                   ) : null}
-                  {img ? (
-                    <Image
-                      src={img}
-                      alt={p.name}
-                      fill
-                      className="object-cover transition duration-300 group-hover:scale-105"
-                      sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                      unoptimized
-                    />
-                  ) : (
-                    <div className="flex h-full items-center justify-center text-sm text-zinc-400">
-                      No image
-                    </div>
-                  )}
+                  <Link
+                    href={`/products/${encodeURIComponent(p.slug)}`}
+                    className="absolute inset-0 z-0 block"
+                    aria-label={`View ${p.name}`}
+                  >
+                    {img ? (
+                      <Image
+                        src={img}
+                        alt={p.name}
+                        fill
+                        className="object-cover transition duration-300 group-hover:scale-105"
+                        sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+                        unoptimized
+                      />
+                    ) : (
+                      <div className="flex h-full items-center justify-center text-sm text-zinc-400">
+                        No image
+                      </div>
+                    )}
+                  </Link>
                 </div>
                 <div className="flex flex-1 flex-col p-4">
                   <div className="mb-2 flex flex-wrap gap-1.5">
@@ -290,7 +296,7 @@ export default function ProductsClient({
                       Fast Dispatch
                     </span>
                   </div>
-                  <h3 className="line-clamp-2 text-base font-semibold text-[#2A1B12] group-hover:underline">
+                  <h3 className="line-clamp-2 text-[0.95rem] font-semibold text-[#2A1B12] group-hover:underline">
                     <Link href={`/products/${encodeURIComponent(p.slug)}`}>
                       {p.name ?? <span className="text-red-600">No name</span>}
                     </Link>
@@ -341,12 +347,6 @@ export default function ProductsClient({
                   >
                     Buy Now
                   </button>
-                  <Link
-                    href={`/products/${encodeURIComponent(p.slug)}`}
-                    className="mt-2 inline-flex w-fit text-xs font-semibold uppercase tracking-[0.08em] text-[#D76618] hover:underline"
-                  >
-                    View Details
-                  </Link>
                 </div>
               </article>
             );

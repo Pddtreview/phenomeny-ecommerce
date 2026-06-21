@@ -362,7 +362,7 @@ export async function HomepageV6() {
       <div className="pointer-events-none absolute -left-32 top-20 h-72 w-72 rounded-full bg-[#FF7A00]/10 blur-3xl" />
       <div className="pointer-events-none absolute -right-24 top-[32rem] h-96 w-96 rounded-full bg-[#E91E63]/10 blur-3xl" />
 
-      <div className="mx-auto flex w-full max-w-[1240px] flex-col gap-14 px-5 pb-24 pt-8 sm:px-8 md:gap-20 md:pt-12 lg:px-12">
+      <div className="mx-auto flex w-full max-w-[1560px] flex-col gap-14 px-5 pb-24 pt-8 sm:px-8 md:gap-20 md:pt-12 lg:px-12 xl:px-16 2xl:px-20">
         {/* Hero */}
         <section className="relative overflow-hidden rounded-[36px] border border-[#F1DFCE] bg-[linear-gradient(120deg,#FFF9F2_0%,#FFF3E8_55%,#FFEFEA_100%)] p-5 shadow-[0_30px_70px_rgba(42,27,18,0.08)] md:p-10">
           <div className="grid items-center gap-8 md:grid-cols-[0.95fr_1.05fr]">
@@ -370,7 +370,7 @@ export async function HomepageV6() {
               <span className="inline-flex w-fit rounded-full border border-[#FFD6BA] bg-white/70 px-4 py-1.5 text-[11px] font-semibold uppercase tracking-[0.18em] text-[#AA4A1A] backdrop-blur">
                 Karan Chopra&apos;s Guidance
               </span>
-              <h1 className="mt-5 text-[clamp(2rem,5.6vw,4.6rem)] font-semibold leading-[0.98] tracking-[-0.035em]">
+              <h1 className="mt-5 text-[clamp(1.7rem,4.8vw,3.9rem)] font-semibold leading-[0.98] tracking-[-0.035em]">
                 I Don&apos;t Sell
                 <br />
                 Random Products.
@@ -379,7 +379,7 @@ export async function HomepageV6() {
                   I Prescribe.
                 </span>
               </h1>
-              <p className="mt-5 max-w-xl text-base leading-relaxed text-[#5D3F2F] md:text-lg">
+              <p className="mt-5 max-w-xl text-sm leading-relaxed text-[#5D3F2F] md:text-base">
                 I&apos;ve guided 1,000+ clients through wealth, protection, and
                 relationship-focused remedies. Start with your intention and
                 I&apos;ll show you what to use.
@@ -432,18 +432,19 @@ export async function HomepageV6() {
 
         {/* Pathways */}
         <section className="rounded-[34px] border border-[#F1DFCE] bg-white/55 p-6 shadow-[0_20px_50px_rgba(42,27,18,0.07)] backdrop-blur-sm md:p-10">
-          <h2 className="text-center text-[clamp(2.2rem,4.5vw,4rem)] font-semibold tracking-[-0.03em]">
+          <h2 className="text-center text-[clamp(1.85rem,3.85vw,3.4rem)] font-semibold tracking-[-0.03em]">
             What&apos;s Bothering You?
           </h2>
-          <p className="mx-auto mt-4 max-w-3xl text-center text-base leading-relaxed text-[#6A4A39]">
+          <p className="mx-auto mt-4 max-w-3xl text-center text-[0.95rem] leading-relaxed text-[#6A4A39]">
             Most people come to me when something in life isn&apos;t going the way they hoped.
             Tell me which situation feels closest to yours.
           </p>
           <div className="mt-8 grid gap-5 md:grid-cols-2 xl:grid-cols-4">
             {pathwayCards.map((card) => (
-              <article
+              <Link
                 key={card.title}
-                className="group flex h-full cursor-pointer flex-col overflow-hidden rounded-[26px] border border-[#F1E0D3] bg-white/80 shadow-[0_14px_30px_rgba(42,27,18,0.06)] backdrop-blur-sm transition-all duration-300 hover:-translate-y-1.5 hover:border-[#E8C9AE] hover:shadow-[0_24px_40px_rgba(42,27,18,0.12)]"
+                href="/quiz"
+                className="group flex h-full cursor-pointer flex-col overflow-hidden rounded-[26px] border border-[#F1E0D3] bg-white/80 shadow-[0_14px_30px_rgba(42,27,18,0.06)] backdrop-blur-sm transition-all duration-300 hover:-translate-y-1.5 hover:border-[#E8C9AE] hover:shadow-[0_24px_44px_rgba(217,107,42,0.16)]"
               >
                 <div className="relative aspect-[16/10] h-[180px] w-full overflow-hidden rounded-t-[26px] sm:h-[190px] md:h-[200px] xl:h-[220px]">
                   <Image
@@ -455,10 +456,10 @@ export async function HomepageV6() {
                   />
                 </div>
                 <div className="flex flex-1 flex-col p-6">
-                  <h3 className="text-[clamp(1.6rem,2.2vw,2rem)] font-semibold leading-tight tracking-[-0.02em]">
+                  <h3 className="text-[clamp(1.35rem,1.9vw,1.7rem)] font-semibold leading-tight tracking-[-0.02em]">
                     {card.title}
                   </h3>
-                  <p className="mt-4 flex-1 text-base leading-relaxed text-[#6A4A39]">{card.subtitle}</p>
+                  <p className="mt-4 flex-1 text-[0.95rem] leading-relaxed text-[#6A4A39]">{card.subtitle}</p>
                   {card.examples && (
                     <ul className="mt-3 space-y-1.5 text-sm leading-relaxed text-[#6A4A39]">
                       {card.examples.map((example) => (
@@ -470,7 +471,7 @@ export async function HomepageV6() {
                     {card.cta} →
                   </p>
                 </div>
-              </article>
+              </Link>
             ))}
           </div>
         </section>
@@ -478,7 +479,7 @@ export async function HomepageV6() {
         {/* Meet Karan */}
         <section className="overflow-hidden rounded-[34px] border border-[#F1DFCE] bg-white p-6 shadow-[0_20px_55px_rgba(42,27,18,0.08)] md:p-10">
           <div className="grid items-stretch gap-7 md:grid-cols-[0.9fr_1.1fr]">
-            <div className="relative min-h-[320px] overflow-hidden rounded-[28px] bg-[linear-gradient(145deg,#FFF0DF_0%,#FFE7D8_100%)]">
+            <div className="relative min-h-[420px] overflow-hidden rounded-[28px] border border-[#F4D9C2] bg-[linear-gradient(145deg,#FFF0DF_0%,#FFE7D8_100%)] shadow-[0_30px_70px_rgba(217,107,42,0.22)] md:order-2 md:min-h-[560px]">
               <Image
                 src={HOMEPAGE_IMAGES.karanChopra}
                 alt="Karan Chopra portrait"
@@ -489,12 +490,12 @@ export async function HomepageV6() {
                 <p className="text-sm font-semibold tracking-[0.08em] text-white">KARAN CHOPRA</p>
               </div>
             </div>
-            <div className="flex flex-col justify-center">
+            <div className="flex flex-col justify-center md:order-1">
               <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-[#D36B2A]">Meet Karan</p>
-              <h2 className="mt-3 text-[clamp(2.1rem,4.4vw,3.8rem)] font-semibold leading-[1.03] tracking-[-0.03em]">
+              <h2 className="mt-3 text-[clamp(1.78rem,3.75vw,3.25rem)] font-semibold leading-[1.03] tracking-[-0.03em]">
                 Let&apos;s Start With Your Current Situation
               </h2>
-              <p className="mt-5 max-w-2xl text-[clamp(1.02rem,1.28vw,1.22rem)] leading-relaxed text-[#5D3F30]">
+              <p className="mt-5 max-w-2xl text-[clamp(0.92rem,1.1vw,1.05rem)] leading-relaxed text-[#5D3F30]">
                 In over a decade of practice, I&apos;ve sat with more than a thousand
                 people — and the same problem rarely has the same cause.
                 <br />
@@ -533,10 +534,10 @@ export async function HomepageV6() {
         <section className="rounded-[34px] border border-[#F1DFCE] bg-[#FFFDFB] p-6 shadow-[0_20px_55px_rgba(42,27,18,0.08)] md:p-10">
           <div className="flex flex-col justify-between gap-4 md:flex-row md:items-end">
             <div>
-              <h2 className="text-[clamp(2.2rem,4.5vw,3.9rem)] font-semibold tracking-[-0.03em]">
+              <h2 className="text-[clamp(1.85rem,3.85vw,3.3rem)] font-semibold tracking-[-0.03em]">
                 What I Usually Recommend
               </h2>
-              <p className="mt-3 max-w-3xl text-base leading-relaxed text-[#664838]">
+              <p className="mt-3 max-w-3xl text-[0.95rem] leading-relaxed text-[#664838]">
                 These are some of the remedies and tools I most frequently recommend based on the situations people come to me with.
               </p>
             </div>
@@ -556,13 +557,13 @@ export async function HomepageV6() {
               >
                 <div className="mb-5 flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
                   <div>
-                    <h3 className="text-[clamp(1.45rem,2.3vw,2.1rem)] font-semibold leading-tight tracking-[-0.02em] text-[#2A1B12]">
+                    <h3 className="text-[clamp(1.22rem,1.95vw,1.78rem)] font-semibold leading-tight tracking-[-0.02em] text-[#2A1B12]">
                       {group.problem}
                     </h3>
                     <p className="mt-2 text-sm font-semibold uppercase tracking-[0.08em] text-[#8A5B3E]">
                       Karan&apos;s Note
                     </p>
-                    <p className="mt-2 text-base leading-relaxed text-[#654536]">
+                    <p className="mt-2 text-[0.95rem] leading-relaxed text-[#654536]">
                       {group.note}
                     </p>
                   </div>
@@ -606,7 +607,7 @@ export async function HomepageV6() {
                       </div>
 
                       <div className="space-y-3 p-4">
-                        <h4 className="text-[clamp(1.08rem,1.4vw,1.28rem)] font-semibold leading-snug text-[#3B2A1F]">
+                        <h4 className="text-[clamp(0.95rem,1.2vw,1.1rem)] font-semibold leading-snug text-[#3B2A1F]">
                           {product.name}
                         </h4>
                         {product.isFeatured && (
@@ -640,12 +641,12 @@ export async function HomepageV6() {
 
         {/* Client stories */}
         <section className="rounded-[34px] border border-[#F1DFCE] bg-white/70 p-6 shadow-[0_20px_55px_rgba(42,27,18,0.08)] backdrop-blur-sm md:p-10">
-          <h2 className="text-[clamp(2.2rem,4.3vw,3.6rem)] font-semibold tracking-[-0.03em]">
+          <h2 className="text-[clamp(1.85rem,3.65vw,3.05rem)] font-semibold tracking-[-0.03em]">
             Stories From People I&apos;ve Guided
           </h2>
           <div className="mt-6">
             <article className="rounded-3xl border border-[#F3E5DB] bg-[#FFF9F3] p-6 shadow-[0_10px_26px_rgba(42,27,18,0.05)]">
-              <p className="text-base leading-relaxed text-[#573A2B]">
+              <p className="text-[0.95rem] leading-relaxed text-[#573A2B]">
                 “Karan&apos;s guidance changed the way I look at challenges. The clarity and
                 peace I feel now is priceless.”
               </p>
@@ -660,10 +661,10 @@ export async function HomepageV6() {
           <div className="relative flex flex-col items-start justify-between gap-6 md:flex-row md:items-center">
             <div>
               <p className="text-xs font-semibold uppercase tracking-[0.14em] text-white/90">Consultations</p>
-              <h2 className="mt-2 text-[clamp(2.2rem,4.3vw,3.6rem)] font-semibold leading-tight tracking-[-0.03em]">
+              <h2 className="mt-2 text-[clamp(1.85rem,3.65vw,3.05rem)] font-semibold leading-tight tracking-[-0.03em]">
                 Need Personal Guidance?
               </h2>
-              <p className="mt-2 text-base text-white/90">
+              <p className="mt-2 text-[0.95rem] text-white/90">
                 Book a one-to-one consultation and get guidance tailored to your current situation.
               </p>
             </div>
@@ -678,8 +679,8 @@ export async function HomepageV6() {
 
         {/* Daily wisdom */}
         <section className="rounded-[34px] border border-[#F1DFCE] bg-white/70 p-6 shadow-[0_20px_55px_rgba(42,27,18,0.08)] backdrop-blur-sm md:p-10">
-          <h2 className="text-[clamp(2.2rem,4.3vw,3.6rem)] font-semibold tracking-[-0.03em]">Daily Wisdom</h2>
-          <p className="mt-3 text-base text-[#664838]">
+          <h2 className="text-[clamp(1.85rem,3.65vw,3.05rem)] font-semibold tracking-[-0.03em]">Daily Wisdom</h2>
+          <p className="mt-3 text-[0.95rem] text-[#664838]">
             Latest insights, videos, articles, and guidance from Karan.
           </p>
           <div className="mt-7 grid gap-4 md:grid-cols-3">
@@ -688,7 +689,7 @@ export async function HomepageV6() {
                 key={card.title}
                 className="group rounded-[24px] border border-[#F4E4D8] bg-[#FFF9F3] p-5 shadow-[0_10px_26px_rgba(42,27,18,0.05)] transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_20px_34px_rgba(42,27,18,0.1)]"
               >
-                <h3 className="text-lg font-semibold leading-snug">{card.title}</h3>
+                <h3 className="text-base font-semibold leading-snug">{card.title}</h3>
                 <p className="mt-2 text-sm leading-relaxed text-[#674A3B]">{card.subtitle}</p>
                 <p className="mt-5 text-xs font-semibold uppercase tracking-[0.1em] text-[#E66E17]">Read →</p>
               </article>
