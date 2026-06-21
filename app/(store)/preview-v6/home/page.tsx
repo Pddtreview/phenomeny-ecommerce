@@ -401,10 +401,10 @@ export async function HomepageV6() {
             </div>
 
             <div className="order-1 md:order-2">
-              <div className="relative min-h-[260px] overflow-hidden rounded-[26px] bg-[radial-gradient(circle_at_50%_28%,#FFF6EA_0%,#FBE7D3_58%,#F5D8BE_100%)] sm:min-h-[300px] md:min-h-[420px] lg:min-h-[360px]">
+              <div className="relative min-h-[220px] overflow-hidden rounded-[26px] bg-[radial-gradient(circle_at_50%_28%,#FFF6EA_0%,#FBE7D3_58%,#F5D8BE_100%)] sm:min-h-[260px] md:min-h-[340px] lg:min-h-[300px]">
                 <div className="absolute inset-0 bg-[radial-gradient(circle_at_52%_88%,rgba(42,27,18,0.14)_0%,rgba(42,27,18,0)_46%)]" />
                 <Image
-                  src={HOMEPAGE_IMAGES.karanChopra}
+                  src={HOMEPAGE_IMAGES.karanHero}
                   alt="Karan Chopra"
                   fill
                   priority
@@ -480,7 +480,7 @@ export async function HomepageV6() {
         {/* Meet Karan */}
         <section className="overflow-hidden rounded-[34px] border border-[#F1DFCE] bg-white p-6 shadow-[0_20px_55px_rgba(42,27,18,0.08)] md:p-10 lg:p-7">
           <div className="grid items-stretch gap-7 md:grid-cols-[0.9fr_1.1fr] lg:gap-6">
-            <div className="relative min-h-[420px] overflow-hidden rounded-[28px] border border-[#F4D9C2] bg-[linear-gradient(145deg,#FFF0DF_0%,#FFE7D8_100%)] shadow-[0_30px_70px_rgba(217,107,42,0.22)] md:order-2 md:min-h-[560px] lg:min-h-[460px]">
+            <div className="relative min-h-[300px] overflow-hidden rounded-[28px] border border-[#F4D9C2] bg-[linear-gradient(145deg,#FFF0DF_0%,#FFE7D8_100%)] shadow-[0_30px_70px_rgba(217,107,42,0.22)] md:order-2 md:min-h-[380px] lg:min-h-[340px]">
               <Image
                 src={HOMEPAGE_IMAGES.karanConsulting}
                 alt="Karan Chopra reviewing a kundli chart"
