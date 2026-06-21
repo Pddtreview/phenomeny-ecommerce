@@ -169,27 +169,31 @@ export function Header() {
                       </p>
                       <Link
                         href={MEGA_MENU_FEATURED_PRODUCT.href}
-                        className="group block overflow-hidden rounded-xl border border-[#F0DEC8] bg-[#FFF8F0] transition-[border-color] duration-150 hover:border-[#D4924A]"
+                        className="group block overflow-hidden rounded-2xl border border-[#E8C99A] bg-[#FFFBF5] shadow-sm transition-[border-color,box-shadow] duration-200 hover:border-[#C08030] hover:shadow-md"
                       >
-                        <div className="relative h-24 w-full overflow-hidden">
+                        <div className="relative h-[148px] w-full overflow-hidden">
                           <Image
                             src={MEGA_MENU_FEATURED_PRODUCT.image}
                             alt={MEGA_MENU_FEATURED_PRODUCT.title}
                             fill
-                            sizes="(max-width: 1200px) 300px, 360px"
-                            className="object-cover object-center"
+                            sizes="360px"
+                            className="object-cover object-center transition-transform duration-300 group-hover:scale-[1.03]"
                           />
                         </div>
-                        <div className="p-3">
-                          <p className="text-xs font-semibold leading-snug text-[#2A1B12]">
+                        <div className="px-4 py-3.5">
+                          <p className="text-[11px] font-semibold uppercase tracking-widest text-[#C08030]">
+                            {MEGA_MENU_FEATURED_PRODUCT.subtitle}
+                          </p>
+                          <p className="mt-1 text-sm font-bold leading-snug text-[#2A1B12]">
                             {MEGA_MENU_FEATURED_PRODUCT.title}
                           </p>
-                          <p className="mt-1 line-clamp-1 text-[11px] text-[#6D5447]">
+                          <p className="mt-1.5 line-clamp-2 text-xs leading-relaxed text-[#6D5447]">
                             {MEGA_MENU_FEATURED_PRODUCT.description}
                           </p>
-                          <p className="mt-2 text-[11px] font-semibold text-[#C08030]">
-                            {MEGA_MENU_FEATURED_PRODUCT.cta} →
-                          </p>
+                          <span className="mt-3 inline-flex items-center gap-1.5 rounded-lg bg-[#C08030] px-4 py-1.5 text-xs font-semibold text-white transition-colors duration-150 group-hover:bg-[#A86A24]">
+                            {MEGA_MENU_FEATURED_PRODUCT.cta}
+                            <span aria-hidden="true">→</span>
+                          </span>
                         </div>
                       </Link>
                     </div>
