@@ -96,7 +96,6 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     text-rendering: optimizeLegibility;
-    cursor: default;
   }
   body {
     @apply bg-background text-foreground;
@@ -110,11 +109,11 @@
   a,
   button {
     cursor: pointer;
-    transition: all 0.2s ease;
+    transition: color 0.15s ease, background-color 0.15s ease, border-color 0.15s ease, opacity 0.15s ease, box-shadow 0.15s ease;
   }
-  button:hover,
-  a:hover {
-    transition: all 0.2s ease;
+  a *,
+  button * {
+    cursor: inherit;
   }
 }
 

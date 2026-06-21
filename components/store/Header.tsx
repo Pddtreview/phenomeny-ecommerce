@@ -32,25 +32,26 @@ export function Header() {
     setMounted(true);
   }, []);
 
+  const computeOffset = () => {
+    const trigger = shopTriggerRef.current;
+    const menu = shopMenuRef.current;
+    if (!trigger || !menu) return;
+    const gutter = 16;
+    const viewportWidth = document.documentElement.clientWidth;
+    const menuWidth = menu.offsetWidth;
+    const triggerRect = trigger.getBoundingClientRect();
+    const triggerCenter = triggerRect.left + triggerRect.width / 2;
+    const naturalLeft = triggerCenter - menuWidth / 2;
+    const maxLeft = viewportWidth - gutter - menuWidth;
+    const clampedLeft = Math.max(gutter, Math.min(naturalLeft, maxLeft));
+    setMenuOffsetX(clampedLeft - naturalLeft);
+  };
+
   useEffect(() => {
     if (!shopOpen) return;
-    const recompute = () => {
-      const trigger = shopTriggerRef.current;
-      const menu = shopMenuRef.current;
-      if (!trigger || !menu) return;
-      const gutter = 16;
-      const viewportWidth = document.documentElement.clientWidth;
-      const menuWidth = menu.offsetWidth;
-      const triggerRect = trigger.getBoundingClientRect();
-      const triggerCenter = triggerRect.left + triggerRect.width / 2;
-      const naturalLeft = triggerCenter - menuWidth / 2;
-      const maxLeft = viewportWidth - gutter - menuWidth;
-      const clampedLeft = Math.max(gutter, Math.min(naturalLeft, maxLeft));
-      setMenuOffsetX(clampedLeft - naturalLeft);
-    };
-    recompute();
-    window.addEventListener("resize", recompute);
-    return () => window.removeEventListener("resize", recompute);
+    window.addEventListener("resize", computeOffset);
+    return () => window.removeEventListener("resize", computeOffset);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [shopOpen]);
 
   const handleLogoClick = () => {
@@ -101,7 +102,7 @@ export function Header() {
             <div
               ref={shopTriggerRef}
               className="relative"
-              onMouseEnter={() => setShopOpen(true)}
+              onMouseEnter={() => { computeOffset(); setShopOpen(true); }}
               onMouseLeave={() => setShopOpen(false)}
             >
               <button
@@ -168,7 +169,7 @@ export function Header() {
                       </p>
                       <Link
                         href={MEGA_MENU_FEATURED_PRODUCT.href}
-                        className="group block overflow-hidden rounded-xl border border-[#F0DEC8] bg-[#FFF8F0] transition-all duration-200 hover:border-[#E8A84C] hover:shadow-md"
+                        className="group block overflow-hidden rounded-xl border border-[#F0DEC8] bg-[#FFF8F0] transition-[border-color,box-shadow] duration-150 hover:border-[#E8A84C] hover:shadow-md"
                       >
                         <div className="relative h-[108px] w-full overflow-hidden bg-[#FFECD6]">
                           <Image
