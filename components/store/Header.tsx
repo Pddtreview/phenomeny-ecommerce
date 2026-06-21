@@ -134,15 +134,15 @@ export function Header() {
                       <p className="mb-3 text-xs font-semibold uppercase tracking-[0.16em] text-[#8A6C5B]">
                         Collections
                       </p>
-                      <div className="space-y-2">
+                      <div className="space-y-1">
                         {MEGA_MENU_COLLECTIONS.map((link) => (
                           <Link
                             key={link.label}
                             href={link.href}
-                            className="block rounded-xl px-3 py-2 hover:bg-[#FFF2E5]"
+                            className="block rounded-xl px-3 py-3 hover:bg-[#FFF2E5]"
                           >
-                            <p className="text-sm font-semibold text-[#2A1B12]">{link.label}</p>
-                            <p className="mt-1 text-xs text-[#6D5447]">{link.description}</p>
+                            <p className="text-[15px] font-semibold text-[#2A1B12]">{link.label}</p>
+                            <p className="mt-1 text-[13px] text-[#6D5447]">{link.description}</p>
                           </Link>
                         ))}
                       </div>
@@ -151,12 +151,12 @@ export function Header() {
                       <p className="mb-3 text-xs font-semibold uppercase tracking-[0.16em] text-[#8A6C5B]">
                         Categories
                       </p>
-                      <div className="space-y-1">
+                      <div className="space-y-0.5">
                         {MEGA_MENU_CATEGORIES.map((link) => (
                           <Link
                             key={link.label}
                             href={link.href}
-                            className="link-underline block rounded-lg px-3 py-2 text-sm font-medium text-[#2A1B12] hover:bg-[#FFF2E5]"
+                            className="link-underline block rounded-lg px-3 py-2.5 text-[15px] font-medium text-[#2A1B12] hover:bg-[#FFF2E5]"
                           >
                             {link.label}
                           </Link>
@@ -171,7 +171,7 @@ export function Header() {
                         href={MEGA_MENU_FEATURED_PRODUCT.href}
                         className="group block overflow-hidden rounded-2xl border border-[#E8C99A] bg-[#FFFBF5] shadow-sm transition-[border-color,box-shadow] duration-200 hover:border-[#C08030] hover:shadow-md"
                       >
-                        <div className="relative h-[148px] w-full overflow-hidden">
+                        <div className="relative h-[190px] w-full overflow-hidden">
                           <Image
                             src={MEGA_MENU_FEATURED_PRODUCT.image}
                             alt={MEGA_MENU_FEATURED_PRODUCT.title}
