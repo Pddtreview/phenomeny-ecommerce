@@ -163,30 +163,31 @@ export function Header() {
                         ))}
                       </div>
                     </div>
-                    <div className="h-full px-2">
+                    <div className="px-2">
                       <p className="mb-3 text-xs font-semibold uppercase tracking-[0.16em] text-[#8A6C5B]">
                         Featured
                       </p>
                       <Link
                         href={MEGA_MENU_FEATURED_PRODUCT.href}
-                        className="group block overflow-hidden rounded-xl border border-[#F0DEC8] bg-[#FFF8F0] transition-[border-color,box-shadow] duration-150 hover:border-[#E8A84C] hover:shadow-sm"
+                        className="group block overflow-hidden rounded-xl border border-[#F0DEC8] bg-[#FFF8F0] transition-[border-color] duration-150 hover:border-[#D4924A]"
                       >
-                        <div className="relative h-[72px] w-full overflow-hidden bg-[#FFECD6]">
+                        <div className="relative h-24 w-full overflow-hidden">
                           <Image
                             src={MEGA_MENU_FEATURED_PRODUCT.image}
                             alt={MEGA_MENU_FEATURED_PRODUCT.title}
                             fill
-                            className="object-cover object-center transition-transform duration-300 group-hover:scale-[1.04]"
+                            sizes="(max-width: 1200px) 300px, 360px"
+                            className="object-cover object-center"
                           />
                         </div>
-                        <div className="px-3 py-2">
-                          <p className="line-clamp-1 text-[12px] font-semibold text-[#2A1B12]">
+                        <div className="p-3">
+                          <p className="text-xs font-semibold leading-snug text-[#2A1B12]">
                             {MEGA_MENU_FEATURED_PRODUCT.title}
                           </p>
-                          <p className="mt-0.5 line-clamp-1 text-[11px] text-[#6D5447]">
+                          <p className="mt-1 line-clamp-1 text-[11px] text-[#6D5447]">
                             {MEGA_MENU_FEATURED_PRODUCT.description}
                           </p>
-                          <p className="mt-1.5 text-[11px] font-semibold text-[#C08030]">
+                          <p className="mt-2 text-[11px] font-semibold text-[#C08030]">
                             {MEGA_MENU_FEATURED_PRODUCT.cta} →
                           </p>
                         </div>
