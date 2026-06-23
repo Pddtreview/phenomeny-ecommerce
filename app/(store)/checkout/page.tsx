@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -34,10 +34,24 @@ type AddressForm = z.infer<typeof addressSchema>;
 
 type PaymentMethod = "prepaid" | "cod";
 
+function PaymentFailedBanner() {
+  const searchParams = useSearchParams();
+  if (searchParams.get("payment_failed") !== "1") return null;
+  return (
+    <div className="mt-4 flex items-start gap-3 rounded-xl border border-red-200 bg-red-50 px-4 py-3">
+      <svg className="mt-0.5 shrink-0 text-red-500" width="18" height="18" viewBox="0 0 20 20" fill="currentColor">
+        <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm.75-11.25a.75.75 0 00-1.5 0v4.5a.75.75 0 001.5 0v-4.5zm-.75 7a.75.75 0 100-1.5.75.75 0 000 1.5z" clipRule="evenodd" />
+      </svg>
+      <div>
+        <p className="text-sm font-semibold text-red-700">Payment was not completed</p>
+        <p className="mt-0.5 text-xs text-red-600">Your order has not been placed. Please review your details and try again.</p>
+      </div>
+    </div>
+  );
+}
+
 export default function CheckoutPage() {
   const router = useRouter();
-  const searchParams = useSearchParams();
-  const paymentFailed = searchParams.get("payment_failed") === "1";
   const { items, totalPrice, clearCart } = useCart();
   const [summaryOpen, setSummaryOpen] = useState(false);
   const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>("cod");
@@ -296,17 +310,9 @@ export default function CheckoutPage() {
       <div className="mx-auto max-w-2xl">
         <h1 className="text-2xl font-bold text-zinc-900">Checkout</h1>
 
-        {paymentFailed && (
-          <div className="mt-4 flex items-start gap-3 rounded-xl border border-red-200 bg-red-50 px-4 py-3">
-            <svg className="mt-0.5 shrink-0 text-red-500" width="18" height="18" viewBox="0 0 20 20" fill="currentColor">
-              <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm.75-11.25a.75.75 0 00-1.5 0v4.5a.75.75 0 001.5 0v-4.5zm-.75 7a.75.75 0 100-1.5.75.75 0 000 1.5z" clipRule="evenodd" />
-            </svg>
-            <div>
-              <p className="text-sm font-semibold text-red-700">Payment was not completed</p>
-              <p className="mt-0.5 text-xs text-red-600">Your order has not been placed. Please review your details and try again.</p>
-            </div>
-          </div>
-        )}
+        <Suspense fallback={null}>
+          <PaymentFailedBanner />
+        </Suspense>
 
         {/* Section 1: Order summary - collapsible on mobile */}
         <section className="mt-6 rounded-xl border border-zinc-200 bg-white">
